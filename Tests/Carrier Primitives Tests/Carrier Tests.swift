@@ -14,35 +14,42 @@ struct CarrierTests {
 extension CarrierTests.Unit {
 
     @Test
-    func `IntCarrier stores and reads Int underlying`() {
-        let c = IntCarrier(42)
+    func `Plain stores and reads Int underlying`() {
+        let c = Fixture.Plain(42)
         #expect(c.underlying == 42)
     }
 
     @Test
-    func `IntCarrier round-trips via init from underlying`() {
-        let a = IntCarrier(100)
-        let b = IntCarrier(a.underlying)
+    func `Plain round-trips via init from underlying`() {
+        let a = Fixture.Plain(100)
+        let b = Fixture.Plain(a.underlying)
         #expect(a.underlying == b.underlying)
     }
 
     @Test
-    func `MoveOnlyCarrier reads underlying via borrow`() {
-        let c = MoveOnlyCarrier(MoveOnly(raw: 99))
+    func `Unique reads underlying via borrow`() {
+        let c = Fixture.Unique(Fixture.Unique.Resource(raw: 99))
         let raw = c.underlying.raw
         #expect(raw == 99)
     }
 
     @Test
-    func `generic describe over any Carrier dispatches`() {
-        let c = IntCarrier(7)
-        let desc = describe(c)
+    func `describe reflects Underlying and Domain at type level`() {
+        let c = Fixture.Plain(7)
+        let desc = Fixture.describe(c)
         #expect(desc == "Carrier<Int> with Domain Never")
     }
 
     @Test
-    func `extractInt accepts IntCarrier via parameterized constraint`() {
-        let c = IntCarrier(55)
-        #expect(extractInt(c) == 55)
+    func `value accepts Plain via parameterized constraint`() {
+        let c = Fixture.Plain(55)
+        #expect(Fixture.value(of: c) == 55)
+    }
+
+    @Test
+    func `Scoped conforms with noncopyable nonescapable underlying`() {
+        let c = Fixture.Scoped(Fixture.Scoped.Resource(raw: 77))
+        let raw = c.underlying.raw
+        #expect(raw == 77)
     }
 }

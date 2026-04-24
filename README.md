@@ -1,46 +1,199 @@
 # Carrier Primitives
 
-![Development Status](https://img.shields.io/badge/status-experimental-red.svg)
+![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
-Research-stage super-abstraction over phantom-typed value wrappers — the `Carrier<Underlying>` protocol family that Tagged, Cardinal, Ordinal, Hash.Value, and similar value-carrying primitives are candidates to conform to.
-
----
-
-## Status
-
-This package is **research-stage**, not production-ready. The `Carrier<Underlying>` protocol's final shape is still converging through experiments in `Experiments/` and design analysis in `Research/`. Consumers SHOULD NOT depend on this package yet.
-
-The design question: given recurring patterns across `Cardinal.\`Protocol\``, `Ordinal.\`Protocol\``, `Hash.\`Protocol\``, and `Tagged<Tag, V>` — can a super-protocol factor out the shared structure (Domain associatedtype + value accessor + round-trip init + Tagged forwarding) without breaking per-type ergonomics?
-
-The current state of the investigation:
-
-- **Recipe characterized** — `Research/capability-lift-pattern.md` documents the shared structure and ecosystem instances.
-- **Options analysed** — Option A (refinement), Option B (parameterized `Carrier<Underlying>` via SE-0346), Option C (both). Option B is the current recommendation.
-- **Experiments CONFIRMED** — `Experiments/capability-lift-pattern/` has six variants (V0–V5) probing the recipe, super-protocol unification options, API broadening, and limits (generic Underlying, `~Copyable` Underlying, existentials).
-- **Adoption DEFERRED** — Cardinal/Ordinal don't need to change to participate; Carrier can be added later as a one-extension migration per conforming type. The decision gate is a concrete Form-D use case (cross-Carrier generic algorithms).
+Unified super-protocol for phantom-typed value wrappers — `Carrier<Underlying>` abstracts Cardinal, Ordinal, Hash.Value, Tagged, and the rest of the primitives layer's value-carrying types, across all four `Copyable × Escapable` quadrants.
 
 ---
 
-## Architecture (intended)
+## Key Features
 
-Once `Carrier<Underlying>` converges, the package is expected to ship:
-
-- `Carrier<Underlying>` — the super-protocol (Option B form, parameterized).
-- Possibly `NoncopyCarrier<Underlying>` — the `~Copyable` Underlying variant (the research's V5b shows round-trip breaks on a unified protocol).
-- Extension points for ecosystem types to conform (`Tagged: Carrier`, `Cardinal: Carrier`, `Ordinal: Carrier`, etc.) — placed in each conforming type's home package.
-- Test support for verifying conformance.
+- **One protocol, four quadrants** — `Carrier<Underlying>` admits `~Copyable` and `~Escapable` suppression on `Self`, `Domain`, and `Underlying`. A single declaration covers `Copyable & Escapable`, `~Copyable & Escapable`, `Copyable & ~Escapable`, and `~Copyable & ~Escapable` conformers. Earlier design drafts had proposed splitting into a `Copyable`-only protocol + a `NoncopyCarrier` sibling; the final design unifies them.
+- **Zero dependencies** — Ships the protocol only. Conformances live in each conforming type's home package (e.g., `Tagged: Carrier` in `swift-tagged-primitives` when adopted). Carrier Primitives itself has no upstream dependencies.
+- **Primary associated type** — `Carrier<Underlying>` per SE-0346 enables the parameterized-constraint spelling `some Carrier<Int>` at API sites.
+- **Two axes of discrimination** — `Domain` (phantom tag, defaults to `Never`) + `Underlying` (wrapped value type). Generic consumers can reflect on both metatypes for phantom-type-aware diagnostics, cross-Carrier conversion, and witness-based serialization.
+- **Foundation-free** — Primitives-layer per `[PRIM-FOUND-001]`; no Foundation imports.
 
 ---
 
-## Relationship to other primitives
+## Shape
 
-| Package | Relationship |
-|---------|--------------|
-| [swift-tagged-primitives](https://github.com/swift-primitives/swift-tagged-primitives) | **Canonical Carrier.** `Tagged<Tag, V>` is the free generic implementation — any `(Tag, V)` combination becomes a Carrier of V with `Domain = Tag`. The `Tagged: Carrier` conformance file will live in this package once the protocol lands. |
-| [swift-cardinal-primitives](https://github.com/swift-primitives/swift-cardinal-primitives) | Candidate adopter. `Cardinal` is a trivial Carrier (`Domain = Never`); `Tagged<T, Cardinal>` is a tagged Carrier. Both shapes conform. |
-| [swift-ordinal-primitives](https://github.com/swift-primitives/swift-ordinal-primitives) | Candidate adopter. Same shape as Cardinal. |
-| [swift-hash-primitives](https://github.com/swift-primitives/swift-hash-primitives) | Candidate adopter. `Hash.Value` is the Underlying; `Hash.\`Protocol\`` follows the recipe. |
-| [swift-property-primitives](https://github.com/swift-primitives/swift-property-primitives) | **Categorically blocked** from Carrier. Property's Tag is a verb-namespace (Group B per `property-tagged-semantic-roles.md`), not a domain-identity. Cross-fiber morphisms don't exist in verb-namespaces, so Carrier's round-trip can't be made coherent. See `Research/capability-lift-pattern.md` §"Pattern taxonomy". |
+```swift
+public protocol Carrier<Underlying>: ~Copyable, ~Escapable {
+    associatedtype Domain: ~Copyable & ~Escapable = Never
+    associatedtype Underlying: ~Copyable & ~Escapable
+
+    var underlying: Underlying {
+        @_lifetime(borrow self)
+        borrowing get
+    }
+
+    @_lifetime(copy underlying)
+    init(_ underlying: consuming Underlying)
+}
+```
+
+---
+
+## Quick Start
+
+### Define a phantom-typed carrier
+
+```swift
+import Carrier_Primitives
+
+public enum User {}
+public enum Order {}
+
+struct UserID: Carrier {
+    typealias Domain = User
+    typealias Underlying = UInt64
+
+    var _raw: UInt64
+    var underlying: UInt64 { borrowing get { _raw } }
+    init(_ underlying: consuming UInt64) { self._raw = underlying }
+}
+
+struct OrderID: Carrier {
+    typealias Domain = Order
+    typealias Underlying = UInt64
+
+    var _raw: UInt64
+    var underlying: UInt64 { borrowing get { _raw } }
+    init(_ underlying: consuming UInt64) { self._raw = underlying }
+}
+```
+
+`UserID` and `OrderID` both wrap `UInt64`, but their `Domain` associated types differ. Generic code can distinguish them without any runtime cost.
+
+### Write a generic function over any Carrier of Int
+
+```swift
+// SE-0346 parameterized-constraint form — accepts any Carrier whose
+// Underlying is Int, regardless of Domain.
+func printInt(_ c: borrowing some Carrier<Int>) {
+    print(c.underlying)
+}
+
+// Fully generic — accepts any Carrier at all.
+func describe<C: Carrier & ~Copyable & ~Escapable>(
+    _ c: borrowing C
+) -> String {
+    "Carrier<\(C.Underlying.self)> with Domain \(C.Domain.self)"
+}
+```
+
+Without Carrier, each of these forms would require a per-type protocol or hand-rolled overload. With Carrier, one signature covers the whole family.
+
+### Conform a ~Copyable resource
+
+```swift
+struct FileHandle: ~Copyable { var fd: Int32 }
+
+struct FileHandleCarrier: ~Copyable, Carrier {
+    typealias Underlying = FileHandle
+
+    var _storage: FileHandle
+
+    // ~Copyable storage requires `_read { yield }` to yield by borrow
+    // without consuming.
+    var underlying: FileHandle {
+        _read { yield _storage }
+    }
+
+    init(_ underlying: consuming FileHandle) {
+        self._storage = underlying
+    }
+}
+```
+
+The `_read` coroutine satisfies the protocol's `borrowing get` requirement for `~Copyable` Underlying. `@_lifetime` annotations are omitted because `FileHandle` is Escapable (the attribute is rejected on Escapable results); they are required only for `~Escapable` Underlying.
+
+---
+
+## Installation
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/swift-primitives/swift-carrier-primitives.git", from: "0.1.0")
+]
+```
+
+```swift
+.target(
+    name: "App",
+    dependencies: [
+        .product(name: "Carrier Primitives", package: "swift-carrier-primitives"),
+    ]
+)
+```
+
+Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (or the matching Linux / Windows toolchain).
+
+---
+
+## Architecture
+
+Single-target package with one library product (`Carrier Primitives`) plus a test-support product (`Carrier Primitives Test Support`, currently re-export only).
+
+| File | Purpose |
+|------|---------|
+| `Carrier.swift` | The `Carrier<Underlying>` protocol declaration — all four quadrants covered via `~Copyable & ~Escapable` suppression on `Self`, `Domain`, and `Underlying`. |
+
+The package is a **supplementary decomposition** per `[MOD-015]` — the umbrella `Carrier Primitives` library is the canonical consumer import. There are no variant targets, and Carrier Primitives ships with **zero external dependencies**.
+
+---
+
+## Platform Support
+
+| Platform | Status |
+|----------|--------|
+| macOS 26 | Full support |
+| Linux | Full support |
+| Windows | Full support |
+| iOS / tvOS / watchOS / visionOS | Supported |
+| Swift Embedded | Supported |
+
+---
+
+## Final-Release Framing
+
+**0.1.0 is this package's final release.** The protocol shape above is the locked-in API; no changes or additions are planned. Downstream packages adopt the pattern at their own cadence by adding `extension MyType: Carrier` conformances in their own repositories.
+
+This framing reflects the protocol's completeness for its purpose: a single super-protocol over phantom-typed value wrappers, covering all four quadrants, with a minimal surface (one primary associated type, one defaulting associated type, one borrowing getter, one consuming init). The research corpus in `Research/` characterizes the pattern and documents what was considered and rejected for the final shape.
+
+---
+
+## Related Packages
+
+**Used By**:
+
+- [swift-tagged-primitives](https://github.com/swift-primitives/swift-tagged-primitives) — `Tagged<Tag, V>` is the canonical free generic implementation of Carrier. `Tagged: Carrier` conformance lives in tagged-primitives per the ecosystem convention (conformances of a type to a foreign protocol live in the conformer's home package).
+- [swift-cardinal-primitives](https://github.com/swift-primitives/swift-cardinal-primitives) — Cardinal (and `Tagged<T, Cardinal>`) candidates for `Carrier<Cardinal>` adoption.
+- [swift-ordinal-primitives](https://github.com/swift-primitives/swift-ordinal-primitives) — Ordinal candidate for `Carrier<Ordinal>` adoption.
+- [swift-hash-primitives](https://github.com/swift-primitives/swift-hash-primitives) — Hash.Value candidate for `Carrier<Hash.Value>` adoption.
+
+**Related research** (not a dependency, but a companion):
+
+- [swift-ownership-primitives](https://github.com/swift-primitives/swift-ownership-primitives) — hosts `Ownership.Borrow.\`Protocol\`` and the self-projection-default pattern, the orthogonal meta-pattern to Carrier. See `Research/capability-lift-pattern.md` and `swift-ownership-primitives/Research/self-projection-default-pattern.md`.
+
+**Dependencies**: none.
+
+---
+
+## Research Corpus
+
+This package ships with the full research record in `Research/`:
+
+- `capability-lift-pattern.md` (v1.1.0, RECOMMENDATION) — the pattern characterization + Option A/B/C analysis + Tagged-as-canonical-Carrier framing.
+- `capability-lift-pattern-primitives.md` — primitives-layer view.
+- `capability-lift-pattern-academic-foundations.md` (Tier 3) — 11 primary citations (Reynolds 1983, Wadler 1989, Hinze 2003, Cheney-Hinze 2003, Yallop-White 2014, Atkey 2009, Cardelli-Wegner 1985, Wadler-Blott 1989, Leijen-Meijer 1999, Carette-Kiselyov-Shan).
+- `capability-lift-pattern-academic-foundations-primitives.md` — primitives-layer slice of the academic foundations.
+- `carrier-vs-rawrepresentable-comparative-analysis.md` (DECISION, 2026-04-24) — nine-dimension comparison of Carrier vs Swift stdlib's RawRepresentable, concluding non-substitutable.
+
+Plus the empirical anchor:
+
+- `Experiments/capability-lift-pattern/` — six variants V0–V5 probing the pattern's recipe, super-protocol unification options, API broadening, and limits. CONFIRMED on Swift 6.3.1.
 
 ---
 

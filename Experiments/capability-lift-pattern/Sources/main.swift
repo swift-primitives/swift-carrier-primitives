@@ -32,6 +32,20 @@
 //
 // Date: 2026-04-22
 //
+// Update 2026-04-24 — V3's parameterized `Carrier<Underlying>` shape
+// IS what this package shipped in `Sources/Carrier Primitives/
+// Carrier.swift`, with one addition: the shipped form suppresses
+// `~Copyable & ~Escapable` on Self, Domain, and Underlying (covering
+// all four Copyable × Escapable quadrants in a single declaration).
+// The experiment's V3 Carrier stub matches the shipped form
+// semantically. The real-shape validation lives in the test target
+// at Tests/Carrier Primitives Tests/ (six tests, all passing on
+// 6.3.1), which exercises the shipped protocol across Q1 (Plain),
+// Q2 (Unique), and Q4 (Scoped) quadrants plus Form-D generic
+// reflection and the SE-0346 parameterized-constraint spelling.
+// This experiment is retained as a historical record of the
+// 2026-04-22 characterization that produced the V0–V5 verdicts.
+//
 // META-FINDINGS:
 //   1. The per-type pattern (V0/V1) is mechanically reproducible: the
 //      recipe transfers cleanly from real Cardinal/Ordinal to stubs,

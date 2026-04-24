@@ -60,14 +60,40 @@
 /// See `Research/capability-lift-pattern.md` for the design analysis
 /// and `Experiments/capability-lift-pattern/` for variant verdicts.
 public protocol Carrier<Underlying>: ~Copyable, ~Escapable {
-    associatedtype Domain:     ~Copyable & ~Escapable
+    /// The phantom domain that tags this carrier.
+    ///
+    /// Defaults to `Never` for trivial self-carriers (bare value types
+    /// that carry themselves with no phantom distinction). Tagged-family
+    /// carriers override this to their Tag type — e.g.,
+    /// `Tagged<UserTag, Int>.Domain == UserTag`, allowing generic
+    /// consumers to distinguish `UserTag`-tagged Ints from `OrderTag`-
+    /// tagged Ints at the type level.
+    associatedtype Domain: ~Copyable & ~Escapable = Never
+
+    /// The wrapped value type.
     associatedtype Underlying: ~Copyable & ~Escapable
 
+    /// Borrowing access to the carried underlying value.
+    ///
+    /// The returned value's lifetime is bounded by `self`. For
+    /// `~Copyable` Underlying, conformers implement this via a
+    /// `_read { yield ... }` coroutine; for `Copyable` Underlying, a
+    /// plain `borrowing get { ... }` suffices (the `@_lifetime` and
+    /// `borrowing` annotations on the getter requirement are omitted
+    /// in the conformer when Underlying is Escapable, since the
+    /// attribute is rejected on Escapable results).
     var underlying: Underlying {
         @_lifetime(borrow self)
         borrowing get
     }
 
+    /// Constructs a carrier from an underlying value.
+    ///
+    /// The `consuming` parameter transfers ownership from caller to
+    /// carrier — required for `~Copyable` Underlying and a no-op for
+    /// `Copyable` Underlying. The `@_lifetime(copy underlying)`
+    /// annotation ties the carrier's lifetime to the underlying's
+    /// scope when Underlying is `~Escapable`.
     @_lifetime(copy underlying)
     init(_ underlying: consuming Underlying)
 }
