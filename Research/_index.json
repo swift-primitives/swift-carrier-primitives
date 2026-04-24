@@ -49,6 +49,17 @@
       "statusRaw": "REFERENCE",
       "tier": 3,
       "scope": "cross-package"
+    },
+    {
+      "file": "carrier-vs-rawrepresentable-comparative-analysis.md",
+      "displayName": "carrier-vs-rawrepresentable-comparative-analysis",
+      "topic": "Nine-dimension comparative analysis between Carrier<Underlying> (this package) and Swift stdlib's RawRepresentable. DECISION: non-substitutable, non-refining protocols. Carrier's ~Copyable/~Escapable support, non-failable init, dual associated types (Domain + Underlying), and primary-associated-type spelling set it apart structurally. RawRepresentable's stdlib integrations (Codable synthesis, OptionSet) sit at a level Carrier does not reach; Carrier's cross-type generic algorithms (Form D) sit at a level RawRepresentable does not express. Neither protocol should refine or subsume the other; ecosystem types should not dual-conform.",
+      "date": "2026-04-24",
+      "status": "DECISION",
+      "statusDetail": null,
+      "statusRaw": "DECISION",
+      "tier": 2,
+      "scope": "cross-package"
     }
   ],
   "narrativeSections": [
