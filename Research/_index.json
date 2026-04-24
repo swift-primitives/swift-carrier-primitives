@@ -57,8 +57,8 @@
       "body": "These four research documents were authored in swift-institute/Research/ on 2026-04-22 and moved to this package on 2026-04-24 when swift-carrier-primitives was created as the dedicated home for Carrier-family research and experiments. See swift-institute/Research/Reflections/2026-04-23-carrier-walkback-and-capability-lift-taxonomy.md for the full investigation arc, including the initial Carrier package proposal, walk-back on three grounds, and the 2026-04-24 revisit that produced this package."
     },
     {
-      "heading": "Lost work note",
-      "body": "The companion abstract characterization self-projection-default-pattern.md was authored in session 2026-04-22 and lost mid-session 2026-04-23 (filesystem disturbance); not re-authored. The pattern's concrete instantiation survives in Ownership.Borrow.`Protocol` (swift-ownership-primitives) and the Borrow DECISION at swift-institute/Research/ownership-borrow-protocol-unification.md."
+      "heading": "Companion research",
+      "body": "The companion characterization of the orthogonal self-projection default pattern lives at swift-ownership-primitives/Research/self-projection-default-pattern.md (v1.0.0, 2026-04-24, RECOMMENDATION, Tier 2). The original authoring on 2026-04-22 was lost mid-session 2026-04-23 and re-authored on 2026-04-24 from the shipped Ownership.Borrow.`Protocol` source and the reflection record. The companion experiment (V0–V5 variants) was also lost and has not been re-authored; variant verdicts in the re-authored doc are replayed from shape analysis."
     }
   ]
 }

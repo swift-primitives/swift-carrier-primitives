@@ -70,18 +70,17 @@ not establish a normative semantic contract; it characterizes options.
 
 **Relationship to prior research**: this document is *complementary
 to and orthogonal from* the **self-projection default pattern**
-exemplified by `Ownership.Borrow.\`Protocol\`` (see
-`swift-institute/Research/ownership-borrow-protocol-unification.md`,
-IMPLEMENTED 2026-04-23). A companion research doc characterizing
-the meta-pattern in the abstract (`self-projection-default-pattern.md`)
-was authored and lost mid-session on 2026-04-23 and has not been
-re-authored; its substance survives in the Borrow DECISION and
-the conformance surface shipped in `swift-ownership-primitives`.
-The self-projection pattern (Borrow / Mutate family) addresses a
-single associatedtype defaulting to `N<Self>`. The capability-lift
-pattern addresses Tagged-forwarding capability protocols over a
-value-type V. A type may participate in either, both, or neither
-— see §"Pattern taxonomy" below.
+characterized in
+`swift-ownership-primitives/Research/self-projection-default-pattern.md`
+(v1.0.0, 2026-04-24, RECOMMENDATION, Tier 2). The self-projection
+pattern (Borrow family; Mutate / Inout candidates) addresses a
+single associatedtype defaulting to `N<Self>` and is exemplified
+by `Ownership.Borrow.\`Protocol\`` (IMPLEMENTED, see
+`swift-institute/Research/ownership-borrow-protocol-unification.md`).
+The capability-lift pattern (this document) addresses Tagged-
+forwarding capability protocols over a value-type V. A type may
+participate in either, both, or neither — see §"Pattern taxonomy"
+below.
 
 ## Question
 
@@ -730,7 +729,7 @@ investigation's.
 ### Primary sources
 
 - **Experiment (CONFIRMED)**: `swift-carrier-primitives/Experiments/capability-lift-pattern/Sources/main.swift` (Apple Swift 6.3.1, 2026-04-22) — six variants V0–V5 probing the capability-lift pattern's recipe, super-protocol unification options, API broadening, and limits.
-- **Companion research** (the abstract characterization of the self-projection default pattern was authored at `swift-primitives/Research/self-projection-default-pattern.md` in session 2026-04-22 and lost mid-session 2026-04-23; not re-authored. The pattern's concrete instantiation in Ownership.Borrow.\`Protocol\` is captured in the Borrow DECISION below.)
+- **Companion research (RECOMMENDATION)**: `swift-ownership-primitives/Research/self-projection-default-pattern.md` (v1.0.0, 2026-04-24, Tier 2) — characterizes the orthogonal self-projection pattern exemplified by `Ownership.Borrow.\`Protocol\``. The original authoring (2026-04-22, in `swift-primitives/Research/`) was lost mid-session 2026-04-23 and re-authored at the current location on 2026-04-24 from the shipped protocol + reflection record.
 - **Reference DECISION**: `swift-institute/Research/ownership-borrow-protocol-unification.md` (v1.0.0, 2026-04-22, tier 2) — the Borrow case that motivated the broader meta-pattern investigation.
 
 ### Ecosystem instances (real types matching the recipe)
