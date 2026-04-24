@@ -17,6 +17,10 @@ let package = Package(
             targets: ["Carrier Primitives"]
         ),
         .library(
+            name: "Carrier Primitives Standard Library Integration",
+            targets: ["Carrier Primitives Standard Library Integration"]
+        ),
+        .library(
             name: "Carrier Primitives Test Support",
             targets: ["Carrier Primitives Test Support"]
         ),
@@ -29,9 +33,16 @@ let package = Package(
             dependencies: []
         ),
         .target(
+            name: "Carrier Primitives Standard Library Integration",
+            dependencies: [
+                "Carrier Primitives",
+            ]
+        ),
+        .target(
             name: "Carrier Primitives Test Support",
             dependencies: [
                 "Carrier Primitives",
+                "Carrier Primitives Standard Library Integration",
             ],
             path: "Tests/Support"
         ),
@@ -39,6 +50,7 @@ let package = Package(
             name: "Carrier Primitives Tests",
             dependencies: [
                 "Carrier Primitives",
+                "Carrier Primitives Standard Library Integration",
                 "Carrier Primitives Test Support",
             ]
         ),

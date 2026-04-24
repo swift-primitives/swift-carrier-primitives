@@ -9,9 +9,11 @@ Unified super-protocol for phantom-typed value wrappers — `Carrier<Underlying>
 ## Key Features
 
 - **One protocol, four quadrants** — `Carrier<Underlying>` admits `~Copyable` and `~Escapable` suppression on `Self`, `Domain`, and `Underlying`. A single declaration covers `Copyable & Escapable`, `~Copyable & Escapable`, `Copyable & ~Escapable`, and `~Copyable & ~Escapable` conformers. Earlier design drafts had proposed splitting into a `Copyable`-only protocol + a `NoncopyCarrier` sibling; the final design unifies them.
-- **Zero dependencies** — Ships the protocol only. Conformances live in each conforming type's home package (e.g., `Tagged: Carrier` in `swift-tagged-primitives` when adopted). Carrier Primitives itself has no upstream dependencies.
+- **Zero dependencies** — Ships the protocol only. Conformances for ecosystem types (Tagged, Cardinal, Ordinal, Hash.Value, etc.) live in each conforming type's home package. Carrier Primitives itself has no upstream dependencies.
 - **Primary associated type** — `Carrier<Underlying>` per SE-0346 enables the parameterized-constraint spelling `some Carrier<Int>` at API sites.
 - **Two axes of discrimination** — `Domain` (phantom tag, defaults to `Never`) + `Underlying` (wrapped value type). Generic consumers can reflect on both metatypes for phantom-type-aware diagnostics, cross-Carrier conversion, and witness-based serialization.
+- **Trivial self-carrier default** — `extension Carrier where Underlying == Self` provides the `underlying` getter and `init(_:)` for free, so trivial self-carriers (types that carry themselves) declare conformance with a single `typealias Underlying = Self` line.
+- **Stdlib integration** — The `Carrier Primitives Standard Library Integration` target conforms Swift's numeric primitives (`Int`, `UInt`, `Int8`–`Int64`, `UInt8`–`UInt64`, `Double`, `Float`), `Bool`, and `String` to Carrier as trivial self-carriers. Bare stdlib values reach `some Carrier<Int>` / `some Carrier<String>` / etc. APIs without wrapping.
 - **Foundation-free** — Primitives-layer per `[PRIM-FOUND-001]`; no Foundation imports.
 
 ---
@@ -134,13 +136,22 @@ Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 
 
 ## Architecture
 
-Single-target package with one library product (`Carrier Primitives`) plus a test-support product (`Carrier Primitives Test Support`, currently re-export only).
+Three library products, zero external dependencies.
+
+| Product | Target | Purpose |
+|---------|--------|---------|
+| `Carrier Primitives` | `Sources/Carrier Primitives/` | The `Carrier<Underlying>` protocol + `extension Carrier where Underlying == Self` default implementation for trivial self-carriers. |
+| `Carrier Primitives Standard Library Integration` | `Sources/Carrier Primitives Standard Library Integration/` | Conforms 14 stdlib numeric and primitive types to Carrier as trivial self-carriers — `Int`, `UInt`, the sized integer family (`Int8`–`Int64`, `UInt8`–`UInt64`), `Double`, `Float`, `Bool`, `String`. |
+| `Carrier Primitives Test Support` | `Tests/Support/` | Re-exports the main targets for test consumers. |
+
+Source files:
 
 | File | Purpose |
 |------|---------|
 | `Carrier.swift` | The `Carrier<Underlying>` protocol declaration — all four quadrants covered via `~Copyable & ~Escapable` suppression on `Self`, `Domain`, and `Underlying`. |
+| `Carrier+Trivial.swift` | The `extension Carrier where Underlying == Self` default — `_read { yield self }` getter + `init(_ underlying: consuming Self)` init for types that carry themselves. Makes trivial self-carrier conformances a one-line `typealias`. |
 
-The package is a **supplementary decomposition** per `[MOD-015]` — the umbrella `Carrier Primitives` library is the canonical consumer import. There are no variant targets, and Carrier Primitives ships with **zero external dependencies**.
+Per `[MOD-015]` consumer-import-precision, import the narrowest product you need. If you only want the protocol (e.g., declaring conformances for your own types), import `Carrier Primitives`. If you want the protocol AND the stdlib conformances, import `Carrier Primitives Standard Library Integration` (which re-exports the main target via `@_exported public import`).
 
 ---
 

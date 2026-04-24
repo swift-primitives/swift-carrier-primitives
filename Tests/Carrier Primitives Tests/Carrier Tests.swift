@@ -1,5 +1,6 @@
 import Testing
 import Carrier_Primitives
+import Carrier_Primitives_Standard_Library_Integration
 import Carrier_Primitives_Test_Support
 
 // Carrier<Underlying> is a generic protocol — per [SWIFT-TEST-003] the
@@ -51,5 +52,42 @@ extension CarrierTests.Unit {
         let c = Fixture.Scoped(Fixture.Scoped.Resource(raw: 77))
         let raw = c.underlying.raw
         #expect(raw == 77)
+    }
+
+    // MARK: Standard Library Integration — stdlib types as trivial self-carriers
+
+    @Test
+    func `Int conforms to Carrier via stdlib integration`() {
+        // Int: Carrier lives in Carrier Primitives Standard Library
+        // Integration. The default `where Underlying == Self` extension
+        // provides underlying + init(_:).
+        let i: Int = 42
+        #expect(i.underlying == 42)
+        #expect(Int(99).underlying == 99)
+    }
+
+    @Test
+    func `Int satisfies some Carrier<Int> at API sites`() {
+        // Form: a bare Int reaches a `some Carrier<Int>` API without
+        // any wrapping.
+        #expect(Fixture.value(of: 77) == 77)
+    }
+
+    @Test
+    func `String conforms to Carrier via stdlib integration`() {
+        let s: String = "hello"
+        #expect(s.underlying == "hello")
+    }
+
+    @Test
+    func `Double conforms to Carrier via stdlib integration`() {
+        let d: Double = 3.14
+        #expect(d.underlying == 3.14)
+    }
+
+    @Test
+    func `Bool conforms to Carrier via stdlib integration`() {
+        let b: Bool = true
+        #expect(b.underlying == true)
     }
 }
