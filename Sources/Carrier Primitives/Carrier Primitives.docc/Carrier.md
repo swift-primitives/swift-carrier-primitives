@@ -1,4 +1,4 @@
-# ``Carrier``
+# ``Carrier_Primitives/Carrier``
 
 @Metadata {
     @DisplayName("Carrier")
@@ -26,11 +26,24 @@ public protocol Carrier<Underlying>: ~Copyable, ~Escapable {
 }
 ```
 
+## The four-quadrant grid
+
+`Self` and `Underlying` independently admit or suppress `Copyable` and `Escapable`, and the protocol shape above degrades gracefully across the resulting grid — concrete conformers omit the `@_lifetime` annotations when `Underlying` is `Escapable` (Swift rejects them on Escapable results) and include them when it is `~Escapable`.
+
+| Self | Underlying | Canonical conformer |
+|------|------------|---------------------|
+| `Copyable` & `Escapable` | `Copyable` & `Escapable` | Bare `Cardinal`, `Ordinal`, `Tagged<T, Int>` |
+| `~Copyable` & `Escapable` | `~Copyable` & `Escapable` | `Tagged<T, MoveOnlyResource>` |
+| `Copyable` & `~Escapable` | `Copyable` & `~Escapable` | Scoped Copyable references |
+| `~Copyable` & `~Escapable` | `~Copyable` & `~Escapable` | `Tagged<T, Ownership.Inout<Base>>` |
+
+The quadrant-by-quadrant conformance recipes — which annotations to include, which to omit, which getter form to use — live in <doc:Conformance-Recipes>.
+
 ## The two associated types
 
 ### `Domain`
 
-The phantom discriminator — a type-level tag distinguishing otherwise-indistinguishable carriers of the same `Underlying`. `Tagged<UserTag, Int>.Domain` is `UserTag`; `Tagged<OrderTag, Int>.Domain` is `OrderTag`; bare `Int.Domain` (if Int conformed) would be `Never`. Generic functions can reflect on `C.Domain` to distinguish Tagged variants at the type level without any runtime overhead.
+The phantom discriminator — a type-level tag distinguishing otherwise-indistinguishable carriers of the same `Underlying`. `Tagged<User, Int>.Domain` is `User`; `Tagged<Order, Int>.Domain` is `Order`; bare `Int.Domain` (if Int conformed) would be `Never`. Generic functions can reflect on `C.Domain` to distinguish Tagged variants at the type level without any runtime overhead.
 
 Defaults to `Never` so trivial self-carriers don't need to declare the typealias.
 
@@ -126,7 +139,21 @@ Form D is the enabler — cross-Carrier algorithms become writable. Concrete nea
 
 ## Why not `RawRepresentable`?
 
-Carrier and Swift's `RawRepresentable` occupy different design spaces. See `Research/carrier-vs-rawrepresentable-comparative-analysis.md` for the nine-dimension comparison; the short version: RawRepresentable's `init?(rawValue:)` is validating (for enum / OptionSet cases), cannot express `~Copyable` / `~Escapable` RawValue, has one associated type (no phantom-tag dimension), and is tied to stdlib integrations (Codable auto-synthesis, OptionSet) that don't apply at the primitives layer. Carrier complements rather than refines.
+Carrier and Swift's `RawRepresentable` occupy different design spaces. See <doc:Carrier-vs-RawRepresentable> for the decision tree and the underlying `Research/carrier-vs-rawrepresentable-comparative-analysis.md` for the nine-dimension comparison; the short version: `RawRepresentable`'s `init?(rawValue:)` is validating (for enum / OptionSet cases), cannot express `~Copyable` / `~Escapable` `RawValue`, has one associated type (no phantom-tag dimension), and is tied to stdlib integrations (Codable auto-synthesis, OptionSet) that don't apply at the primitives layer. Carrier complements rather than refines.
+
+## Design decisions
+
+### A single protocol covering all four quadrants, not split siblings
+
+An earlier draft proposed splitting Carrier into copyable-only and `NoncopyCarrier` siblings to sidestep the round-trip weakening for `~Copyable` underlyings documented above. The final design takes the unified path: the round-trip is total for `Copyable` and weakens to "inspect-via-borrow-then-reconstruct" for `~Copyable`. Consumers opt into whichever conformance shape matches their type's characteristics; the protocol accommodates both.
+
+### Top-level protocol with a primary associated type, not `Carrier.\`Protocol\``
+
+Per SE-0346, `Carrier<Underlying>` is declared at module scope with `Underlying` marked as a primary associated type. This enables the `some Carrier<Int>` spelling at API sites. The ecosystem's nested-protocol convention (`Cardinal.\`Protocol\``) still applies to domain-specific per-type protocols; Carrier is a different shape — a super-protocol that spans the whole family.
+
+### Trivial-self-carrier default via `extension Carrier where Underlying == Self`
+
+Bare value types that carry themselves conform in a single `typealias Underlying = Self` line; the extension provides the `underlying` accessor and `init(_:)`. The default uses `_read { yield self }` rather than `borrowing get { self }` so the same extension works whether `Self` admits copying or suppresses it. The `Carrier Primitives Standard Library Integration` target ships 24 stdlib conformances of this shape (`Int`, `String`, `Bool`, …) in a single-line-per-type form.
 
 ## Research
 

@@ -11,7 +11,7 @@ The carrier abstraction, its relationship to phantom-typed wrappers, and where i
 A `Carrier` is a type that exposes an `Underlying` value through a borrowing accessor and constructs from an underlying via a consuming init. It's the generalization of "wrapper type" from the four concrete instances that appear in the primitives layer:
 
 - A bare value type that is its own underlying (`Cardinal.underlying == self`).
-- A Tagged wrapper around a value (`Tagged<UserTag, Int>.underlying == rawValue`).
+- A Tagged wrapper around a value (`Tagged<User, Int>.underlying == rawValue`).
 - A scoped borrowed reference to a value (`Ownership.Inout<Base>` or similar).
 - Combinations of these.
 
@@ -21,7 +21,7 @@ The common shape is: a value accessor, a construction path, and an optional phan
 
 `Underlying` is the wrapped value type. `Domain` is a phantom tag discriminating otherwise-indistinguishable carriers of the same Underlying.
 
-Without `Domain`, `Tagged<UserTag, Int>` and `Tagged<OrderTag, Int>` would look identical to generic code — both conform to `some Carrier<Int>`, both expose `underlying: Int`, both construct the same way. The Tag information would be lost at the generic dispatch level.
+Without `Domain`, `Tagged<User, Int>` and `Tagged<Order, Int>` would look identical to generic code — both conform to `some Carrier<Int>`, both expose `underlying: Int`, both construct the same way. The Tag information would be lost at the generic dispatch level.
 
 With `Domain`, generic code can reflect on `C.Domain` to distinguish the tags at the type level:
 
@@ -30,8 +30,8 @@ func diagnose<C: Carrier>(_ c: C) -> String {
     "Error in Carrier<\(C.Underlying.self)> from domain \(C.Domain.self)"
 }
 
-diagnose(Tagged<UserTag, Int>(42))   // "... Domain UserTag"
-diagnose(Tagged<OrderTag, Int>(42))  // "... Domain OrderTag"
+diagnose(Tagged<User, Int>(42))   // "... Domain User"
+diagnose(Tagged<Order, Int>(42))  // "... Domain Order"
 ```
 
 The runtime value (42) is the same, but the compile-time metadata differs. Carrier preserves that distinction in the generic setting.
@@ -93,7 +93,7 @@ A type may participate in either, both, or neither:
 
 The Tagged / Property split from `swift-property-primitives/Research/property-tagged-semantic-roles.md` partitions phantom-typed wrappers into:
 
-- **Group A — domain-identity phantom wrappers** (Tagged). The tag identifies what kind of value is wrapped. `retag<NewTag>` is a meaningful cross-fiber morphism. Extensions are per-domain. **Carrier is designed for Group A.**
+- **Group A — domain-identity phantom wrappers** (Tagged). The tag identifies what kind of value is wrapped. `retag<NewDomain>` is a meaningful cross-fiber morphism. Extensions are per-domain. **Carrier is designed for Group A.**
 - **Group B — verb-namespace phantom wrappers** (Property). The tag selects which extension methods apply. Cross-fiber morphisms don't exist (retagging `Push` to `Pop` would be semantically nonsensical). **Carrier does not fit Group B.**
 
 `Property<Tag, Base>` explicitly does NOT conform to Carrier. The verb-namespace's sealed-fiber structure is fundamentally incompatible with Carrier's round-trip-and-discriminate-by-Domain shape. See the research docs for the categorical asymmetry argument.

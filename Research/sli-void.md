@@ -30,7 +30,9 @@ extension Void: Carrier { ... }
 We could introduce a nominal wrapper type:
 
 ```swift
-public struct Unit: Carrier {
+public struct Unit {}
+
+extension Unit: Carrier {
     public typealias Underlying = Unit
 }
 ```
@@ -41,7 +43,7 @@ And ship it in the SLI target. But then we've invented a new type (`Carrier_Prim
 
 **Status**: DECISION — skipped from 0.1.0 SLI.
 
-**Rationale**: The Swift language doesn't permit `extension Void: Carrier`. A wrapper type would be a new invention, not a stdlib integration. Consumers who genuinely need a Carrier-shaped unit type can declare their own `struct Unit: Carrier { ... }` in their package.
+**Rationale**: The Swift language doesn't permit `extension Void: Carrier`. A wrapper type would be a new invention, not a stdlib integration. Consumers who genuinely need a Carrier-shaped unit type can declare their own `struct Unit` with a standalone `extension Unit: Carrier { ... }` in their package.
 
 ## References
 

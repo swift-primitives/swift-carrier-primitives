@@ -330,7 +330,7 @@ So Tagged can be read two ways:
 The second reading is what makes Tagged the universal Carrier-builder.
 **Anywhere you'd want a Carrier with a specific Domain, you reach for
 Tagged.** You don't author a custom Carrier conformance for a new
-phantom Tag; you instantiate `Tagged<MyTag, MyValue>` and the
+phantom Tag; you instantiate `Tagged<User, MyValue>` and the
 conformance comes free via the parametric extension.
 
 Bare types (Cardinal, Ordinal) conform separately as "trivial Carriers"
@@ -348,7 +348,7 @@ protocol so APIs accept both.
 2. **The `Domain = Never` self-conformance trick is doing real work.**
    It's how a value type joins the Carrier club without going through
    Tagged. Without it, you'd force Cardinal to be
-   `Tagged<NeverTag, Cardinal>` everywhere — awkward and pointless.
+   `Tagged<Never, Cardinal>` everywhere — awkward and pointless.
 
 3. **A new value type V joins the family in two extensions**, not one:
    - `extension V: Carrier where Underlying == V` (V carries itself —
@@ -699,7 +699,7 @@ informed by this characterization.
 | Writing an API for `Cardinal` quantities | `func f<C: Cardinal.\`Protocol\`>(_ c: C) -> C` (today) or `func f(_ c: some Carrier<Cardinal>) -> Cardinal` (if Carrier added) |
 | Writing an API for `Ordinal` positions | Mirror of above with `Ordinal` |
 | Writing a function that should accept ANY Carrier (debug, log, generic conversion) | `func f<C: Carrier>(_ c: C) -> ...` — only works after Carrier exists |
-| Adding a new Tag for an existing value type V | Just `typealias MyCount = Tagged<MyTag, V>`. Conformance to `V.\`Protocol\`` (and Carrier, if added) comes free via the parametric extension |
+| Adding a new Tag for an existing value type V | Just `typealias MyCount = Tagged<User, V>`. Conformance to `V.\`Protocol\`` (and Carrier, if added) comes free via the parametric extension |
 | Adding a new value type V to the Carrier family | Two extensions: `extension V: Carrier where Underlying == V` (trivial Carrier) AND `extension Tagged: Carrier where RawValue == V, Tag: ~Copyable` (Tagged generates Carriers of V for any Tag) |
 | Adding a `~Copyable` value type | Don't conform to Carrier — author a separate NoncopyCarrier protocol |
 | Writing an existential `any Carrier<X>` | Type-checks but loses Underlying; prefer `some Carrier<X>` for generic dispatch |

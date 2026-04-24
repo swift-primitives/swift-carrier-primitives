@@ -36,21 +36,23 @@ Four call sites, one signature:
 
 ```swift
 // Q1 — Copyable & Escapable Underlying (the ordinary case):
-let userID: Tagged<UserTag, UInt64> = 42
+let userID = User.ID(42)
 let next = project(userID) { u in u &+ 1 }
 
 // Q2 — ~Copyable & Escapable Underlying (resource wrappers):
-let fileCarrier = FileHandleCarrier(FileHandle(fd: 3))
-let fd = project(fileCarrier) { h in h.fd }
+let fileHandle = File.Handle(File.Descriptor(raw: 3))
+let rawFd = project(fileHandle) { descriptor in descriptor.raw }
 
 // Q3 — Copyable & ~Escapable Underlying (span-like views):
-let spanCarrier: SpanCarrier<UInt8> = .init(bytes[...])
-let count = project(spanCarrier) { s in s.count }
+let bufferView: Buffer.View<UInt8> = .init(bytes[...])
+let count = project(bufferView) { span in span.count }
 
 // Q4 — ~Copyable & ~Escapable Underlying (scoped references):
-let inoutCarrier: InoutRefCarrier<Base> = ...
-let snapshot = project(inoutCarrier) { r in r.summary() }
+let bufferScope: Buffer.Scope<Base> = ...
+let snapshot = project(bufferScope) { ref in ref.summary() }
 ```
+
+The authored conformances follow the `Nest.Name` discipline — `User.ID` (a real `User` domain plus a nested identifier wrapper for Q1), `File.Handle` over `File.Descriptor` (both siblings in the `File` namespace for Q2), and `Buffer.View` / `Buffer.Scope` (siblings under `Buffer` for Q3 and Q4). None of the carriers uses a compound name; each sits under a namespace with other inhabitants, so `[API-NAME-001a]`'s single-type-no-namespace rule is satisfied.
 
 ## Why `RawRepresentable` cannot host this
 

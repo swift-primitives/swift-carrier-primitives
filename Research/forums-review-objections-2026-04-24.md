@@ -31,7 +31,7 @@ The top-6 below are the angles I'd expect a Swift Forums `related-projects` anno
 **Mitigation** (pre-launch):
 - Add a Research note "Lifetime and round-trip semantics for `~Copyable` Underlyings" that documents the consuming-init semantic property c2 surfaces (a correct `~Copyable` conformer cannot round-trip its own `.underlying` without owning a separate instance); landed as `Research/round-trip-semantics-noncopyable-underlyings.md` in this session.
 - DocC tutorial version of the same — deferred to 0.1.x polish track.
-- Add one `~Copyable`-Underlying conformer to the README Quick Start (already present: `FileHandleCarrier` example at README §"Conform a ~Copyable resource" exercises the `_read { yield }` path).
+- Add one `~Copyable`-Underlying conformer to the README Quick Start (already present: `File.Handle` over `File.Descriptor` example at README §"Conform a ~Copyable resource" exercises the `_read { yield }` path).
 
 **Concreteness anchor**: high — cites specific protocol requirement `init(_ underlying: consuming Underlying)`, specific file line `Carrier+Trivial.swift:15`, and a specific semantic consequence. Load-bearing per [FREVIEW-012] triage.
 

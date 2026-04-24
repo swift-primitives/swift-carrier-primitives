@@ -7,17 +7,19 @@ extension Fixture {
     /// init. `@_lifetime` annotations are omitted because `Int` is
     /// Escapable (the attribute is rejected on Escapable results).
     /// `Domain` defaults to `Never`.
-    struct Plain: Carrier {
-        typealias Underlying = Int
-
+    struct Plain {
         var _storage: Int
-
-        var underlying: Int {
-            borrowing get { _storage }
-        }
 
         init(_ underlying: consuming Int) {
             self._storage = underlying
         }
+    }
+}
+
+extension Fixture.Plain: Carrier {
+    typealias Underlying = Int
+
+    var underlying: Int {
+        borrowing get { _storage }
     }
 }

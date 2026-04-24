@@ -55,13 +55,15 @@ The last row is the one that surprises readers. It's the intended behavior — t
 
 Consumers that need to "change the carrier" for a `~Copyable` Underlying have two options:
 
+The worked examples below use the Q2 recipe from `Sources/.../Conformance-Recipes.md` — `File.Handle` is the carrier, `File.Descriptor` is the `~Copyable` underlying.
+
 ### Option A — Consume and reconstruct
 
 ```swift
-var carrier: FileHandleCarrier = ...
-let underlying = consume carrier          // destroys carrier; takes ownership of its underlying
-// ... do something with underlying, perhaps producing a new owned value ...
-let newCarrier = FileHandleCarrier(underlying)  // consumes underlying; produces new carrier
+var handle: File.Handle = ...
+let descriptor = consume handle               // destroys handle; takes ownership of its descriptor
+// ... do something with descriptor, perhaps producing a new owned value ...
+let rebuilt = File.Handle(descriptor)         // consumes descriptor; produces new carrier
 ```
 
 This is the *canonical* ~Copyable pattern: one carrier in, one carrier out, the path between them passing through an owned value.
@@ -69,21 +71,21 @@ This is the *canonical* ~Copyable pattern: one carrier in, one carrier out, the 
 ### Option B — Supply a fresh Underlying from elsewhere
 
 ```swift
-let freshFH = FileHandle(fd: openedByCaller)  // new owned FileHandle
-let carrier = FileHandleCarrier(freshFH)      // consumes it
+let freshDescriptor = File.Descriptor(raw: openedByCaller)   // new owned descriptor
+let handle = File.Handle(freshDescriptor)                    // consumes it
 ```
 
-Here `freshFH` is not `carrier.underlying` from any pre-existing carrier — it's a separately-owned value. The `consuming init` works fine because ownership transfers cleanly.
+Here `freshDescriptor` is not `handle.underlying` from any pre-existing carrier — it's a separately-owned value. The `consuming init` works fine because ownership transfers cleanly.
 
 ### What does NOT work
 
 ```swift
-// COMPILE ERROR for FileHandleCarrier with ~Copyable FileHandle:
-let c1: FileHandleCarrier = ...
-let c2 = FileHandleCarrier(c1.underlying)     // ✗ can't consume a borrow
+// COMPILE ERROR for File.Handle with ~Copyable File.Descriptor:
+let first: File.Handle = ...
+let second = File.Handle(first.underlying)    // ✗ can't consume a borrow
 ```
 
-`c1.underlying` is a borrowed `FileHandle` by the protocol's `borrowing get` requirement. `FileHandleCarrier.init(_:)` takes `consuming FileHandle`. You cannot pass a borrow where a consume is expected.
+`first.underlying` is a borrowed `File.Descriptor` by the protocol's `borrowing get` requirement. `File.Handle.init(_:)` takes `consuming File.Descriptor`. You cannot pass a borrow where a consume is expected.
 
 ## Relationship to the trivial-self default
 
@@ -92,9 +94,9 @@ The trivial-self-carrier default (`extension Carrier where Underlying == Self`) 
 ```swift
 // Even more restrictive — Self IS Underlying, so "round-trip" means
 // destroying the carrier to yield its own self.
-var c: SomeNoncopyableCarrier = ...
-let u = consume c        // both c and its underlying are now owned by u
-// No distinction between c and its underlying anymore.
+var resource: Some.Resource = ...         // Some.Resource: ~Copyable, Carrier, Underlying == Self
+let extracted = consume resource          // resource and its underlying are now owned by extracted
+// No distinction between the carrier and its underlying anymore.
 ```
 
 This is fine — ~Copyable self-carriers are rare, and when they exist the distinction between "the carrier" and "its underlying" is vacuous anyway.
@@ -113,7 +115,7 @@ Most Carrier-consuming algorithms fall into category 3 (read-only) — they obse
 
 The protocol's shape is correct. The confusion is consumer-side: documentation needs to state the round-trip asymmetry explicitly rather than leaving it implicit in the `~Copyable` mechanics. That's what this note does.
 
-Implication for DocC tutorial content (deferred to 0.1.x polish track): a worked example of the `c2 = FileHandleCarrier(c1.underlying)` compile failure, showing the caller what the error message looks like and pointing to the consume-and-reconstruct option.
+Implication for DocC tutorial content (deferred to 0.1.x polish track): a worked example of the `second = File.Handle(first.underlying)` compile failure, showing the caller what the error message looks like and pointing to the consume-and-reconstruct option.
 
 ## References
 

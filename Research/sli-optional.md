@@ -39,7 +39,7 @@ extension Optional: Carrier where Wrapped: Carrier {
 }
 ```
 
-This reads cleanly. `Optional<Tagged<UserTag, Int>>` becomes a carrier of `Optional<Int>` with `Domain = UserTag`. Round-trip works: `Optional(.some(x)).underlying` returns `.some(x.underlying)`, `Optional(.some(x.underlying))` reconstructs.
+This reads cleanly. `Optional<Tagged<User, Int>>` becomes a carrier of `Optional<Int>` with `Domain = User`. Round-trip works: `Optional(.some(x)).underlying` returns `.some(x.underlying)`, `Optional(.some(x.underlying))` reconstructs.
 
 The map pattern parallels Swift's standard Optional.map; consumers would find it natural.
 

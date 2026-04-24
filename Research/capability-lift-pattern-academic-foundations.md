@@ -383,7 +383,7 @@ the structural reading helps.
 With phantom Tag (no inhabitant — `Tag` is `~Copyable` and never
 constructed at runtime), the Σ-type degenerates: `Σ(t : Tag) V ≡ V`
 extensionally, but distinguished AT THE TYPE LEVEL from
-`Σ(s : OtherTag) V`. The phantom Tag plays the role of a *type-
+`Σ(s : OtherDomain) V`. The phantom Tag plays the role of a *type-
 level token* indexing the family.
 
 The interesting consequence: many type-theoretic tools that apply

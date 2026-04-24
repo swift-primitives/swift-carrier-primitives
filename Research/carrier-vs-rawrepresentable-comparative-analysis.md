@@ -78,7 +78,7 @@ Superficial similarity — one associated type, one accessor, one init. Below is
 
 This is the largest single structural divergence. **RawRepresentable's failability is load-bearing** for its canonical use cases. Enum conformers implement it to reject raw-bit-patterns that don't map to any case (e.g., `enum Color: Int { case red = 0; case green = 1 }` — `Color(rawValue: 7)` returns `nil` because 7 is not a case). OptionSet conformers use it the same way for bitmask validation.
 
-**Carrier is never-failing** because the Carrier abstraction is about wrapping, not about validating. `Tagged<UserTag, UInt64>(42)` cannot fail — any `UInt64` is a valid underlying for `Tagged<UserTag, UInt64>`. The phantom `UserTag` is informationally inert; no runtime check can reject a value based on it.
+**Carrier is never-failing** because the Carrier abstraction is about wrapping, not about validating. `Tagged<User, UInt64>(42)` cannot fail — any `UInt64` is a valid underlying for `Tagged<User, UInt64>`. The phantom `User` is informationally inert; no runtime check can reject a value based on it.
 
 A non-failing `init(_:)` cannot satisfy `init?(rawValue:)` without always returning `.some` (which makes the fallibility cosmetic and confuses consumers). Going the other direction — making Carrier's init failable — would require every Carrier conformer to pretend construction can fail, which is false for all canonical conformers.
 
@@ -120,7 +120,7 @@ Carrier's `borrowing get` yields a borrow, not a copy. Works for both Copyable a
 | Primary associated type | None | `Underlying` (SE-0346) |
 | Phantom-domain story | Not expressible — the type has no way to carry a compile-time tag alongside the raw value | `Domain = Never` for trivial carriers, `Domain = Tag` for Tagged-family carriers; discriminates via the type system |
 
-RawRepresentable has no phantom-tag dimension. `Color: RawRepresentable where RawValue == Int` has one dimension of variation — the raw value. It cannot discriminate "this is a `UserID`" from "this is an `OrderID`" when both wrap `Int`; that's why enums work (each case is a distinct type-level constant) but phantom-typed newtypes around the same primitive cannot use RawRepresentable to distinguish themselves in generic code.
+RawRepresentable has no phantom-tag dimension. `Color: RawRepresentable where RawValue == Int` has one dimension of variation — the raw value. It cannot discriminate "this is a `User.ID`" from "this is an `Order.ID`" when both wrap `UInt64`; that's why enums work (each case is a distinct type-level constant) but phantom-typed newtypes around the same primitive cannot use RawRepresentable to distinguish themselves in generic code.
 
 Carrier's `Domain` associated type is the **compile-time tag dimension**. A generic function constrained on `some Carrier<Int>` can discriminate on `C.Domain` even when Underlying is identical — reflective diagnostics, cross-Carrier conversion, witness-based serialization all rely on this.
 
@@ -181,7 +181,7 @@ For ~Copyable Underlying, Carrier weakens further — the "round-trip" is semant
 
 This is where the design space divergence shows up in API surface. A typical RawRepresentable use is a single enum or struct declaring its own conformance. There's no ecosystem story for "all types that represent an Int" — each RawRepresentable-Int conformer is its own island.
 
-Carrier's design is precisely the ecosystem story. Every type that carries an Int — bare Cardinal, `Tagged<UserTag, Int>`, `Tagged<OrderTag, Int>` — joins the same family, visible at `some Carrier<Int>`. The `Domain` dimension is how they stay distinct while being compared or converted under a common abstraction.
+Carrier's design is precisely the ecosystem story. Every type that carries an Int — bare Cardinal, `Tagged<User, Int>`, `Tagged<Order, Int>` — joins the same family, visible at `some Carrier<Int>`. The `Domain` dimension is how they stay distinct while being compared or converted under a common abstraction.
 
 **Verdict**: Carrier's design enables cross-type algorithms that RawRepresentable categorically cannot.
 

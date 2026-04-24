@@ -227,7 +227,7 @@ this back.
 |---|---|
 | Writing an API for `Cardinal` quantities | `func f<C: Cardinal.\`Protocol\`>(_ c: C) -> C` |
 | Writing an API for `Ordinal` positions | `func f<O: Ordinal.\`Protocol\`>(_ o: O) -> O` |
-| Adding a new Tag to existing value type V | `typealias MyCount = Tagged<MyTag, V>` — conformance to V.\`Protocol\` is parametric, free |
+| Adding a new Tag to existing value type V | `typealias MyCount = Tagged<User, V>` — conformance to V.\`Protocol\` is parametric, free |
 | Adding a new value type V to the family | Two extensions: `extension V: V.\`Protocol\`` and `extension Tagged: V.\`Protocol\` where RawValue == V` |
 | Wanting cross-V genericity | Don't have it today; add a `Carrier`-style super-protocol IF the use case is real (revisit) |
 
