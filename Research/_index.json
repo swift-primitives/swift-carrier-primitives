@@ -1,0 +1,64 @@
+{
+  "$schema": "https://swift-institute.org/schemas/research-index-v1.json",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-04-24",
+  "title": "Research Index",
+  "blurb": "",
+  "scope": "swift-carrier-primitives (swift-primitives)",
+  "documents": [
+    {
+      "file": "capability-lift-pattern.md",
+      "displayName": "capability-lift-pattern",
+      "topic": "Characterization of the Cardinal/Ordinal/Hash capability-lift pattern; super-protocol unification options (A refinement, B parameterized Carrier<Underlying> via SE-0346, C both); API broadening; limits (~Copyable Underlying, generic Underlying, existentials); Tagged-as-canonical-Carrier framing",
+      "date": "2026-04-22",
+      "status": "RECOMMENDATION",
+      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24 when swift-carrier-primitives was created. v1.1.0 content preserved; Option B recommended if super-protocol introduced.",
+      "statusRaw": "RECOMMENDATION",
+      "tier": 2,
+      "scope": "cross-package"
+    },
+    {
+      "file": "capability-lift-pattern-primitives.md",
+      "displayName": "capability-lift-pattern-primitives",
+      "topic": "Primitives-layer view of the capability-lift pattern: Cardinal/Ordinal/Hash ecosystem instances + participation criteria",
+      "date": "2026-04-22",
+      "status": "RECOMMENDATION",
+      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
+      "statusRaw": "RECOMMENDATION",
+      "tier": 2,
+      "scope": "cross-package"
+    },
+    {
+      "file": "capability-lift-pattern-academic-foundations.md",
+      "displayName": "capability-lift-pattern-academic-foundations",
+      "topic": "Tier 3 academic survey backing the capability-lift pattern: 11 primary sources (Reynolds 1983 parametricity, Wadler 1989 free theorems, Hinze 2003, Cheney-Hinze 2003 GADTs, Yallop-White 2014 lightweight higher-kinded, Atkey 2009 fibration, Cardelli-Wegner 1985, Wadler-Blott 1989, Leijen-Meijer 1999 DSLs, Carette-Kiselyov-Shan tagless-final)",
+      "date": "2026-04-22",
+      "status": "REFERENCE",
+      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
+      "statusRaw": "REFERENCE",
+      "tier": 3,
+      "scope": "cross-package"
+    },
+    {
+      "file": "capability-lift-pattern-academic-foundations-primitives.md",
+      "displayName": "capability-lift-pattern-academic-foundations-primitives",
+      "topic": "Primitives-layer slice of the academic foundations — how the cited results apply to Cardinal/Ordinal/Hash specifically",
+      "date": "2026-04-22",
+      "status": "REFERENCE",
+      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
+      "statusRaw": "REFERENCE",
+      "tier": 3,
+      "scope": "cross-package"
+    }
+  ],
+  "narrativeSections": [
+    {
+      "heading": "Provenance",
+      "body": "These four research documents were authored in swift-institute/Research/ on 2026-04-22 and moved to this package on 2026-04-24 when swift-carrier-primitives was created as the dedicated home for Carrier-family research and experiments. See swift-institute/Research/Reflections/2026-04-23-carrier-walkback-and-capability-lift-taxonomy.md for the full investigation arc, including the initial Carrier package proposal, walk-back on three grounds, and the 2026-04-24 revisit that produced this package."
+    },
+    {
+      "heading": "Lost work note",
+      "body": "The companion abstract characterization self-projection-default-pattern.md was authored in session 2026-04-22 and lost mid-session 2026-04-23 (filesystem disturbance); not re-authored. The pattern's concrete instantiation survives in Ownership.Borrow.`Protocol` (swift-ownership-primitives) and the Borrow DECISION at swift-institute/Research/ownership-borrow-protocol-unification.md."
+    }
+  ]
+}

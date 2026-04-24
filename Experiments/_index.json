@@ -1,0 +1,28 @@
+{
+  "$schema": "https://swift-institute.org/schemas/experiments-index-v1.json",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-04-24",
+  "title": "Experiments Index",
+  "blurb": "",
+  "scope": "swift-carrier-primitives (swift-primitives)",
+  "experiments": [
+    {
+      "directory": "capability-lift-pattern",
+      "displayName": "capability-lift-pattern",
+      "purpose": "Probe the capability-lift pattern's recipe, super-protocol unification options (A refinement, B parameterized Carrier<Underlying>, C both), API broadening at four levels, and limits (generic Underlying, ~Copyable Underlying, existentials). Six variants V0–V5.",
+      "date": "2026-04-22",
+      "toolchain": "Swift 6.3.1",
+      "status": "CONFIRMED",
+      "statusDetail": "V0 Cardinal baseline, V1 Ordinal baseline with refinement, V2 super-protocol via refinement, V3 super-protocol via SE-0346 parameterization, V4 API broadening at four levels, V5 limits (three sub-cases catalogued). Moved from swift-institute/Experiments/ on 2026-04-24 when swift-carrier-primitives was created.",
+      "statusRaw": "CONFIRMED",
+      "supersededBy": null,
+      "crossRefs": []
+    }
+  ],
+  "narrativeSections": [
+    {
+      "heading": "Provenance",
+      "body": "This experiment was authored in swift-institute/Experiments/ on 2026-04-22 and moved to this package on 2026-04-24. See Research/capability-lift-pattern.md §Methodology for variant verdicts."
+    }
+  ]
+}
