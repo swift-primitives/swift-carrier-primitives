@@ -90,4 +90,41 @@ extension CarrierTests.Unit {
         let b: Bool = true
         #expect(b.underlying == true)
     }
+
+    @Test
+    func `Character conforms to Carrier via stdlib integration`() {
+        let c: Character = "A"
+        #expect(c.underlying == "A")
+    }
+
+    @Test
+    func `Substring conforms to Carrier via stdlib integration`() {
+        let full = "hello world"
+        let s: Substring = full.prefix(5)
+        #expect(s.underlying == "hello")
+    }
+
+    @Test
+    func `Int128 conforms to Carrier via stdlib integration`() {
+        let big: Int128 = 123_456_789
+        #expect(big.underlying == 123_456_789)
+    }
+
+    @Test
+    func `Duration conforms to Carrier via stdlib integration`() {
+        let d: Duration = .milliseconds(500)
+        #expect(d.underlying == .milliseconds(500))
+    }
+
+    @Test
+    func `Never conforms to Carrier at the type level`() {
+        // Never is uninhabited; no value can exist. The conformance
+        // is verifiable at type level only — the protocol is
+        // satisfied by the default `where Underlying == Self`
+        // extension with Self == Never. This test confirms the
+        // conformance is present in the module's conformance table.
+        func _requireCarrier<T: Carrier & ~Copyable & ~Escapable>(_: T.Type) {}
+        _requireCarrier(Never.self)
+        #expect(Bool(true))
+    }
 }

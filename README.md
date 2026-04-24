@@ -13,7 +13,7 @@ Unified super-protocol for phantom-typed value wrappers — `Carrier<Underlying>
 - **Primary associated type** — `Carrier<Underlying>` per SE-0346 enables the parameterized-constraint spelling `some Carrier<Int>` at API sites.
 - **Two axes of discrimination** — `Domain` (phantom tag, defaults to `Never`) + `Underlying` (wrapped value type). Generic consumers can reflect on both metatypes for phantom-type-aware diagnostics, cross-Carrier conversion, and witness-based serialization.
 - **Trivial self-carrier default** — `extension Carrier where Underlying == Self` provides the `underlying` getter and `init(_:)` for free, so trivial self-carriers (types that carry themselves) declare conformance with a single `typealias Underlying = Self` line.
-- **Stdlib integration** — The `Carrier Primitives Standard Library Integration` target conforms Swift's numeric primitives (`Int`, `UInt`, `Int8`–`Int64`, `UInt8`–`UInt64`, `Double`, `Float`), `Bool`, and `String` to Carrier as trivial self-carriers. Bare stdlib values reach `some Carrier<Int>` / `some Carrier<String>` / etc. APIs without wrapping.
+- **Stdlib integration** — The `Carrier Primitives Standard Library Integration` target conforms 24 stdlib primitive types to Carrier as trivial self-carriers, so bare stdlib values reach `some Carrier<Int>` / `some Carrier<String>` / etc. APIs without wrapping. See the Architecture section for the full list.
 - **Foundation-free** — Primitives-layer per `[PRIM-FOUND-001]`; no Foundation imports.
 
 ---
@@ -141,7 +141,7 @@ Three library products, zero external dependencies.
 | Product | Target | Purpose |
 |---------|--------|---------|
 | `Carrier Primitives` | `Sources/Carrier Primitives/` | The `Carrier<Underlying>` protocol + `extension Carrier where Underlying == Self` default implementation for trivial self-carriers. |
-| `Carrier Primitives Standard Library Integration` | `Sources/Carrier Primitives Standard Library Integration/` | Conforms 14 stdlib numeric and primitive types to Carrier as trivial self-carriers — `Int`, `UInt`, the sized integer family (`Int8`–`Int64`, `UInt8`–`UInt64`), `Double`, `Float`, `Bool`, `String`. |
+| `Carrier Primitives Standard Library Integration` | `Sources/Carrier Primitives Standard Library Integration/` | Conforms 24 stdlib primitive types to Carrier as trivial self-carriers. See the stdlib conformance table below. |
 | `Carrier Primitives Test Support` | `Tests/Support/` | Re-exports the main targets for test consumers. |
 
 Source files:
@@ -152,6 +152,25 @@ Source files:
 | `Carrier+Trivial.swift` | The `extension Carrier where Underlying == Self` default — `_read { yield self }` getter + `init(_ underlying: consuming Self)` init for types that carry themselves. Makes trivial self-carrier conformances a one-line `typealias`. |
 
 Per `[MOD-015]` consumer-import-precision, import the narrowest product you need. If you only want the protocol (e.g., declaring conformances for your own types), import `Carrier Primitives`. If you want the protocol AND the stdlib conformances, import `Carrier Primitives Standard Library Integration` (which re-exports the main target via `@_exported public import`).
+
+### Stdlib conformances shipped by the SLI target
+
+| Category | Types |
+|----------|-------|
+| Native-width integers | `Int`, `UInt` |
+| Sized integers (8-bit) | `Int8`, `UInt8` |
+| Sized integers (16-bit) | `Int16`, `UInt16` |
+| Sized integers (32-bit) | `Int32`, `UInt32` |
+| Sized integers (64-bit) | `Int64`, `UInt64` |
+| 128-bit integers | `Int128`, `UInt128` (SE-0425) |
+| Floating-point | `Double`, `Float`, `Float16` |
+| Boolean | `Bool` |
+| Text / Unicode | `String`, `Substring`, `Character`, `Unicode.Scalar`, `StaticString` |
+| Time | `Duration` |
+| Object identity | `ObjectIdentifier` |
+| Uninhabited | `Never` (type-level conformance; no value can exist) |
+
+Every conformance is a trivial self-carrier with `Domain = Never` (the default) and `Underlying = Self`. The default `extension Carrier where Underlying == Self` in the main target provides `underlying` and `init(_:)`, so each per-type conformance collapses to a single `typealias Underlying = Self` line.
 
 ---
 
