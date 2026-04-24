@@ -62,6 +62,50 @@
       "scope": "cross-package"
     },
     {
+      "file": "generic-consumer-across-quadrants.md",
+      "displayName": "generic-consumer-across-quadrants",
+      "topic": "Concrete witness-style generic consumer signature over some Carrier<Underlying> that spans all four Copyable × Escapable quadrants. Operationalizes the four-quadrant coverage claim from the comparative-analysis doc; shows why RawRepresentable categorically cannot host the same signature. Addresses the c5-skeptic (scope/motivation) objection from the forums-review simulation.",
+      "date": "2026-04-24",
+      "status": "REFERENCE",
+      "statusDetail": null,
+      "statusRaw": "REFERENCE",
+      "tier": 1,
+      "scope": null
+    },
+    {
+      "file": "round-trip-semantics-noncopyable-underlyings.md",
+      "displayName": "round-trip-semantics-noncopyable-underlyings",
+      "topic": "Documents the semantic property that Carrier's `init(_ underlying: consuming Underlying)` obliges a freshly consumed value, so a correct ~Copyable Underlying conformer cannot round-trip its own `.underlying` (a borrow) without owning a separate Underlying instance. Not a bug — intended ~Copyable linearity. Describes the correct consume-and-reconstruct pattern and the supply-a-fresh-Underlying alternative. Addresses the c2 (protocol-shape) objection from the forums-review simulation.",
+      "date": "2026-04-24",
+      "status": "DECISION",
+      "statusDetail": null,
+      "statusRaw": "DECISION",
+      "tier": 2,
+      "scope": null
+    },
+    {
+      "file": "forums-review-simulation-2026-04-24.md",
+      "displayName": "forums-review-simulation-2026-04-24",
+      "topic": "Simulated Swift Forums related-projects announcement thread for swift-carrier-primitives. 11 posts across 9 canonical archetypes (c1, c2, c3, c4, c5, c5-skeptic, c6, c8, short) drawn from the full-corpus analysis (602 threads / 25,428 posts). Predicts load-bearing critiques, archetype-driven noise, and concrete action items. Rendered 2026-04-24 v1.0 (partial corpus); refreshed 2026-04-24 v1.1 against full corpus with canonical labels applied to body metadata. Sidecar JSON: forums-review-simulation-2026-04-24.json.",
+      "date": "2026-04-24",
+      "status": "REFERENCE",
+      "statusDetail": "Paired with forums-review-objections-2026-04-24.md (top-6 prediction) and the sidecar JSON.",
+      "statusRaw": "REFERENCE",
+      "tier": 1,
+      "scope": null
+    },
+    {
+      "file": "forums-review-objections-2026-04-24.md",
+      "displayName": "forums-review-objections-2026-04-24",
+      "topic": "Predicted top-6 hardest-landing objections for a swift-carrier-primitives announcement. Rankings: Ownership 40 / Naming 39 / Type-system 29 / Docs 26 / Layering 26 / Scope 24; Evolution-process deflated to mid-tier (~12) as a corpus artifact. Each entry includes archetype-grounded opening salvos, concreteness-anchor classification, and pre-emptive mitigation actions. Launch-readiness verdict + revised gated list.",
+      "date": "2026-04-24",
+      "status": "REFERENCE",
+      "statusDetail": "v1.1 refresh applied 2026-04-24: canonical archetype labels, Evolution-process corpus-artifact deflation, launch-readiness DocC-articles demoted from 0.1.0-gating to 0.1.x polish. Derivation basis: manual synthesis from analysis.md reliable-top-5 + characterize_package.py weights (pending skill-level [FREVIEW-013] venue-deflation + [FREVIEW-011] refresh atomicity).",
+      "statusRaw": "REFERENCE",
+      "tier": 1,
+      "scope": null
+    },
+    {
       "file": "sli-array.md",
       "displayName": "sli-array",
       "topic": "SLI skip rationale for Array<Element>. Could be done (trivial self-carrier or parametric element-unwrap); skipped because trivial form is zero-payoff and parametric form pre-commits a specific Domain/Underlying choice that consumers should own.",

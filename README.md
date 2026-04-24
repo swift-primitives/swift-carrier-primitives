@@ -6,10 +6,22 @@ Unified super-protocol for phantom-typed value wrappers — `Carrier<Underlying>
 
 ---
 
+## Motivation
+
+Swift's stdlib already has `RawRepresentable` — a protocol that looks structurally similar: one associated type, one accessor, one init. `Carrier<Underlying>` differs on three load-bearing axes:
+
+- It admits `~Copyable & ~Escapable` on both `Self` and `Underlying`. `RawRepresentable` was designed before ownership language features existed and cannot express these shapes.
+- It carries a second associated type, `Domain`, for phantom-type discrimination. `RawRepresentable` has no phantom dimension — `UserID` and `OrderID` both wrapping `Int` are indistinguishable under its constraint.
+- It uses `consuming` / `borrowing` ownership annotations at the protocol level, rather than the implicit by-value semantics of `init?(rawValue:)` / `var rawValue: RawValue { get }`.
+
+These differences aren't decoration — they're what lets the ecosystem's `Tagged<Tag, V>`, `Cardinal`, `Ordinal`, `Hash.Value`, and `~Copyable` resource wrappers share one super-protocol that `RawRepresentable` cannot host. See `Research/carrier-vs-rawrepresentable-comparative-analysis.md` for the full nine-dimension comparison and the explicit non-substitution decision.
+
+---
+
 ## Key Features
 
 - **One protocol, four quadrants** — `Carrier<Underlying>` admits `~Copyable` and `~Escapable` suppression on `Self`, `Domain`, and `Underlying`. A single declaration covers `Copyable & Escapable`, `~Copyable & Escapable`, `Copyable & ~Escapable`, and `~Copyable & ~Escapable` conformers. Earlier design drafts had proposed splitting into a `Copyable`-only protocol + a `NoncopyCarrier` sibling; the final design unifies them.
-- **Zero dependencies** — Ships the protocol only. Conformances for ecosystem types (Tagged, Cardinal, Ordinal, Hash.Value, etc.) live in each conforming type's home package. Carrier Primitives itself has no upstream dependencies.
+- **Zero external dependencies** — Ships the protocol only. Conformances for ecosystem types (Tagged, Cardinal, Ordinal, Hash.Value, etc.) live in each conforming type's home package. Carrier Primitives itself has no upstream packages in its dependency graph. (Internal target-to-target dependencies within the package — the Integration target re-exports the main target; Test Support re-exports both — are not external dependencies.)
 - **Primary associated type** — `Carrier<Underlying>` per SE-0346 enables the parameterized-constraint spelling `some Carrier<Int>` at API sites.
 - **Two axes of discrimination** — `Domain` (phantom tag, defaults to `Never`) + `Underlying` (wrapped value type). Generic consumers can reflect on both metatypes for phantom-type-aware diagnostics, cross-Carrier conversion, and witness-based serialization.
 - **Trivial self-carrier default** — `extension Carrier where Underlying == Self` provides the `underlying` getter and `init(_:)` for free, so trivial self-carriers (types that carry themselves) declare conformance with a single `typealias Underlying = Self` line.
@@ -172,6 +184,12 @@ Per `[MOD-015]` consumer-import-precision, import the narrowest product you need
 
 Every conformance is a trivial self-carrier with `Domain = Never` (the default) and `Underlying = Self`. The default `extension Carrier where Underlying == Self` in the main target provides `underlying` and `init(_:)`, so each per-type conformance collapses to a single `typealias Underlying = Self` line.
 
+### Conformance ownership
+
+`swift-carrier-primitives` is the canonical owner of the stdlib-type Carrier conformances. Downstream packages that want `some Carrier<Int>` reach for bare stdlib values depend on the `Carrier Primitives Standard Library Integration` product rather than declaring `Int: Carrier` themselves — there is one canonical conformance per stdlib type, sourced from this package.
+
+This model sidesteps the SE-0364 retroactive-conformance hazard: if two transitive dependencies both declared `Int: Carrier` independently, Swift's module system would warn and the resulting conformance selection would be undefined behavior across module boundaries. By centralizing the stdlib conformances in this integration target, the module graph has exactly one source of truth.
+
 ---
 
 ## Platform Support
@@ -183,14 +201,6 @@ Every conformance is a trivial self-carrier with `Domain = Never` (the default) 
 | Windows | Full support |
 | iOS / tvOS / watchOS / visionOS | Supported |
 | Swift Embedded | Supported |
-
----
-
-## Final-Release Framing
-
-**0.1.0 is this package's final release.** The protocol shape above is the locked-in API; no changes or additions are planned. Downstream packages adopt the pattern at their own cadence by adding `extension MyType: Carrier` conformances in their own repositories.
-
-This framing reflects the protocol's completeness for its purpose: a single super-protocol over phantom-typed value wrappers, covering all four quadrants, with a minimal surface (one primary associated type, one defaulting associated type, one borrowing getter, one consuming init). The research corpus in `Research/` characterizes the pattern and documents what was considered and rejected for the final shape.
 
 ---
 
@@ -207,7 +217,7 @@ This framing reflects the protocol's completeness for its purpose: a single supe
 
 - [swift-ownership-primitives](https://github.com/swift-primitives/swift-ownership-primitives) — hosts `Ownership.Borrow.\`Protocol\`` and the self-projection-default pattern, the orthogonal meta-pattern to Carrier. See `Research/capability-lift-pattern.md` and `swift-ownership-primitives/Research/self-projection-default-pattern.md`.
 
-**Dependencies**: none.
+**External dependencies**: none.
 
 ---
 

@@ -127,4 +127,16 @@ extension CarrierTests.Unit {
         _requireCarrier(Never.self)
         #expect(Bool(true))
     }
+
+    @Test
+    func `Domain-constrained generic resolves Never for default-Domain conformer`() {
+        // Exercises `where C.Domain: ~Copyable & ~Escapable` against a
+        // conformer that uses the `Domain = Never` default. The generic
+        // substitution machinery must (a) bind C.Domain to Never without
+        // the caller spelling it out, and (b) confirm Never satisfies the
+        // ~Copyable & ~Escapable constraint on the associated type.
+        let c = Fixture.Plain(42)
+        let d = Fixture.domainDescription(c)
+        #expect(d == "Never")
+    }
 }
