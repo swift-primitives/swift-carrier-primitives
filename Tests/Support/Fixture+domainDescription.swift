@@ -1,4 +1,4 @@
-import Carrier_Primitives
+public import Carrier_Primitives
 
 extension Fixture {
     /// Generic helper that projects only `C.Domain` (not `C.Underlying`).
@@ -17,7 +17,7 @@ extension Fixture {
     /// Added per the 2026-04-24 forums-review simulation (post 3, c3
     /// archetype) asking for an explicit test of the Never-default
     /// generic-dispatch path.
-    static func domainDescription<C: Carrier & ~Copyable & ~Escapable>(
+    public static func domainDescription<C: Carrier & ~Copyable & ~Escapable>(
         _ carrier: borrowing C
     ) -> String {
         "\(C.Domain.self)"

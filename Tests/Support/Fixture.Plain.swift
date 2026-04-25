@@ -1,4 +1,4 @@
-import Carrier_Primitives
+public import Carrier_Primitives
 
 extension Fixture {
     /// Quadrant 1: Copyable & Escapable Underlying.
@@ -7,19 +7,19 @@ extension Fixture {
     /// init. `@_lifetime` annotations are omitted because `Int` is
     /// Escapable (the attribute is rejected on Escapable results).
     /// `Domain` defaults to `Never`.
-    struct Plain {
+    public struct Plain {
         var _storage: Int
 
-        init(_ underlying: consuming Int) {
+        public init(_ underlying: consuming Int) {
             self._storage = underlying
         }
     }
 }
 
 extension Fixture.Plain: Carrier {
-    typealias Underlying = Int
+    public typealias Underlying = Int
 
-    var underlying: Int {
+    public var underlying: Int {
         borrowing get { _storage }
     }
 }

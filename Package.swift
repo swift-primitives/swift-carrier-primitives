@@ -50,6 +50,13 @@ let package = Package(
             name: "Carrier Primitives Tests",
             dependencies: [
                 "Carrier Primitives",
+                "Carrier Primitives Test Support",
+            ]
+        ),
+        .testTarget(
+            name: "Carrier Primitives Standard Library Integration Tests",
+            dependencies: [
+                "Carrier Primitives",
                 "Carrier Primitives Standard Library Integration",
                 "Carrier Primitives Test Support",
             ]
