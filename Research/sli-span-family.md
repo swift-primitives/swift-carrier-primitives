@@ -1,8 +1,8 @@
-# SLI — Span family (`Span`, `MutableSpan`, `RawSpan`, `MutableRawSpan`): Adopt (revised 2026-04-25)
+# SLI — Span family (`Span`, `MutableSpan`, `RawSpan`, `MutableRawSpan`): Adopt (revised 2026-04-25, v1.2.0)
 
 <!--
 ---
-version: 1.1.0
+version: 1.2.0
 last_updated: 2026-04-25
 status: DECISION
 tier: 1
@@ -65,35 +65,30 @@ Concerns #2 (parametric "Span of a Carrier Pointee") and #4 (single-conformance 
 
 ## Outcome
 
-**Status (revised 2026-04-25)**: DECISION — adopt trivial-self conformance for the four span types in 0.1.x SLI. Each conformance is an explicit ~5-line extension following the V2 shape; the `Carrier where Underlying == Self` default extension is not used.
+**Status (revised 2026-04-25, v1.2.0)**: DECISION — adopt trivial-self conformance for the four span types in 0.1.x SLI. With the Q3 default extension landed in the same session (per `Experiments/relax-trivial-self-default/`), each conformance is now a one-line typealias.
 
-**Original status (2026-04-24)**: SKIP. Superseded by the empirical result above — the verification cost has been paid by the experiment, and the failure mode is now well-characterized rather than speculative.
+**Original status (2026-04-24)**: SKIP. Superseded twice:
+- v1.1.0 (2026-04-25): empirical result from `Experiments/span-carrier-conformance/` showed explicit ~5-line witnesses are viable. Adopted with explicit witnesses.
+- v1.2.0 (2026-04-25): empirical result from `Experiments/relax-trivial-self-default/` showed sibling default extensions can cover `~Escapable` Self. Conformances reduced to one-liners.
 
-**Conformance shape (per Span variant)**:
+**Conformance shape (per Span variant, v1.2.0)**:
 
 ```swift
 extension Span: Carrier {
     public typealias Underlying = Span<Element>
-
-    public var underlying: Span<Element> {
-        @_lifetime(borrow self)
-        _read { yield self }
-    }
-
-    @_lifetime(copy underlying)
-    public init(_ underlying: consuming Span<Element>) {
-        self = underlying
-    }
+    // `underlying` and `init(_:)` satisfied by the default
+    // `extension Carrier where Underlying == Self, Self: ~Escapable`.
 }
 ```
 
 `MutableSpan`, `RawSpan`, `MutableRawSpan` follow the same shape with their own type substituted for `Span<Element>`.
 
-**Open**: whether the `Carrier where Underlying == Self` default extension should be loosened to cover `~Escapable` Self (a single relaxation that would obviate per-span explicit bodies). Out of scope for this document; track separately if the SLI grows additional `~Escapable` self-carriers.
+**Open item closed (2026-04-25)**: the v1.1.0 "Open" question — whether the default extension can be loosened — was answered empirically. Three sibling default extensions now cover Q2 / Q3 / Q4 in addition to the original Q1, with quadrant-appropriate `@_lifetime` annotations.
 
 ## References
 
 - Swift stdlib `Span<Element>` (SE-0447), `MutableSpan<Element>` (SE-0467), `RawSpan`, `MutableRawSpan`.
 - `Research/capability-lift-pattern.md` §V5b, V5c — `~Copyable` and `~Escapable` quadrant considerations.
-- `Sources/Carrier Primitives/Carrier where Underlying == Self.swift` — the default extension; gated to `Self: Escapable` per V1 finding.
-- `Experiments/span-carrier-conformance/` — empirical verification (V1 REFUTED, V2/V3/V4 CONFIRMED, 2026-04-25).
+- `Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Escapable.swift` — the Q3 default extension covering Span family.
+- `Experiments/span-carrier-conformance/` — empirical verification of the explicit-witness shape (V1 REFUTED, V2/V3/V4 CONFIRMED, 2026-04-25).
+- `Experiments/relax-trivial-self-default/` — empirical verification of the sibling default extensions (V1/V2/V3 CONFIRMED, 2026-04-25).

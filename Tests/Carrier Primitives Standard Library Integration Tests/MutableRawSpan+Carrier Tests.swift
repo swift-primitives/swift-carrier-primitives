@@ -1,8 +1,8 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-// MutableRawSpan is ~Escapable. Conformance ships explicit @_lifetime
-// witnesses in MutableRawSpan+Carrier.swift.
+// MutableRawSpan is ~Escapable. Conformance is a one-line typealias
+// backed by `extension Carrier where Underlying == Self, Self: ~Escapable`.
 
 @Suite("MutableRawSpan+Carrier")
 struct MutableRawSpanCarrierTests {

@@ -31,6 +31,18 @@
       "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier where Underlying == Self.swift"]
     },
     {
+      "directory": "relax-trivial-self-default",
+      "displayName": "relax-trivial-self-default",
+      "purpose": "Test whether sibling default extensions on Carrier (each with its own constraint suppression) can cover the ~Escapable, ~Copyable, and ~Copyable & ~Escapable trivial-self quadrants — collapsing per-conformer explicit witnesses to one-liners.",
+      "date": "2026-04-25",
+      "toolchain": "Swift 6.3.1",
+      "status": "CONFIRMED",
+      "statusDetail": "V1 (Q3 ~Escapable Self) CONFIRMED — Span: Carrier with one-line typealias works through the Q3 default. V2 (Q2 ~Copyable Self) CONFIRMED — synthetic UniqueValue conforms with one-line typealias through Q2 default. V3 (Q4 ~Copyable & ~Escapable Self) CONFIRMED — synthetic ScopedValue conforms with one-line typealias through Q4 default. Three sibling default extensions cover Q2/Q3/Q4; the existing Q1 default remains. @_lifetime annotations are in the ~Escapable variants (Q3, Q4) where the result type is ~Escapable; they remain absent from Q1 and Q2 (Escapable Self rejects them). Closes the Open item in sli-span-family.md v1.1.0.",
+      "statusRaw": "CONFIRMED",
+      "supersededBy": null,
+      "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Escapable.swift", "Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Copyable.swift", "Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Copyable & ~Escapable.swift"]
+    },
+    {
       "directory": "dynamic-member-lookup-quadrants",
       "displayName": "dynamic-member-lookup-quadrants",
       "purpose": "Empirically determine whether @dynamicMemberLookup applied to the Carrier super-protocol (with a default KeyPath subscript on a protocol extension) is viable across all four Copyable × Escapable quadrants of Underlying.",

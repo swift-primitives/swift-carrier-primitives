@@ -1,11 +1,11 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-// Span<Element> is ~Escapable. The default `Carrier where Underlying
-// == Self` extension does NOT cover ~Escapable Self (its candidacy is
-// gated to Self: Escapable); Span+Carrier.swift ships explicit
-// witnesses with @_lifetime annotations. See Research/sli-span-family.md
-// (v1.1.0) and Experiments/span-carrier-conformance/.
+// Span<Element> is ~Escapable. Conformance is a one-line typealias —
+// `underlying` and `init(_:)` are provided by the default
+// `extension Carrier where Underlying == Self, Self: ~Escapable`. See
+// Research/sli-span-family.md (v1.2.0) and
+// Experiments/relax-trivial-self-default/.
 
 @Suite("Span+Carrier")
 struct SpanCarrierTests {

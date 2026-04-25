@@ -2,14 +2,6 @@ public import Carrier_Primitives
 
 extension RawSpan: Carrier {
     public typealias Underlying = RawSpan
-
-    public var underlying: RawSpan {
-        @_lifetime(borrow self)
-        _read { yield self }
-    }
-
-    @_lifetime(copy underlying)
-    public init(_ underlying: consuming RawSpan) {
-        self = underlying
-    }
+    // `underlying` and `init(_:)` satisfied by the default
+    // `extension Carrier where Underlying == Self, Self: ~Escapable`.
 }
