@@ -1,7 +1,7 @@
 {
   "$schema": "https://swift-institute.org/schemas/experiments-index-v1.json",
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-04-24",
+  "generatedAt": "2026-04-25",
   "title": "Experiments Index",
   "blurb": "",
   "scope": "swift-carrier-primitives (swift-primitives)",
@@ -17,6 +17,18 @@
       "statusRaw": "CONFIRMED",
       "supersededBy": null,
       "crossRefs": []
+    },
+    {
+      "directory": "span-carrier-conformance",
+      "displayName": "span-carrier-conformance",
+      "purpose": "Empirically test whether Span<Element>: Carrier is viable in the Q3 (Copyable × ~Escapable) quadrant, contra Research/sli-span-family.md DECISION (2026-04-24). Four variants: V1 default extension, V2 explicit witnesses same-module, V3 cross-module use, V4 release-mode validation per [EXP-017].",
+      "date": "2026-04-25",
+      "toolchain": "Swift 6.3.1",
+      "status": "CONFIRMED",
+      "statusDetail": "V1 REFUTED (default `Carrier where Underlying == Self` extension is gated to Self: Escapable; ~Escapable Self witness candidates are excluded entirely). V2/V3/V4 CONFIRMED with explicit witnesses (`@_lifetime(borrow self) _read { yield self }` + `@_lifetime(copy underlying) init(_:)`). Cross-module generic algorithms returning `C.Underlying` as a function result require `where C.Underlying: Copyable`. The production default extension does NOT cover Span; per-Span explicit bodies are required (~5 lines each). Refines sli-span-family.md concern #1 with a sharper failure mode and confirms concern #3 (explicit bodies, not one-liners).",
+      "statusRaw": "CONFIRMED",
+      "supersededBy": null,
+      "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier+Trivial.swift"]
     }
   ],
   "narrativeSections": [

@@ -129,6 +129,37 @@ extension CarrierTests.Unit {
     }
 
     @Test
+    func `Span family conforms to Carrier at the type level`() {
+        // Span, MutableSpan, RawSpan, MutableRawSpan are ~Escapable.
+        // Conformances are verified at type level — values can only
+        // exist within a scoped lifetime context, so binding-based
+        // tests like the other SLI assertions don't apply directly.
+        // The default `where Underlying == Self` extension does NOT
+        // cover ~Escapable Self (its candidacy is gated to Self:
+        // Escapable); each Span variant ships explicit witnesses.
+        func _requireCarrier<T: Carrier & ~Copyable & ~Escapable>(_: T.Type) {}
+        _requireCarrier(Span<UInt8>.self)
+        _requireCarrier(MutableSpan<UInt8>.self)
+        _requireCarrier(RawSpan.self)
+        _requireCarrier(MutableRawSpan.self)
+        #expect(Bool(true))
+    }
+
+    @Test
+    func `Span underlying yields self via _read coroutine`() {
+        // Runtime exercise of the explicit witness body for Span<UInt8>.
+        // Inside a scoped buffer, .underlying yields the same span;
+        // count round-trips, confirming the witness routes through the
+        // protocol's @_lifetime(borrow self) _read accessor without
+        // breaking the lifetime dependency.
+        let bytes: [UInt8] = [10, 20, 30]
+        bytes.withUnsafeBufferPointer { buffer in
+            let span = Span<UInt8>(_unsafeElements: buffer)
+            #expect(span.underlying.count == 3)
+        }
+    }
+
+    @Test
     func `Domain-constrained generic resolves Never for default-Domain conformer`() {
         // Exercises `where C.Domain: ~Copyable & ~Escapable` against a
         // conformer that uses the `Domain = Never` default. The generic

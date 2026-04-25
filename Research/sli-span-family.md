@@ -1,9 +1,9 @@
-# SLI — Span family (`Span`, `MutableSpan`, `RawSpan`, `MutableRawSpan`): Skip (strongest could-be-done case)
+# SLI — Span family (`Span`, `MutableSpan`, `RawSpan`, `MutableRawSpan`): Adopt (revised 2026-04-25)
 
 <!--
 ---
-version: 1.0.0
-last_updated: 2026-04-24
+version: 1.1.0
+last_updated: 2026-04-25
 status: DECISION
 tier: 1
 scope: swift-carrier-primitives SLI target
@@ -53,16 +53,47 @@ Span IS a value carrier in a defensible sense — `Span<Int>` carries a `Span<In
 | Self-carrier with explicit `@_lifetime` | Yes | 4 explicit bodies, not one-liners |
 | Parametric (Element-unwrap) | Yes, non-trivially | Array-family complications |
 
+## Empirical update (2026-04-25)
+
+`Experiments/span-carrier-conformance/` (V1–V4, CONFIRMED) settles concerns #1 and #3 with sharper findings than this document anticipated:
+
+- **Concern #1 was right that the default doesn't apply, but for a different reason.** V1 REFUTED bare `extension Span: Carrier { typealias Underlying = Self }`. The failure isn't a `@_lifetime` mismatch on the witness body; it's that `extension Carrier where Underlying == Self` carries Self's default `Escapable` constraint and does not propagate `~Escapable`. The witness candidates are excluded from consideration entirely. Diagnostic: *"candidate would match if 'Span<Element>' conformed to 'Escapable'"*.
+- **Concern #3 was correct.** V2 CONFIRMED that explicit witnesses work — `@_lifetime(borrow self) _read { yield self }` plus `@_lifetime(copy underlying) init(_ underlying: consuming Span<Element>) { self = underlying }`. Side finding: `borrowing get { self }` does NOT work for `~Escapable` Self (treated as a consume); `_read { yield self }` is required.
+- **Cross-module + release pass.** V3 (cross-module generic dispatch) and V4 (release build) both CONFIRMED. Form-D generic algorithms compile and dispatch through Span correctly. A generic algorithm returning `C.Underlying` as a function result MUST add `where C.Underlying: Copyable` (the protocol's `Underlying: ~Copyable & ~Escapable` would otherwise reject the return as a `copy` of a noncopyable). Span is Copyable, so use sites for Span-of-T satisfy the constraint.
+
+Concerns #2 (parametric "Span of a Carrier Pointee") and #4 (single-conformance lock for an evolving stdlib type) are NOT settled by the experiment; they remain considerations against parametric shapes and against premature centralization, but they do not block the trivial-self conformance that this document originally rejected.
+
 ## Outcome
 
-**Status**: DECISION — skipped from 0.1.0 SLI.
+**Status (revised 2026-04-25)**: DECISION — adopt trivial-self conformance for the four span types in 0.1.x SLI. Each conformance is an explicit ~5-line extension following the V2 shape; the Carrier+Trivial default extension is not used.
 
-**Rationale**: Span fits Carrier's Q3 quadrant structurally and would be the first SLI conformer to exercise `~Escapable` Self at stdlib integration scope. But the trivial-self-carrier default may not handle `@_lifetime` correctly; each Span variant would need a bespoke conformance; and Span is too new to centralize a single parametric shape at 0.1.0 FINAL.
+**Original status (2026-04-24)**: SKIP. Superseded by the empirical result above — the verification cost has been paid by the experiment, and the failure mode is now well-characterized rather than speculative.
 
-This is the SLI candidate with the strongest could-be-done case. Post-0.1.0 — if a consumer surfaces concrete need for `some Carrier<Span<UInt8>>` APIs — they can declare their own conformance, potentially shipping it in their package.
+**Conformance shape (per Span variant)**:
+
+```swift
+extension Span: Carrier {
+    public typealias Underlying = Span<Element>
+
+    public var underlying: Span<Element> {
+        @_lifetime(borrow self)
+        _read { yield self }
+    }
+
+    @_lifetime(copy underlying)
+    public init(_ underlying: consuming Span<Element>) {
+        self = underlying
+    }
+}
+```
+
+`MutableSpan`, `RawSpan`, `MutableRawSpan` follow the same shape with their own type substituted for `Span<Element>`.
+
+**Open**: whether the Carrier+Trivial default extension should be loosened to cover `~Escapable` Self (a single relaxation that would obviate per-span explicit bodies). Out of scope for this document; track separately if the SLI grows additional `~Escapable` self-carriers.
 
 ## References
 
 - Swift stdlib `Span<Element>` (SE-0447), `MutableSpan<Element>` (SE-0467), `RawSpan`, `MutableRawSpan`.
 - `Research/capability-lift-pattern.md` §V5b, V5c — `~Copyable` and `~Escapable` quadrant considerations.
-- `Carrier+Trivial.swift` — the default extension whose lifetime semantics would need per-span verification.
+- `Carrier+Trivial.swift` — the default extension; gated to `Self: Escapable` per V1 finding.
+- `Experiments/span-carrier-conformance/` — empirical verification (V1 REFUTED, V2/V3/V4 CONFIRMED, 2026-04-25).
