@@ -65,7 +65,7 @@ Concerns #2 (parametric "Span of a Carrier Pointee") and #4 (single-conformance 
 
 ## Outcome
 
-**Status (revised 2026-04-25)**: DECISION — adopt trivial-self conformance for the four span types in 0.1.x SLI. Each conformance is an explicit ~5-line extension following the V2 shape; the Carrier+Trivial default extension is not used.
+**Status (revised 2026-04-25)**: DECISION — adopt trivial-self conformance for the four span types in 0.1.x SLI. Each conformance is an explicit ~5-line extension following the V2 shape; the `Carrier where Underlying == Self` default extension is not used.
 
 **Original status (2026-04-24)**: SKIP. Superseded by the empirical result above — the verification cost has been paid by the experiment, and the failure mode is now well-characterized rather than speculative.
 
@@ -89,11 +89,11 @@ extension Span: Carrier {
 
 `MutableSpan`, `RawSpan`, `MutableRawSpan` follow the same shape with their own type substituted for `Span<Element>`.
 
-**Open**: whether the Carrier+Trivial default extension should be loosened to cover `~Escapable` Self (a single relaxation that would obviate per-span explicit bodies). Out of scope for this document; track separately if the SLI grows additional `~Escapable` self-carriers.
+**Open**: whether the `Carrier where Underlying == Self` default extension should be loosened to cover `~Escapable` Self (a single relaxation that would obviate per-span explicit bodies). Out of scope for this document; track separately if the SLI grows additional `~Escapable` self-carriers.
 
 ## References
 
 - Swift stdlib `Span<Element>` (SE-0447), `MutableSpan<Element>` (SE-0467), `RawSpan`, `MutableRawSpan`.
 - `Research/capability-lift-pattern.md` §V5b, V5c — `~Copyable` and `~Escapable` quadrant considerations.
-- `Carrier+Trivial.swift` — the default extension; gated to `Self: Escapable` per V1 finding.
+- `Sources/Carrier Primitives/Carrier where Underlying == Self.swift` — the default extension; gated to `Self: Escapable` per V1 finding.
 - `Experiments/span-carrier-conformance/` — empirical verification (V1 REFUTED, V2/V3/V4 CONFIRMED, 2026-04-25).

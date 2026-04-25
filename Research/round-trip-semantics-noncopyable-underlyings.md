@@ -120,7 +120,7 @@ Implication for DocC tutorial content (deferred to 0.1.x polish track): a worked
 ## References
 
 - `Sources/Carrier Primitives/Carrier.swift` — protocol declaration
-- `Sources/Carrier Primitives/Carrier+Trivial.swift` — trivial-self default using `_read { yield self }`
+- `Sources/Carrier Primitives/Carrier where Underlying == Self.swift` — trivial-self default using `_read { yield self }`
 - `forums-review-simulation-2026-04-24.md` post 2 (c2) — the objection this note addresses
 - `capability-lift-pattern.md` §V5b — `~Copyable` quadrant considerations
 - `self-projection-default-pattern.md` (swift-ownership-primitives) §Round-trip — the complementary ownership-layer pattern

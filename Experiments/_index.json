@@ -28,7 +28,7 @@
       "statusDetail": "V1 REFUTED (default `Carrier where Underlying == Self` extension is gated to Self: Escapable; ~Escapable Self witness candidates are excluded entirely). V2/V3/V4 CONFIRMED with explicit witnesses (`@_lifetime(borrow self) _read { yield self }` + `@_lifetime(copy underlying) init(_:)`). Cross-module generic algorithms returning `C.Underlying` as a function result require `where C.Underlying: Copyable`. The production default extension does NOT cover Span; per-Span explicit bodies are required (~5 lines each). Refines sli-span-family.md concern #1 with a sharper failure mode and confirms concern #3 (explicit bodies, not one-liners).",
       "statusRaw": "CONFIRMED",
       "supersededBy": null,
-      "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier+Trivial.swift"]
+      "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier where Underlying == Self.swift"]
     }
   ],
   "narrativeSections": [

@@ -62,7 +62,7 @@ What I'm looking for: feedback on whether `Carrier` is the right name, whether t
 
 <!-- archetype: The ~Copyable / Sendable / protocol-shape reviewer (canonical c2) — target: ownership-memory, naming, type-system — opener: direct-stance — closer: question-to-author -->
 
-Reading this carefully. The `borrowing get` + `consuming init(_:)` pairing is the right primitive — I expected to see `_read { yield self }` show up somewhere and of course there it is, in `Sources/Carrier Primitives/Carrier+Trivial.swift:15`:
+Reading this carefully. The `borrowing get` + `consuming init(_:)` pairing is the right primitive — I expected to see `_read { yield self }` show up somewhere and of course there it is, in `Sources/Carrier Primitives/Carrier where Underlying == Self.swift:15`:
 
 ```swift
 extension Carrier where Underlying == Self {

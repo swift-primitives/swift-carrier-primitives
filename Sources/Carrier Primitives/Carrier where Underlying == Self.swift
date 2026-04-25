@@ -1,4 +1,4 @@
-// Carrier+Trivial.swift
+// Carrier where Underlying == Self.swift
 // Default implementation for trivial self-carriers — types where
 // Underlying == Self.
 

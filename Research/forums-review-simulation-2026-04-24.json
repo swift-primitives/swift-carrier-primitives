@@ -63,7 +63,7 @@
   ],
   "posts": [
     {"post_number": 1,  "persona": "op",           "opener_pattern": "direct-stance",   "closer_pattern": "explicit-ask",        "anchors": ["Carrier at Sources/Carrier Primitives/Carrier.swift:62", "Research/capability-lift-pattern.md", "Research/carrier-vs-rawrepresentable-comparative-analysis.md"]},
-    {"post_number": 2,  "cluster_id": "c2",         "opener_pattern": "direct-stance",   "closer_pattern": "question-to-author",  "anchors": ["Sources/Carrier Primitives/Carrier+Trivial.swift:15", "DocC article on _read vs borrowing get"]},
+    {"post_number": 2,  "cluster_id": "c2",         "opener_pattern": "direct-stance",   "closer_pattern": "question-to-author",  "anchors": ["Sources/Carrier Primitives/Carrier where Underlying == Self.swift:15", "DocC article on _read vs borrowing get"]},
     {"post_number": 3,  "cluster_id": "c3",         "opener_pattern": "thanks",          "closer_pattern": "recommendation",      "anchors": ["Sources/Carrier Primitives/Carrier.swift:62", "Tests/Carrier Primitives Tests/"]},
     {"post_number": 4,  "cluster_id": "c5",         "opener_pattern": "direct-stance",   "closer_pattern": "withdraw-hedge",      "anchors": ["RawRepresentable", "Research/carrier-vs-rawrepresentable-comparative-analysis.md"]},
     {"post_number": 5,  "cluster_id": "c4",         "opener_pattern": "meta-comment",    "closer_pattern": "recommendation",      "anchors": ["README Motivation section", "Haskell Coercible", "Rust repr(transparent)"]},

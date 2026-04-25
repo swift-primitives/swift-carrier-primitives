@@ -4,6 +4,11 @@ import Carrier_Primitives_Test_Support
 // Carrier<Underlying> is a generic protocol — per [SWIFT-TEST-003] the
 // test suite uses the parallel namespace pattern (a non-generic
 // top-level struct).
+//
+// This file scopes only the protocol-level surface (generic dispatch,
+// associated-type defaults, parameterized constraint). Per-quadrant
+// fixture conformance assertions live in the dedicated
+// `Fixture.{Plain,Unique,Scoped} Tests.swift` files.
 
 @Suite("Carrier")
 struct CarrierTests {
@@ -11,41 +16,6 @@ struct CarrierTests {
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
-}
-
-// MARK: - Unit
-//
-// Per-quadrant exercises of the protocol's witness shape via the
-// fixtures shipped in Carrier Primitives Test Support.
-
-extension CarrierTests.Unit {
-
-    @Test
-    func `Q1 Plain stores and reads Int underlying`() {
-        let c = Fixture.Plain(42)
-        #expect(c.underlying == 42)
-    }
-
-    @Test
-    func `Q1 Plain round-trips via init from underlying`() {
-        let a = Fixture.Plain(100)
-        let b = Fixture.Plain(a.underlying)
-        #expect(a.underlying == b.underlying)
-    }
-
-    @Test
-    func `Q2 Unique reads underlying via borrow`() {
-        let c = Fixture.Unique(Fixture.Unique.Resource(raw: 99))
-        let raw = c.underlying.raw
-        #expect(raw == 99)
-    }
-
-    @Test
-    func `Q4 Scoped conforms with noncopyable nonescapable underlying`() {
-        let c = Fixture.Scoped(Fixture.Scoped.Resource(raw: 77))
-        let raw = c.underlying.raw
-        #expect(raw == 77)
-    }
 }
 
 // MARK: - Integration
@@ -73,8 +43,8 @@ extension CarrierTests.Integration {
         // Exercises `where C.Domain: ~Copyable & ~Escapable` against a
         // conformer that uses the `Domain = Never` default. The generic
         // substitution machinery must (a) bind C.Domain to Never without
-        // the caller spelling it out, and (b) confirm Never satisfies the
-        // ~Copyable & ~Escapable constraint on the associated type.
+        // the caller spelling it out, and (b) confirm Never satisfies
+        // the ~Copyable & ~Escapable constraint on the associated type.
         let c = Fixture.Plain(42)
         let d = Fixture.domainDescription(c)
         #expect(d == "Never")

@@ -24,7 +24,7 @@ The top-6 below are the angles I'd expect a Swift Forums `related-projects` anno
 
 **Predicted opening salvos** (drawn from canonical archetype c2 — `~Copyable` / Sendable / protocol-shape reviewer):
 
-> "The `_read { yield self }` in `Carrier+Trivial.swift` is a workaround for a real generic-context trap. The comment explains it; the DocC doesn't. Promote it."
+> "The `_read { yield self }` in `Carrier where Underlying == Self.swift` is a workaround for a real generic-context trap. The comment explains it; the DocC doesn't. Promote it."
 
 > "The round-trip semantic note weakens for `~Copyable` Underlying to 'inspect-then-rebuild.' But the protocol requirement `init(_ underlying: consuming Underlying)` still obliges a freshly consumed value — a correct conformer can't round-trip its own `underlying`. Is the weaker reading the intended contract?"
 
@@ -33,7 +33,7 @@ The top-6 below are the angles I'd expect a Swift Forums `related-projects` anno
 - DocC tutorial version of the same — deferred to 0.1.x polish track.
 - Add one `~Copyable`-Underlying conformer to the README Quick Start (already present: `File.Handle` over `File.Descriptor` example at README §"Conform a ~Copyable resource" exercises the `_read { yield }` path).
 
-**Concreteness anchor**: high — cites specific protocol requirement `init(_ underlying: consuming Underlying)`, specific file line `Carrier+Trivial.swift:15`, and a specific semantic consequence. Load-bearing per [FREVIEW-012] triage.
+**Concreteness anchor**: high — cites specific protocol requirement `init(_ underlying: consuming Underlying)`, specific file line `Carrier where Underlying == Self.swift:15`, and a specific semantic consequence. Load-bearing per [FREVIEW-012] triage.
 
 ---
 
