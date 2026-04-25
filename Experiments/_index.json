@@ -29,6 +29,18 @@
       "statusRaw": "CONFIRMED",
       "supersededBy": null,
       "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier where Underlying == Self.swift"]
+    },
+    {
+      "directory": "dynamic-member-lookup-quadrants",
+      "displayName": "dynamic-member-lookup-quadrants",
+      "purpose": "Empirically determine whether @dynamicMemberLookup applied to the Carrier super-protocol (with a default KeyPath subscript on a protocol extension) is viable across all four Copyable × Escapable quadrants of Underlying.",
+      "date": "2026-04-25",
+      "toolchain": "Swift 6.3.1",
+      "status": "PARTIAL",
+      "statusDetail": "V1 (Q1 Copyable & Escapable) CONFIRMED — protocol-level @dynamicMemberLookup propagates to conformers; default subscript on protocol extension instantiates correctly. V2 (Q2 ~Copyable) REFUTED — protocol-extension subscript carries implicit `where Self: Copyable, Self.Underlying: Copyable`. V3 (Q3 ~Escapable) REFUTED — implicit `where Self: Escapable, Self.Underlying: Escapable`. Q4 REFUTED by transitivity. Verdict: dynamic member lookup at the Carrier protocol level is a Q1-only affordance. Informs Research/dynamic-member-lookup-decision.md (DECISION: do not add to Carrier; consumers may adopt locally on their own Q1 conformers).",
+      "statusRaw": "PARTIAL",
+      "supersededBy": null,
+      "crossRefs": ["Research/dynamic-member-lookup-decision.md", "Research/carrier-vs-rawrepresentable-comparative-analysis.md"]
     }
   ],
   "narrativeSections": [
