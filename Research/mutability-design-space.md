@@ -2,11 +2,19 @@
 
 <!--
 ---
-version: 1.0.0
+version: 1.1.0
 last_updated: 2026-04-25
 status: DECISION
 tier: 2
 scope: cross-package
+changelog:
+  - v1.1.0 (2026-04-25): Added §"Investigation outcome (2026-04-25)" recording the
+    swift-mutable-primitives / swift-mutator-primitives package investigation completed
+    DEFERRED. Cross-references to relocated artifacts under swift-institute/Research/
+    and swift-institute/Experiments/ added. Original DECISION on Carrier read-only
+    surface unchanged.
+  - v1.0.0 (2026-04-25): Initial deferral with three options (A/B/C) and option-C
+    revisit triggers.
 ---
 -->
 
@@ -92,10 +100,39 @@ This is a future-work direction, not a 0.1.x commitment.
 **Revisit triggers**:
 
 - A concrete consumer surfaces a genuine need for `func f<C: ???>(_ c: inout C) { c.underlying.foo = bar }` generic dispatch. At that point, the design space narrows from speculative to evidence-based.
-- A `swift-mutable-primitives` package emerges in the ecosystem with a `Mutatable` protocol. At that point, integrating Carrier with it (either via dual conformance on shared types, or via a refining `Carrier & Mutatable`-style protocol) becomes concrete.
+- ~~A `swift-mutable-primitives` package emerges in the ecosystem with a `Mutatable` protocol.~~ **Investigation completed 2026-04-25 with outcome DEFERRED** — see *Investigation outcome* below.
 - Swift's KeyPath / dynamic member lookup story evolves enough that a different approach (e.g., `WritableKeyPath`-based dynamic mutation forwarding) becomes viable. Currently blocked by the same four-quadrant compatibility issues catalogued in `Research/dynamic-member-lookup-decision.md`.
 
-None of these triggers is active as of 2026-04-25.
+## Investigation outcome (2026-04-25)
+
+A focused investigation of option (C) — *"separate `swift-mutable-primitives` package with `Mutatable` protocol"* — was completed. The investigation iterated across three protocol shapes (full-capability with `var value: Value`; empty marker; Hasher-pattern witness type) and produced a Tier-2 academic prior-art survey and four CONFIRMED experiments before concluding **the package should NOT ship**.
+
+**Key findings**:
+
+- The compositional machinery is already shipped at the ecosystem layer: `swift-optic-primitives` (Lens/Prism/Iso/Affine/Traversal with composition + laws) and `swift-algebra-*` (Magma/Monoid/Group/Ring/Field/Module witnesses) cover the abstractions a Mutator package would need; substructural typing is language-level via `~Copyable`/`~Escapable`/`@_lifetime`.
+- The two well-shaped gaps are small extensions to existing primitives, not a new package: (1) `Optic.Setter` for write-only mutation in `swift-optic-primitives`; (2) `Algebra.Semilattice` for CRDT-merge in the algebra family.
+- The genuine academic gap (handlers for linear/borrowed state with a lifetime-bounded witness — sits between Tang–Hillerström–Lindley–Morris 2024 and Wagner et al. 2025 *BoCa*) lacks a credible second consumer per [RES-018].
+
+**Empirical Swift findings reusable across the ecosystem**:
+
+- `mutating _modify` is NOT a valid protocol property requirement (Swift accepts only `get`/`set` in property requirements).
+- `@_lifetime(&self)` (NOT `@_lifetime(borrow self)`) on `_modify` for `~Escapable` Self.
+- `WritableKeyPath<Root, Value>` carries an implicit `Root: Copyable & Escapable` constraint that propagates through protocol-extension dynamic-member subscripts — the same Q1-only constraint as for read-only `KeyPath`.
+
+**Artifacts relocated to `swift-institute/` for cross-package reference**:
+
+- `swift-institute/Research/mutator-type-hasher-pattern-exploration.md` (DEFERRED) — driving investigation.
+- `swift-institute/Research/mutator-academic-prior-art-survey.md` (REFERENCE) — Tier-2 prior-art survey, 31 citations, 26 verified.
+- `swift-institute/Research/mutator-naming-protocol-and-typealias.md` (REFERENCE) — naming spine if a future package emerges.
+- `swift-institute/Research/mutator-orthogonal-vs-refinement-stance.md` (REFERENCE) — sibling-not-refinement reasoning vs Carrier.
+- `swift-institute/Research/mutator-modify-across-quadrants.md` (REFERENCE) — empirical Swift findings.
+- `swift-institute/Research/mutator-writable-keypath-interaction.md` (REFERENCE) — WritableKeyPath Q1-only constraint confirmation.
+- `swift-institute/Experiments/hasher-pattern-mutator-isolation/` — Hasher-pattern witness viability (CONFIRMED).
+- `swift-institute/Experiments/mutator-modify-across-quadrants/` — alternative-shape four-quadrant defaults (CONFIRMED).
+- `swift-institute/Experiments/mutator-generic-dispatch-and-keypath/` — alternative-shape KeyPath constraint (CONFIRMED).
+- `swift-institute/Experiments/mutator-dual-conformance-carrier-mutable/` — Carrier+Mutable dual conformance viability (CONFIRMED).
+
+The deferral in this document remains in force; the investigation refined "DEFERRED, awaiting future information" into "DEFERRED, with the future-information specifications now spelled out in the relocated research."
 
 ## References
 
@@ -103,3 +140,4 @@ None of these triggers is active as of 2026-04-25.
 - `Research/carrier-vs-rawrepresentable-comparative-analysis.md` — explicit-projection stance shared with stdlib's `RawRepresentable`.
 - `Research/round-trip-semantics-noncopyable-underlyings.md` — `~Copyable` Underlying's reconstruction semantics; relevant to why mutation-via-rebuild is the canonical channel.
 - `Sources/Carrier Primitives/Carrier.swift` — protocol declaration; `borrowing get` only, no `_modify`.
+- `swift-institute/Research/mutator-*.md` and `swift-institute/Experiments/{hasher-pattern-mutator-isolation,mutator-*}/` — investigation outcome artifacts.
