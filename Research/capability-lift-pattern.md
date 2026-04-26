@@ -394,10 +394,19 @@ varying levels of completeness):
 | `Cardinal.\`Protocol\`` | `swift-cardinal-primitives/Sources/Cardinal Primitives Core/Cardinal.Protocol.swift:29` | — | yes (line 65) |
 | `Ordinal.\`Protocol\`` | `swift-ordinal-primitives/Sources/Ordinal Primitives Core/Ordinal.Protocol.swift:35` | `Count: Cardinal.\`Protocol\`` | yes (line 80) |
 | `Hash.\`Protocol\`` | `swift-hash-primitives/Sources/Hash Primitives Core/Hash.Protocol.swift:51` | `Equation.\`Protocol\`` | yes via `Hash.Protocol+Identity.Tagged.swift` |
+| `Affine.Discrete.Vector.\`Protocol\`` | `swift-affine-primitives` (per `swift-institute/Research/carrier-ecosystem-application-inventory.md`, 2026-04-26 RECOMMENDATION inventory) | — | yes |
 
 Additional candidates with structurally similar shape (not all carry
 the explicit `Domain` associatedtype, so adoption would require extension):
 `Equation.\`Protocol\``, `Comparison.\`Protocol\``, `Numeric.\`Protocol\``.
+
+**Provenance for the `Affine.Discrete.Vector` row**: discovered during the
+2026-04-26 `HANDOFF-ecosystem-application-inventory.md` survey of 292
+ecosystem packages. The 4-adopter set (this row + the three above) is
+the current capability-shaped population per the inventory's
+classification (capability-shaped vs witness-style). See
+`swift-institute/Research/carrier-ecosystem-application-inventory.md` for
+the full classification matrix.
 
 ### Option A: Super-protocol via REFINEMENT (V2)
 
