@@ -84,6 +84,17 @@
       "scope": null
     },
     {
+      "file": "cross-carrier-utilities.md",
+      "displayName": "cross-carrier-utilities",
+      "topic": "Prior-art survey and ship-list recommendation for cross-Carrier utilities (operations that work generically across any Carrier conformer). Surveys Haskell tagged/lens/Coercible, Rust derive_more/PhantomData, Scala 3 opaque types, F# units of measure, OCaml private types, Idris/Agda; cites the Tier-3 phantom-typed-value-wrappers literature study for academic foundations. Classifies seven candidate utilities (describe, reroot, equate, project, conditional Equatable/Hashable/CustomStringConvertible) along the four HANDOFF axes (prior-art support, Carrier-protocol-feasible, quadrant coverage, Underlying constraint). Confirms the HANDOFF's structural decision (utilities inside Carrier Primitives; methods on the protocol; `Carrier where {clause}.swift` naming) and resolves the content question: ship NONE — every candidate fails the [RES-018] second-consumer hurdle as of 2026-04-26. Direct precedents cited: mutability-design-space DECISION (2026-04-25), Mutator-package DEFERRAL (2026-04-25), Decimal-Phase-4 cancellation (2026-04-26). Recommends promoting candidates from candidate-list to ship-list one at a time when concrete consumers surface; provides an acceptance gate (named consumer, quadrant story, conformance-shadowing analysis, verification spike). Notes `reroot` is structurally blocked for Q2/Q3/Q4 absent a separate investigation into widening the Carrier protocol with consume-extraction.",
+      "date": "2026-04-26",
+      "status": "RECOMMENDATION",
+      "statusDetail": "Resolution of HANDOFF.md (Cross-Carrier Utilities Research). Structural decision (location, file-naming, methods-on-protocol convention) preserved as locked-in by HANDOFF; content decision = ship none until second-consumer evidence accumulates per [RES-018].",
+      "statusRaw": "RECOMMENDATION",
+      "tier": 2,
+      "scope": "package-specific"
+    },
+    {
       "file": "forums-review-simulation-2026-04-24.md",
       "displayName": "forums-review-simulation-2026-04-24",
       "topic": "Simulated Swift Forums related-projects announcement thread for swift-carrier-primitives. 11 posts across 9 canonical archetypes (c1, c2, c3, c4, c5, c5-skeptic, c6, c8, short) drawn from the full-corpus analysis (602 threads / 25,428 posts). Predicts load-bearing critiques, archetype-driven noise, and concrete action items. Rendered 2026-04-24 v1.0 (partial corpus); refreshed 2026-04-24 v1.1 against full corpus with canonical labels applied to body metadata. Sidecar JSON: forums-review-simulation-2026-04-24.json.",
