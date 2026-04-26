@@ -2,7 +2,7 @@
 
 <!--
 ---
-version: 1.2.0
+version: 1.3.0
 last_updated: 2026-04-26
 status: RECOMMENDATION
 tier: 2
@@ -12,6 +12,17 @@ scope: cross-package
 
 <!--
 Changelog:
+- v1.3.0 (2026-04-26): Added Recommendation #8 — domain-specific value-
+  wrapping structs whose phantom-typed variants don't exist and whose
+  cross-type generic dispatch isn't a use case stay distinct from
+  Carrier. Extends the Rec #6 / Rec #7 sibling-not-Carrier pattern from
+  protocols to non-protocol value types (Decimal.Exponent / Precision /
+  Payload, Time refinement types, RFC magnitude types). Resolution
+  document: `swift-institute/Research/decimal-carrier-integration.md`.
+  Provenance: Phase 4 of the carrier-ecosystem migration revealed that
+  the inventory's CAN-yes verdict on Decimal was ungrounded — naming
+  obstacle, literal-conformance gating, [IMPL-001] domain-erasure, and
+  [RES-018] second-consumer hurdle all converged.
 - v1.2.0 (2026-04-26): Added Recommendation #7 — operator-ergonomics
   protocols (per-conformer associatedtype like `Ordinal.\`Protocol\``'s
   `Count`) stay distinct from Carrier as siblings, mirroring
@@ -733,6 +744,40 @@ informed by this characterization.
    (RECOMMENDATION, 2026-04-26) — the investigation that articulated
    this rule after Phase 2b of the carrier-ecosystem migration revealed
    the asymmetry empirically.
+
+8. **Domain-specific value-wrapping structs stay distinct from Carrier**
+   when their phantom-typed variants don't exist and cross-type generic
+   dispatch isn't a use case. Same reasoning as Recommendation #6
+   (witness protocols) and Recommendation #7 (operator-ergonomics
+   protocols), now extended to non-protocol value types.
+
+   The diagnostic test (per [IMPL-001]): would treating the type's
+   arithmetic as generic `Carrier<Underlying>` arithmetic violate the
+   type's domain semantics? If yes, retain as standalone domain type.
+
+   **Examples that fall in this class**:
+   - `Decimal.Exponent` / `Decimal.Precision` / `Decimal.Payload`:
+     power-of-10 exponent / significant-digit count / NaN diagnostic
+     payload — domain-typed arithmetic distinct from generic Int
+     arithmetic. No phantom-tagged variants (no `Tagged<X, Decimal.Exponent>`
+     usage anywhere). [Verified: 2026-04-26]
+   - `Time.Second` / `Time.Minute` / `Time.Hour` / etc.: refinement
+     types with `init throws` validation — already RawRepresentable-shaped
+     per `carrier-vs-rawrepresentable-comparative-analysis.md`.
+   - RFC-spec'd magnitude types whose validity domain is the spec.
+
+   **The naming signal**: when a Tagged refactor would require
+   synthesizing a `*Tag` phantom type (e.g., `ExponentTag`,
+   `PayloadTag`) because the value type IS the namespace name, the
+   convention break is signal that Tagged isn't the right shape.
+   Phantom tags use real domain types or namespaces (User, Memory,
+   Bit, Kernel.User), not role-suffixes.
+
+   **Resolution document**: `swift-institute/Research/decimal-carrier-integration.md`
+   (RECOMMENDATION, 2026-04-26) — the investigation that surfaced
+   the four-way convergence (naming obstacle, literal-conformance
+   gating, [IMPL-001] domain-erasure, [RES-018] second-consumer
+   hurdle) and articulated this third role-class.
 
 ### How to read this in practice
 
