@@ -2,8 +2,8 @@
 
 <!--
 ---
-version: 1.1.0
-last_updated: 2026-04-22
+version: 1.2.0
+last_updated: 2026-04-26
 status: RECOMMENDATION
 tier: 2
 scope: cross-package
@@ -12,6 +12,14 @@ scope: cross-package
 
 <!--
 Changelog:
+- v1.2.0 (2026-04-26): Added Recommendation #7 — operator-ergonomics
+  protocols (per-conformer associatedtype like `Ordinal.\`Protocol\``'s
+  `Count`) stay distinct from Carrier as siblings, mirroring
+  Recommendation #6 for witness protocols. Resolution document:
+  `swift-institute/Research/operator-ergonomics-and-carrier-migration.md`.
+  Provenance: Phase 2b of the carrier-ecosystem migration revealed
+  empirically that Carrier's parametric form cannot replicate per-type
+  protocols whose operators depend on `Self.Count`-style associatedtypes.
 - v1.1.0 (2026-04-22): Added §"Tagged as the canonical Carrier" — clarifies
   that Carrier IS the abstract interface that Tagged is the free/canonical
   generic implementation of (the relationship surfaced in design discussion
@@ -691,6 +699,40 @@ informed by this characterization.
    abstraction belongs to the value-CARRYING subset (Cardinal, Ordinal,
    maybe future Time/Distance/etc.); witness protocols (Hash, Comparison)
    stay distinct.
+
+7. **Operator-ergonomics protocols stay distinct from Carrier as
+   siblings — same shape as Recommendation #6.** A protocol whose
+   operators rely on a per-conformer `associatedtype` (e.g.,
+   `Ordinal.\`Protocol\``'s `Count: Carrier<Cardinal>` driving
+   `static func + (Self, Self.Count) -> Self`) cannot be replaced by
+   `Carrier<Underlying>` — Carrier has no such associatedtype, so
+   `Self.Count` cannot be expressed at the constrained-extension level
+   without re-introducing the per-type protocol pattern. The legacy
+   `Self.Count` machinery is what makes `slot + .one` infer cleanly
+   at call sites; removing the protocol breaks that across O(N) call
+   sites in the consumer ecosystem.
+
+   The right shape: keep the per-type protocol as a SIBLING to Carrier
+   (NOT a refinement — refinement triggers Recommendation #3's V2
+   double-Tagged-conformance cost). Conformers conform to both
+   independently: `Ordinal: Carrier`, `Ordinal: Ordinal.\`Protocol\``;
+   `Tagged<Tag, Ordinal>: Carrier` (via the parametric Tagged extension),
+   `Tagged<Tag, Ordinal>: Ordinal.\`Protocol\`` (via a separate
+   conditional extension). The two protocols serve different roles:
+   Carrier handles cross-type generic dispatch (Form-D); the per-type
+   protocol handles operator-ergonomics with per-conformer `Count`.
+
+   **How to tell which protocols qualify**: examine the operators on
+   the per-type protocol's extension. If they're `Self + Self → Self`
+   shape (Cardinal.\`Protocol\`, Affine.Discrete.Vector.\`Protocol\`),
+   migrate to Carrier-where-Underlying-X — the per-type protocol is
+   redundant. If they're `Self + Self.Count → Self` shape with `Count`
+   as an associatedtype (Ordinal.\`Protocol\`), retain as sibling.
+
+   **Resolution document**: `swift-institute/Research/operator-ergonomics-and-carrier-migration.md`
+   (RECOMMENDATION, 2026-04-26) — the investigation that articulated
+   this rule after Phase 2b of the carrier-ecosystem migration revealed
+   the asymmetry empirically.
 
 ### How to read this in practice
 
