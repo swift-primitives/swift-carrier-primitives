@@ -1,0 +1,48 @@
+import Carrier_Primitives_Test_Support
+import Testing
+
+@Suite
+struct `UInt8+Carrier Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+    @Suite(.serialized) struct Performance {}
+}
+
+extension `UInt8+Carrier Tests`.Unit {
+
+    @Test
+    func `UInt8 round-trips via underlying`() {
+        let v: UInt8 = 42
+        #expect(v.underlying == 42)
+    }
+
+    @Test
+    func `UInt8 round-trips via init from underlying`() {
+        let v: UInt8 = 99
+        #expect(UInt8(v.underlying) == 99)
+    }
+}
+
+extension `UInt8+Carrier Tests`.`Edge Case` {
+
+    @Test
+    func `UInt8 handles min (zero)`() {
+        let v: UInt8 = .min
+        #expect(v.underlying == 0)
+    }
+
+    @Test
+    func `UInt8 handles max`() {
+        let v: UInt8 = .max
+        #expect(v.underlying == .max)
+    }
+}
+
+extension `UInt8+Carrier Tests`.Integration {
+
+    @Test
+    func `UInt8 satisfies some Carrier<UInt8>`() {
+        #expect(Fixture.value(of: 7 as UInt8) == 7)
+    }
+}

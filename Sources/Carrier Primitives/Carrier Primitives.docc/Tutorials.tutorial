@@ -1,0 +1,14 @@
+@Tutorials(name: "Carrier Primitives") {
+    @Intro(title: "Tutorials for Carrier Primitives") {
+        Hands-on walkthroughs for declaring and using `Carrier<Underlying>`
+        conformances.
+    }
+
+    @Chapter(name: "Getting Started") {
+        Define a phantom-domain wrapper, conform it to `Carrier`, and
+        write a generic function that accepts any `Carrier<UInt64>` —
+        the core shape in under ten minutes.
+
+        @TutorialReference(tutorial: "doc:GettingStarted")
+    }
+}

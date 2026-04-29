@@ -1,0 +1,64 @@
+{
+  "$schema": "https://swift-institute.org/schemas/experiments-index-v1.json",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-04-25",
+  "title": "Experiments Index",
+  "blurb": "",
+  "scope": "swift-carrier-primitives (swift-primitives)",
+  "experiments": [
+    {
+      "directory": "capability-lift-pattern",
+      "displayName": "capability-lift-pattern",
+      "purpose": "Probe the capability-lift pattern's recipe, super-protocol unification options (A refinement, B parameterized Carrier<Underlying>, C both), API broadening at four levels, and limits (generic Underlying, ~Copyable Underlying, existentials). Six variants V0–V5.",
+      "date": "2026-04-22",
+      "toolchain": "Swift 6.3.1",
+      "status": "CONFIRMED",
+      "statusDetail": "V0 Cardinal baseline, V1 Ordinal baseline with refinement, V2 super-protocol via refinement, V3 super-protocol via SE-0346 parameterization, V4 API broadening at four levels, V5 limits (three sub-cases catalogued). Moved from swift-institute/Experiments/ on 2026-04-24 when swift-carrier-primitives was created.",
+      "statusRaw": "CONFIRMED",
+      "supersededBy": null,
+      "crossRefs": []
+    },
+    {
+      "directory": "span-carrier-conformance",
+      "displayName": "span-carrier-conformance",
+      "purpose": "Empirically test whether Span<Element>: Carrier is viable in the Q3 (Copyable × ~Escapable) quadrant, contra Research/sli-span-family.md DECISION (2026-04-24). Four variants: V1 default extension, V2 explicit witnesses same-module, V3 cross-module use, V4 release-mode validation per [EXP-017].",
+      "date": "2026-04-25",
+      "toolchain": "Swift 6.3.1",
+      "status": "CONFIRMED",
+      "statusDetail": "V1 REFUTED (default `Carrier where Underlying == Self` extension is gated to Self: Escapable; ~Escapable Self witness candidates are excluded entirely). V2/V3/V4 CONFIRMED with explicit witnesses (`@_lifetime(borrow self) _read { yield self }` + `@_lifetime(copy underlying) init(_:)`). Cross-module generic algorithms returning `C.Underlying` as a function result require `where C.Underlying: Copyable`. The production default extension does NOT cover Span; per-Span explicit bodies are required (~5 lines each). Refines sli-span-family.md concern #1 with a sharper failure mode and confirms concern #3 (explicit bodies, not one-liners).",
+      "statusRaw": "CONFIRMED",
+      "supersededBy": null,
+      "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier where Underlying == Self.swift"]
+    },
+    {
+      "directory": "relax-trivial-self-default",
+      "displayName": "relax-trivial-self-default",
+      "purpose": "Test whether sibling default extensions on Carrier (each with its own constraint suppression) can cover the ~Escapable, ~Copyable, and ~Copyable & ~Escapable trivial-self quadrants — collapsing per-conformer explicit witnesses to one-liners.",
+      "date": "2026-04-25",
+      "toolchain": "Swift 6.3.1",
+      "status": "CONFIRMED",
+      "statusDetail": "V1 (Q3 ~Escapable Self) CONFIRMED — Span: Carrier with one-line typealias works through the Q3 default. V2 (Q2 ~Copyable Self) CONFIRMED — synthetic UniqueValue conforms with one-line typealias through Q2 default. V3 (Q4 ~Copyable & ~Escapable Self) CONFIRMED — synthetic ScopedValue conforms with one-line typealias through Q4 default. Three sibling default extensions cover Q2/Q3/Q4; the existing Q1 default remains. @_lifetime annotations are in the ~Escapable variants (Q3, Q4) where the result type is ~Escapable; they remain absent from Q1 and Q2 (Escapable Self rejects them). Closes the Open item in sli-span-family.md v1.1.0.",
+      "statusRaw": "CONFIRMED",
+      "supersededBy": null,
+      "crossRefs": ["Research/sli-span-family.md", "Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Escapable.swift", "Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Copyable.swift", "Sources/Carrier Primitives/Carrier where Underlying == Self, Self ~Copyable & ~Escapable.swift"]
+    },
+    {
+      "directory": "dynamic-member-lookup-quadrants",
+      "displayName": "dynamic-member-lookup-quadrants",
+      "purpose": "Empirically determine whether @dynamicMemberLookup applied to the Carrier super-protocol (with a default KeyPath subscript on a protocol extension) is viable across all four Copyable × Escapable quadrants of Underlying.",
+      "date": "2026-04-25",
+      "toolchain": "Swift 6.3.1",
+      "status": "PARTIAL",
+      "statusDetail": "V1 (Q1 Copyable & Escapable) CONFIRMED — protocol-level @dynamicMemberLookup propagates to conformers; default subscript on protocol extension instantiates correctly. V2 (Q2 ~Copyable) REFUTED — protocol-extension subscript carries implicit `where Self: Copyable, Self.Underlying: Copyable`. V3 (Q3 ~Escapable) REFUTED — implicit `where Self: Escapable, Self.Underlying: Escapable`. Q4 REFUTED by transitivity. Verdict: dynamic member lookup at the Carrier protocol level is a Q1-only affordance. Decision (do not add to Carrier; consumers may adopt locally on their own Q1 conformers) is captured in Research/Carrier Primitives Vision.md §'Read-only by design (no Mutable / no @dynamicMemberLookup / no cross-Carrier utilities at v0.1.x)'.",
+      "statusRaw": "PARTIAL",
+      "supersededBy": null,
+      "crossRefs": ["Research/Carrier Primitives Vision.md"]
+    }
+  ],
+  "narrativeSections": [
+    {
+      "heading": "Provenance",
+      "body": "This experiment was authored in swift-institute/Experiments/ on 2026-04-22 and moved to this package on 2026-04-24. See Research/Carrier Primitives Vision.md §'Capability-lift pattern' for variant verdicts (the original Research/capability-lift-pattern.md was consolidated into the Vision document on 2026-04-29)."
+    }
+  ]
+}

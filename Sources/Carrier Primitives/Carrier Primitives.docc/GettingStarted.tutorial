@@ -1,0 +1,120 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Getting Started with Carrier Primitives") {
+        Walk through the three core steps of working with `Carrier`: nest an
+        identifier wrapper inside an existing domain type, conform it to
+        `Carrier` via an extension, and write a generic function that
+        accepts any `Carrier<UInt64>`.
+
+        By the end, you'll have a `User.ID` type backed by `UInt64` whose
+        phantom `Domain` is the existing `User` type, a sibling `Order.ID`
+        sharing the same underlying representation, and a generic function
+        that accepts either transparently.
+    }
+
+    @Section(title: "Nest an identifier wrapper in an existing domain") {
+        @ContentAndMedia {
+            A phantom-domain carrier reuses a type you already have as its
+            compile-time tag — no need to author an empty tag type. The
+            idiomatic shape is a real domain (say, `User`) with a nested
+            identifier wrapper (`User.ID`) conforming to `Carrier` with
+            `Domain = User`.
+        }
+
+        @Steps {
+            @Step {
+                Start with an empty file. Import `Carrier_Primitives`.
+
+                @Code(name: "main.swift", file: "step-01-imports.swift")
+            }
+
+            @Step {
+                Declare `User` as an ordinary struct with its own fields.
+                It does not need to be uninhabited, sealed, or otherwise
+                contorted — any concrete domain type works. We will reuse
+                it as the phantom `Domain` tag for the identifier wrapper
+                below.
+
+                @Code(name: "main.swift", file: "step-02-domain.swift")
+            }
+
+            @Step {
+                Nest a `User.ID` struct inside `User`. It has one stored
+                field (`_storage: UInt64`) plus a canonical initializer
+                that consumes the incoming value. Reading the path
+                `User.ID` out loud — "ID within User" — makes the nesting
+                choice legible. No Carrier conformance yet; that comes
+                next.
+
+                @Code(name: "main.swift", file: "step-03-struct.swift")
+            }
+        }
+    }
+
+    @Section(title: "Conform to Carrier via an extension") {
+        @ContentAndMedia {
+            `Carrier<Underlying>` has two associated types (`Domain`
+            defaulting to `Never`, `Underlying` for the wrapped value)
+            and two requirements (a borrowing getter plus a consuming
+            init). The init already lives in the type's body as its
+            canonical initializer; the getter and the associated-type
+            bindings go in a conformance extension.
+
+            For `Copyable & Escapable` Underlyings like `UInt64`, the
+            getter is a plain `borrowing get` — no `_read` coroutine and
+            no `@_lifetime` annotations.
+        }
+
+        @Steps {
+            @Step {
+                Declare the conformance in a separate `extension`. Bind
+                `Domain = User` (reusing the existing domain type as the
+                phantom tag) and `Underlying = UInt64` (the wrapped
+                representation). Add the `underlying` getter; the
+                canonical `init(_:)` from the struct's body already
+                satisfies the init requirement.
+
+                @Code(name: "main.swift", file: "step-04-conformance.swift")
+            }
+
+            @Step {
+                Mirror the same pattern under `Order` to give `User.ID`
+                a sibling. `Order.ID` also wraps `UInt64`, but its
+                `Domain` is `Order` rather than `User` — two phantom
+                carriers sharing the same underlying representation.
+
+                @Code(name: "main.swift", file: "step-05-requirements.swift")
+            }
+        }
+    }
+
+    @Section(title: "Use it generically") {
+        @ContentAndMedia {
+            The payoff of `Carrier` is at API sites. A function accepting
+            `some Carrier<UInt64>` accepts *any* type whose `Underlying`
+            is `UInt64` — `User.ID`, `Order.ID`, or a bare `UInt64` via
+            the Standard Library Integration target.
+        }
+
+        @Steps {
+            @Step {
+                Write `describe(id:)`, generic over any `Carrier<UInt64>`.
+                `~Copyable & ~Escapable` on the generic parameter lets
+                the function accept move-only and scoped carriers too;
+                the `some Carrier<UInt64>` shorthand would work here as
+                well, but the fully-spelled form documents the constraint
+                explicitly.
+
+                @Code(name: "main.swift", file: "step-06-sibling.swift")
+            }
+
+            @Step {
+                Call `describe(id:)` with both `User.ID` and `Order.ID`. The
+                phantom `Domain` discriminates the two at the type level;
+                the output distinguishes them without any runtime
+                dispatch.
+
+                @Code(name: "main.swift", file: "step-07-generic.swift")
+            }
+        }
+    }
+}
