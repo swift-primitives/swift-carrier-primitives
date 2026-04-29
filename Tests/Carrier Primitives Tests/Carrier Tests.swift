@@ -10,8 +10,8 @@ import Carrier_Primitives_Test_Support
 // fixture conformance assertions live in the dedicated
 // `Fixture.{Plain,Unique,Scoped} Tests.swift` files.
 
-@Suite("Carrier")
-struct CarrierTests {
+@Suite
+struct `Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
@@ -23,7 +23,7 @@ struct CarrierTests {
 // Generic-dispatch tests exercising the parameterized super-protocol
 // surface across multiple fixtures.
 
-extension CarrierTests.Integration {
+extension `Carrier Tests`.Integration {
 
     @Test
     func `describe reflects Underlying and Domain at type level`() {

@@ -7,15 +7,15 @@ import Carrier_Primitives_Test_Support
 // Research/sli-span-family.md (v1.2.0) and
 // Experiments/relax-trivial-self-default/.
 
-@Suite("Span+Carrier")
-struct SpanCarrierTests {
+@Suite
+struct `Span+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension SpanCarrierTests.Unit {
+extension `Span+Carrier Tests`.Unit {
 
     @Test
     func `Span underlying yields self via _read coroutine`() {
@@ -31,7 +31,7 @@ extension SpanCarrierTests.Unit {
     }
 }
 
-extension SpanCarrierTests.`Edge Case` {
+extension `Span+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Span<UInt8> conforms at the type level`() {
@@ -59,7 +59,7 @@ extension SpanCarrierTests.`Edge Case` {
     }
 }
 
-extension SpanCarrierTests.Integration {
+extension `Span+Carrier Tests`.Integration {
 
     @Test
     func `Span satisfies generic Carrier<Span<UInt8>> dispatch`() {

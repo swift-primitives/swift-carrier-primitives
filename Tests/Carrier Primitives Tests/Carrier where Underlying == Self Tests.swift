@@ -20,8 +20,8 @@ import Carrier_Primitives_Test_Support
 //     Span+Carrier Tests.swift for the empirical demonstration).
 //   • Integration — synthetic conformer reaches `some Carrier<U>` APIs.
 
-@Suite("Carrier where Underlying == Self")
-struct CarrierWhereUnderlyingEqualsSelfTests {
+@Suite
+struct `Carrier where Underlying == Self Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
@@ -39,7 +39,7 @@ private struct Cardinal: Carrier {
     var raw: Int
 }
 
-extension CarrierWhereUnderlyingEqualsSelfTests.Unit {
+extension `Carrier where Underlying == Self Tests`.Unit {
 
     @Test
     func `default extension provides underlying for trivial self-carrier`() {
@@ -62,7 +62,7 @@ extension CarrierWhereUnderlyingEqualsSelfTests.Unit {
     }
 }
 
-extension CarrierWhereUnderlyingEqualsSelfTests.Integration {
+extension `Carrier where Underlying == Self Tests`.Integration {
 
     @Test
     func `synthetic trivial conformer reaches some Carrier<U> API`() {

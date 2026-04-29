@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Double+Carrier")
-struct DoubleCarrierTests {
+@Suite
+struct `Double+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension DoubleCarrierTests.Unit {
+extension `Double+Carrier Tests`.Unit {
 
     @Test
     func `Double round-trips via underlying`() {
@@ -24,7 +24,7 @@ extension DoubleCarrierTests.Unit {
     }
 }
 
-extension DoubleCarrierTests.`Edge Case` {
+extension `Double+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Double handles zero`() {
@@ -57,7 +57,7 @@ extension DoubleCarrierTests.`Edge Case` {
     }
 }
 
-extension DoubleCarrierTests.Integration {
+extension `Double+Carrier Tests`.Integration {
 
     @Test
     func `Double satisfies some Carrier<Double>`() {

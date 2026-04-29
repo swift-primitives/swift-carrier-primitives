@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Bool+Carrier")
-struct BoolCarrierTests {
+@Suite
+struct `Bool+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension BoolCarrierTests.Unit {
+extension `Bool+Carrier Tests`.Unit {
 
     @Test
     func `Bool true round-trips via underlying`() {
@@ -24,7 +24,7 @@ extension BoolCarrierTests.Unit {
     }
 }
 
-extension BoolCarrierTests.`Edge Case` {
+extension `Bool+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Bool false round-trips via underlying`() {
@@ -33,7 +33,7 @@ extension BoolCarrierTests.`Edge Case` {
     }
 }
 
-extension BoolCarrierTests.Integration {
+extension `Bool+Carrier Tests`.Integration {
 
     @Test
     func `Bool satisfies some Carrier<Bool>`() {

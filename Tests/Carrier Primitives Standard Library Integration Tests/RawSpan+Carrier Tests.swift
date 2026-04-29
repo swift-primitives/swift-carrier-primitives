@@ -4,15 +4,15 @@ import Carrier_Primitives_Test_Support
 // RawSpan is ~Escapable. Conformance is a one-line typealias backed by
 // `extension Carrier where Underlying == Self, Self: ~Escapable`.
 
-@Suite("RawSpan+Carrier")
-struct RawSpanCarrierTests {
+@Suite
+struct `RawSpan+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension RawSpanCarrierTests.Unit {
+extension `RawSpan+Carrier Tests`.Unit {
 
     @Test
     func `RawSpan underlying yields self via _read coroutine`() {
@@ -25,7 +25,7 @@ extension RawSpanCarrierTests.Unit {
     }
 }
 
-extension RawSpanCarrierTests.`Edge Case` {
+extension `RawSpan+Carrier Tests`.`Edge Case` {
 
     @Test
     func `RawSpan conforms at the type level`() {

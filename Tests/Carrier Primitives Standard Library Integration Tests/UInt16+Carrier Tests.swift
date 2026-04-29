@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("UInt16+Carrier")
-struct UInt16CarrierTests {
+@Suite
+struct `UInt16+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension UInt16CarrierTests.Unit {
+extension `UInt16+Carrier Tests`.Unit {
 
     @Test
     func `UInt16 round-trips via underlying`() {
@@ -24,7 +24,7 @@ extension UInt16CarrierTests.Unit {
     }
 }
 
-extension UInt16CarrierTests.`Edge Case` {
+extension `UInt16+Carrier Tests`.`Edge Case` {
 
     @Test
     func `UInt16 handles min (zero)`() {
@@ -39,7 +39,7 @@ extension UInt16CarrierTests.`Edge Case` {
     }
 }
 
-extension UInt16CarrierTests.Integration {
+extension `UInt16+Carrier Tests`.Integration {
 
     @Test
     func `UInt16 satisfies some Carrier<UInt16>`() {

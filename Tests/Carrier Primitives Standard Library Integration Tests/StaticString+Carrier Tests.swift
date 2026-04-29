@@ -1,8 +1,8 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("StaticString+Carrier")
-struct StaticStringCarrierTests {
+@Suite
+struct `StaticString+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
@@ -13,7 +13,7 @@ struct StaticStringCarrierTests {
 // `description` (which produces a String), or through the underlying
 // UTF-8 bytes via `withUTF8Buffer`.
 
-extension StaticStringCarrierTests.Unit {
+extension `StaticString+Carrier Tests`.Unit {
 
     @Test
     func `StaticString round-trips via underlying`() {
@@ -22,7 +22,7 @@ extension StaticStringCarrierTests.Unit {
     }
 }
 
-extension StaticStringCarrierTests.`Edge Case` {
+extension `StaticString+Carrier Tests`.`Edge Case` {
 
     @Test
     func `StaticString handles empty literal`() {
@@ -43,7 +43,7 @@ extension StaticStringCarrierTests.`Edge Case` {
     }
 }
 
-extension StaticStringCarrierTests.Integration {
+extension `StaticString+Carrier Tests`.Integration {
 
     @Test
     func `StaticString satisfies some Carrier<StaticString>`() {

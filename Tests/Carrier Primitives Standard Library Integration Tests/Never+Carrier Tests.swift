@@ -1,8 +1,8 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Never+Carrier")
-struct NeverCarrierTests {
+@Suite
+struct `Never+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
@@ -13,7 +13,7 @@ struct NeverCarrierTests {
 // verifiable at type level only — the protocol is satisfied by the
 // default `where Underlying == Self` extension with Self == Never.
 
-extension NeverCarrierTests.`Edge Case` {
+extension `Never+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Never conforms to Carrier at the type level`() {

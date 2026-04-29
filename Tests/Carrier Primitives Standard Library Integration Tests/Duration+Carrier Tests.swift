@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Duration+Carrier")
-struct DurationCarrierTests {
+@Suite
+struct `Duration+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension DurationCarrierTests.Unit {
+extension `Duration+Carrier Tests`.Unit {
 
     @Test
     func `Duration round-trips via underlying`() {
@@ -18,7 +18,7 @@ extension DurationCarrierTests.Unit {
     }
 }
 
-extension DurationCarrierTests.`Edge Case` {
+extension `Duration+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Duration handles zero`() {
@@ -45,7 +45,7 @@ extension DurationCarrierTests.`Edge Case` {
     }
 }
 
-extension DurationCarrierTests.Integration {
+extension `Duration+Carrier Tests`.Integration {
 
     @Test
     func `Duration satisfies some Carrier<Duration>`() {

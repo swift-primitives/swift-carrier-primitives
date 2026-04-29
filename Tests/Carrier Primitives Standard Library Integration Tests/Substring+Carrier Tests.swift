@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Substring+Carrier")
-struct SubstringCarrierTests {
+@Suite
+struct `Substring+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension SubstringCarrierTests.Unit {
+extension `Substring+Carrier Tests`.Unit {
 
     @Test
     func `Substring round-trips via underlying`() {
@@ -19,7 +19,7 @@ extension SubstringCarrierTests.Unit {
     }
 }
 
-extension SubstringCarrierTests.`Edge Case` {
+extension `Substring+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Substring handles empty slice`() {
@@ -43,7 +43,7 @@ extension SubstringCarrierTests.`Edge Case` {
     }
 }
 
-extension SubstringCarrierTests.Integration {
+extension `Substring+Carrier Tests`.Integration {
 
     @Test
     func `Substring satisfies some Carrier<Substring>`() {

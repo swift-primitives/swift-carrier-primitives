@@ -6,15 +6,15 @@ import Carrier_Primitives_Test_Support
 // so `@_lifetime` annotations are still omitted. The getter uses a
 // `_read { yield }` coroutine for borrowing access.
 
-@Suite("Fixture.Unique")
-struct FixtureUniqueTests {
+@Suite
+struct `Fixture.Unique Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension FixtureUniqueTests.Unit {
+extension `Fixture.Unique Tests`.Unit {
 
     @Test
     func `Unique reads underlying via borrow`() {
@@ -24,7 +24,7 @@ extension FixtureUniqueTests.Unit {
     }
 }
 
-extension FixtureUniqueTests.`Edge Case` {
+extension `Fixture.Unique Tests`.`Edge Case` {
 
     @Test
     func `Unique handles raw zero`() {
@@ -39,7 +39,7 @@ extension FixtureUniqueTests.`Edge Case` {
     }
 }
 
-extension FixtureUniqueTests.Integration {
+extension `Fixture.Unique Tests`.Integration {
 
     @Test
     func `Unique satisfies generic Carrier reflection`() {

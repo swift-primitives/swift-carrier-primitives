@@ -7,15 +7,15 @@ import Carrier_Primitives_Test_Support
 // yields the ~Copyable stored value by borrow with its lifetime
 // scoped to self.
 
-@Suite("Fixture.Scoped")
-struct FixtureScopedTests {
+@Suite
+struct `Fixture.Scoped Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension FixtureScopedTests.Unit {
+extension `Fixture.Scoped Tests`.Unit {
 
     @Test
     func `Scoped conforms with noncopyable nonescapable underlying`() {
@@ -25,7 +25,7 @@ extension FixtureScopedTests.Unit {
     }
 }
 
-extension FixtureScopedTests.`Edge Case` {
+extension `Fixture.Scoped Tests`.`Edge Case` {
 
     @Test
     func `Scoped handles raw zero`() {
@@ -40,7 +40,7 @@ extension FixtureScopedTests.`Edge Case` {
     }
 }
 
-extension FixtureScopedTests.Integration {
+extension `Fixture.Scoped Tests`.Integration {
 
     @Test
     func `Scoped satisfies generic Carrier reflection`() {

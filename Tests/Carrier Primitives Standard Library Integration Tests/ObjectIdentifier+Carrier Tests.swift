@@ -1,8 +1,8 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("ObjectIdentifier+Carrier")
-struct ObjectIdentifierCarrierTests {
+@Suite
+struct `ObjectIdentifier+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
@@ -14,7 +14,7 @@ struct ObjectIdentifierCarrierTests {
 
 private final class Token {}
 
-extension ObjectIdentifierCarrierTests.Unit {
+extension `ObjectIdentifier+Carrier Tests`.Unit {
 
     @Test
     func `ObjectIdentifier round-trips via underlying`() {
@@ -31,7 +31,7 @@ extension ObjectIdentifierCarrierTests.Unit {
     }
 }
 
-extension ObjectIdentifierCarrierTests.`Edge Case` {
+extension `ObjectIdentifier+Carrier Tests`.`Edge Case` {
 
     @Test
     func `ObjectIdentifier distinguishes distinct instances`() {
@@ -43,7 +43,7 @@ extension ObjectIdentifierCarrierTests.`Edge Case` {
     }
 }
 
-extension ObjectIdentifierCarrierTests.Integration {
+extension `ObjectIdentifier+Carrier Tests`.Integration {
 
     @Test
     func `ObjectIdentifier satisfies some Carrier<ObjectIdentifier>`() {

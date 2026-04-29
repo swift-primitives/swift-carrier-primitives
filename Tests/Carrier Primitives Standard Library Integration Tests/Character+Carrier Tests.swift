@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Character+Carrier")
-struct CharacterCarrierTests {
+@Suite
+struct `Character+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension CharacterCarrierTests.Unit {
+extension `Character+Carrier Tests`.Unit {
 
     @Test
     func `Character round-trips via underlying`() {
@@ -24,7 +24,7 @@ extension CharacterCarrierTests.Unit {
     }
 }
 
-extension CharacterCarrierTests.`Edge Case` {
+extension `Character+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Character handles emoji grapheme cluster`() {
@@ -45,7 +45,7 @@ extension CharacterCarrierTests.`Edge Case` {
     }
 }
 
-extension CharacterCarrierTests.Integration {
+extension `Character+Carrier Tests`.Integration {
 
     @Test
     func `Character satisfies some Carrier<Character>`() {

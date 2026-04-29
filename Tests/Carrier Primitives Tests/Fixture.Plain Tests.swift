@@ -6,15 +6,15 @@ import Carrier_Primitives_Test_Support
 // `@_lifetime` annotations are omitted because Int is Escapable.
 // `Domain` defaults to `Never`.
 
-@Suite("Fixture.Plain")
-struct FixturePlainTests {
+@Suite
+struct `Fixture.Plain Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension FixturePlainTests.Unit {
+extension `Fixture.Plain Tests`.Unit {
 
     @Test
     func `Plain stores and reads Int underlying`() {
@@ -30,7 +30,7 @@ extension FixturePlainTests.Unit {
     }
 }
 
-extension FixturePlainTests.`Edge Case` {
+extension `Fixture.Plain Tests`.`Edge Case` {
 
     @Test
     func `Plain handles Int min`() {
@@ -51,7 +51,7 @@ extension FixturePlainTests.`Edge Case` {
     }
 }
 
-extension FixturePlainTests.Integration {
+extension `Fixture.Plain Tests`.Integration {
 
     @Test
     func `Plain satisfies some Carrier<Int>`() {

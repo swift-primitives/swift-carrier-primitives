@@ -132,36 +132,16 @@ Foundation-free per `[PRIM-FOUND-001]`.
 
 ## Contributing
 
-Local DocC preview requires the canonical multi-target pipeline per
-`[DOC-019a]` / `[DOC-102]`. Bare `swift package preview-documentation` will
-not resolve the `Carrier` symbol — Test Support's `@_exported public import`
-shadows the umbrella unless explicitly excluded.
-
-```sh
-RAW=.build/docs-work/raw
-ISO=.build/docs-work/isolated
-mkdir -p "$RAW" "$ISO"
-
-swift build -c debug --target "Carrier Primitives" \
-    -Xswiftc -emit-symbol-graph \
-    -Xswiftc -emit-symbol-graph-dir -Xswiftc "$RAW"
-
-python3 ../../swift-institute/Scripts/patch-umbrella-symbol-graph.py \
-    --symbol-graph-dir "$RAW" \
-    --umbrella-module Carrier_Primitives \
-    --output-dir "$ISO" \
-    --exclude-module Carrier_Primitives_Test_Support
-
-xcrun docc preview "Sources/Carrier Primitives/Carrier Primitives.docc" \
-    --additional-symbol-graph-dir "$ISO" \
-    --fallback-display-name "Carrier Primitives" \
-    --fallback-bundle-identifier swift-carrier-primitives.Carrier-Primitives \
-    --port 8765
-```
-
-Requires a sibling `swift-institute` checkout at `../../swift-institute`
-for the patch script. CI runs the equivalent `docc convert` flow via the
-centralized `swift-docs.yml` reusable workflow.
+Documentation building and deployment is handled by the centralized
+`swift-institute/.github/.github/workflows/swift-docs.yml` reusable
+workflow on every push to `main`. Local DocC preview is not currently
+shipped as a per-package script — bare `swift package preview-documentation`
+hits a known cross-module symbol-pool ambiguity on multi-target umbrella
+packages with `@_exported public import` (Test Support shadows the
+umbrella's `Carrier` symbol). Work the docs against rendered CI output,
+or invoke the canonical pipeline from `swift-institute/Scripts/` if a
+centralized local-preview helper has landed (tracked in the
+carrier-launch skill-incorporation backlog).
 
 ---
 

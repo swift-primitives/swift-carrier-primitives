@@ -5,15 +5,15 @@ import Carrier_Primitives_Test_Support
 // typealias backed by `extension Carrier where Underlying == Self,
 // Self: ~Escapable`.
 
-@Suite("MutableSpan+Carrier")
-struct MutableSpanCarrierTests {
+@Suite
+struct `MutableSpan+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension MutableSpanCarrierTests.Unit {
+extension `MutableSpan+Carrier Tests`.Unit {
 
     @Test
     func `MutableSpan underlying yields self via _read coroutine`() {
@@ -25,7 +25,7 @@ extension MutableSpanCarrierTests.Unit {
     }
 }
 
-extension MutableSpanCarrierTests.`Edge Case` {
+extension `MutableSpan+Carrier Tests`.`Edge Case` {
 
     @Test
     func `MutableSpan<UInt8> conforms at the type level`() {

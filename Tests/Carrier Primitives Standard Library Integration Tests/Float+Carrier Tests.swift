@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Float+Carrier")
-struct FloatCarrierTests {
+@Suite
+struct `Float+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension FloatCarrierTests.Unit {
+extension `Float+Carrier Tests`.Unit {
 
     @Test
     func `Float round-trips via underlying`() {
@@ -24,7 +24,7 @@ extension FloatCarrierTests.Unit {
     }
 }
 
-extension FloatCarrierTests.`Edge Case` {
+extension `Float+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Float handles zero`() {
@@ -51,7 +51,7 @@ extension FloatCarrierTests.`Edge Case` {
     }
 }
 
-extension FloatCarrierTests.Integration {
+extension `Float+Carrier Tests`.Integration {
 
     @Test
     func `Float satisfies some Carrier<Float>`() {

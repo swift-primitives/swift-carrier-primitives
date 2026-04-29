@@ -1,15 +1,15 @@
 import Testing
 import Carrier_Primitives_Test_Support
 
-@Suite("Unicode.Scalar+Carrier")
-struct UnicodeScalarCarrierTests {
+@Suite
+struct `Unicode.Scalar+Carrier Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
 
-extension UnicodeScalarCarrierTests.Unit {
+extension `Unicode.Scalar+Carrier Tests`.Unit {
 
     @Test
     func `Unicode_Scalar round-trips via underlying`() {
@@ -24,7 +24,7 @@ extension UnicodeScalarCarrierTests.Unit {
     }
 }
 
-extension UnicodeScalarCarrierTests.`Edge Case` {
+extension `Unicode.Scalar+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Unicode_Scalar handles ASCII zero`() {
@@ -51,7 +51,7 @@ extension UnicodeScalarCarrierTests.`Edge Case` {
     }
 }
 
-extension UnicodeScalarCarrierTests.Integration {
+extension `Unicode.Scalar+Carrier Tests`.Integration {
 
     @Test
     func `Unicode_Scalar satisfies some Carrier<Unicode_Scalar>`() {
