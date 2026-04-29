@@ -130,6 +130,69 @@ Foundation-free per `[PRIM-FOUND-001]`.
 
 ---
 
+## Contributing
+
+Local DocC preview requires the canonical multi-target pipeline per
+`[DOC-019a]` / `[DOC-102]`. Bare `swift package preview-documentation` will
+not resolve the `Carrier` symbol — Test Support's `@_exported public import`
+shadows the umbrella unless explicitly excluded.
+
+```sh
+RAW=.build/docs-work/raw
+ISO=.build/docs-work/isolated
+mkdir -p "$RAW" "$ISO"
+
+swift build -c debug --target "Carrier Primitives" \
+    -Xswiftc -emit-symbol-graph \
+    -Xswiftc -emit-symbol-graph-dir -Xswiftc "$RAW"
+
+python3 ../../swift-institute/Scripts/patch-umbrella-symbol-graph.py \
+    --symbol-graph-dir "$RAW" \
+    --umbrella-module Carrier_Primitives \
+    --output-dir "$ISO" \
+    --exclude-module Carrier_Primitives_Test_Support
+
+xcrun docc preview "Sources/Carrier Primitives/Carrier Primitives.docc" \
+    --additional-symbol-graph-dir "$ISO" \
+    --fallback-display-name "Carrier Primitives" \
+    --fallback-bundle-identifier swift-carrier-primitives.Carrier-Primitives \
+    --port 8765
+```
+
+Requires a sibling `swift-institute` checkout at `../../swift-institute`
+for the patch script. CI runs the equivalent `docc convert` flow via the
+centralized `swift-docs.yml` reusable workflow.
+
+---
+
+## Further reading
+
+Design rationale, decision records, and empirical verification live in
+the package's `Research/` and `Experiments/` directories per `[RES-002]`
+/ `[EXP-002]` / `[DOC-101]` — DocC is the consumer surface; research and
+experiments are the contributor surface.
+
+**Research** (selection):
+
+- [`capability-lift-pattern.md`](Research/capability-lift-pattern.md) — the parent pattern characterization (RECOMMENDATION, v1.3.0)
+- [`carrier-vs-rawrepresentable-comparative-analysis.md`](Research/carrier-vs-rawrepresentable-comparative-analysis.md) — nine-dimension comparative analysis (DECISION)
+- [`capability-lift-pattern-academic-foundations.md`](Research/capability-lift-pattern-academic-foundations.md) — Tier 3 academic survey (Reynolds parametricity, Wadler free theorems, fibration structure, lightweight higher-kinded encoding)
+- [`mutability-design-space.md`](Research/mutability-design-space.md) — Carrier mutability decision (DEFERRED)
+- [`dynamic-member-lookup-decision.md`](Research/dynamic-member-lookup-decision.md) — `@dynamicMemberLookup` rejection record
+- [`round-trip-semantics-noncopyable-underlyings.md`](Research/round-trip-semantics-noncopyable-underlyings.md) — semantic property of `~Copyable` Underlyings
+
+**Experiments** (selection):
+
+- [`capability-lift-pattern/`](Experiments/capability-lift-pattern/) — six variants V0–V5 (CONFIRMED)
+- [`span-carrier-conformance/`](Experiments/span-carrier-conformance/) — Q3 conformance probe
+- [`relax-trivial-self-default/`](Experiments/relax-trivial-self-default/) — quadrant coverage validation
+- [`dynamic-member-lookup-quadrants/`](Experiments/dynamic-member-lookup-quadrants/) — asymmetric-quadrant rejection evidence
+
+Full catalog in [`Research/_index.json`](Research/_index.json) and
+[`Experiments/_index.json`](Experiments/_index.json).
+
+---
+
 ## License
 
 Apache 2.0. See [LICENSE.md](LICENSE.md).

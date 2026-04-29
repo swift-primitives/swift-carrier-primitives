@@ -155,16 +155,6 @@ Per SE-0346, `Carrier<Underlying>` is declared at module scope with `Underlying`
 
 Bare value types that carry themselves conform in a single `typealias Underlying = Self` line; the extension provides the `underlying` accessor and `init(_:)`. The default uses `_read { yield self }` rather than `borrowing get { self }` so the same extension works whether `Self` admits copying or suppresses it. The `Carrier Primitives Standard Library Integration` target ships 24 stdlib conformances of this shape (`Int`, `String`, `Bool`, …) in a single-line-per-type form.
 
-## Research
-
-- [Capability-lift pattern](../../Research/capability-lift-pattern.md) — the parent pattern characterization. Status: RECOMMENDATION, v1.1.0.
-- [Carrier vs RawRepresentable](../../Research/carrier-vs-rawrepresentable-comparative-analysis.md) — nine-dimension comparative analysis. Status: DECISION, 2026-04-24.
-- [Capability-lift academic foundations](../../Research/capability-lift-pattern-academic-foundations.md) — 11 primary citations (Reynolds parametricity, Wadler free theorems, fibration structure, lightweight higher-kinded encoding). Tier 3 reference.
-
-## Experiments
-
-- [capability-lift-pattern](../../Experiments/capability-lift-pattern/) — six variants V0–V5 probing the pattern's recipe, unification options, API broadening, and limits. Status: CONFIRMED.
-
 ## Topics
 
 ### Creating a Carrier

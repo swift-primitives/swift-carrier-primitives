@@ -1,7 +1,7 @@
 {
   "$schema": "https://swift-institute.org/schemas/research-index-v1.json",
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-04-24",
+  "generatedAt": "2026-04-29",
   "title": "Research Index",
   "blurb": "",
   "scope": "swift-carrier-primitives (swift-primitives)",
@@ -278,6 +278,39 @@
       "status": "DECISION",
       "statusDetail": null,
       "statusRaw": "DECISION",
+      "tier": 1,
+      "scope": null
+    },
+    {
+      "file": "dynamic-member-lookup-decision.md",
+      "displayName": "dynamic-member-lookup-decision",
+      "topic": "Decision record on rejecting `@dynamicMemberLookup` for the Carrier protocol. Asymmetric-quadrant ergonomics rejection criterion: the affordance is unsound across the four `Copyable × Escapable` quadrants. Locked decision; cited from commit 6dd73b6.",
+      "date": "2026-04-25",
+      "status": "DECISION",
+      "statusDetail": null,
+      "statusRaw": "DECISION",
+      "tier": 2,
+      "scope": "cross-package"
+    },
+    {
+      "file": "mutability-design-space.md",
+      "displayName": "mutability-design-space",
+      "topic": "Design-space exploration of Carrier mutability. Investigation outcome (2026-04-25): swift-mutable-primitives / swift-mutator-primitives package investigation completed DEFERRED. Carrier remains read-only at 0.1.0; no `Carrier.Mutable` refinement and no `set` on the protocol surface. Locked decision; cited from commit 0e5e30b.",
+      "date": "2026-04-25",
+      "status": "DECISION",
+      "statusDetail": "v1.1.0 (2026-04-25) added §\"Investigation outcome\" recording the swift-mutable-primitives investigation as DEFERRED; original DECISION on Carrier read-only surface unchanged.",
+      "statusRaw": "DECISION",
+      "tier": 2,
+      "scope": "cross-package"
+    },
+    {
+      "file": "forums-review-triage-2026-04-24.md",
+      "displayName": "forums-review-triage-2026-04-24",
+      "topic": "Concreteness-anchor triage of the forums-review-simulation-2026-04-24 thread per [FREVIEW-012]. Pre-classifies the 11 simulated reviewer posts by anchor count; final classifications require human review. Companion to forums-review-simulation-2026-04-24.md and forums-review-objections-2026-04-24.md.",
+      "date": "2026-04-24",
+      "status": "REFERENCE",
+      "statusDetail": null,
+      "statusRaw": "REFERENCE",
       "tier": 1,
       "scope": null
     }
