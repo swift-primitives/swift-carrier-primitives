@@ -42,7 +42,7 @@
     {
       "file": "capability-lift-pattern-academic-foundations-primitives.md",
       "displayName": "capability-lift-pattern-academic-foundations-primitives",
-      "topic": "Primitives-layer slice of the academic foundations — how the cited results apply to Cardinal/Ordinal/Hash specifically",
+      "topic": "Primitives-layer slice of the academic foundations \u2014 how the cited results apply to Cardinal/Ordinal/Hash specifically",
       "date": "2026-04-22",
       "status": "REFERENCE",
       "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
@@ -64,7 +64,7 @@
     {
       "file": "generic-consumer-across-quadrants.md",
       "displayName": "generic-consumer-across-quadrants",
-      "topic": "Concrete witness-style generic consumer signature over some Carrier<Underlying> that spans all four Copyable × Escapable quadrants. Operationalizes the four-quadrant coverage claim from the comparative-analysis doc; shows why RawRepresentable categorically cannot host the same signature. Addresses the c5-skeptic (scope/motivation) objection from the forums-review simulation.",
+      "topic": "Concrete witness-style generic consumer signature over some Carrier<Underlying> that spans all four Copyable \u00d7 Escapable quadrants. Operationalizes the four-quadrant coverage claim from the comparative-analysis doc; shows why RawRepresentable categorically cannot host the same signature. Addresses the c5-skeptic (scope/motivation) objection from the forums-review simulation.",
       "date": "2026-04-24",
       "status": "REFERENCE",
       "statusDetail": null,
@@ -75,7 +75,7 @@
     {
       "file": "round-trip-semantics-noncopyable-underlyings.md",
       "displayName": "round-trip-semantics-noncopyable-underlyings",
-      "topic": "Documents the semantic property that Carrier's `init(_ underlying: consuming Underlying)` obliges a freshly consumed value, so a correct ~Copyable Underlying conformer cannot round-trip its own `.underlying` (a borrow) without owning a separate Underlying instance. Not a bug — intended ~Copyable linearity. Describes the correct consume-and-reconstruct pattern and the supply-a-fresh-Underlying alternative. Addresses the c2 (protocol-shape) objection from the forums-review simulation.",
+      "topic": "Documents the semantic property that Carrier's `init(_ underlying: consuming Underlying)` obliges a freshly consumed value, so a correct ~Copyable Underlying conformer cannot round-trip its own `.underlying` (a borrow) without owning a separate Underlying instance. Not a bug \u2014 intended ~Copyable linearity. Describes the correct consume-and-reconstruct pattern and the supply-a-fresh-Underlying alternative. Addresses the c2 (protocol-shape) objection from the forums-review simulation.",
       "date": "2026-04-24",
       "status": "DECISION",
       "statusDetail": null,
@@ -86,35 +86,13 @@
     {
       "file": "cross-carrier-utilities.md",
       "displayName": "cross-carrier-utilities",
-      "topic": "Prior-art survey and ship-list recommendation for cross-Carrier utilities (operations that work generically across any Carrier conformer). Surveys Haskell tagged/lens/Coercible, Rust derive_more/PhantomData, Scala 3 opaque types, F# units of measure, OCaml private types, Idris/Agda; cites the Tier-3 phantom-typed-value-wrappers literature study for academic foundations. Classifies seven candidate utilities (describe, reroot, equate, project, conditional Equatable/Hashable/CustomStringConvertible) along the four HANDOFF axes (prior-art support, Carrier-protocol-feasible, quadrant coverage, Underlying constraint). Confirms the HANDOFF's structural decision (utilities inside Carrier Primitives; methods on the protocol; `Carrier where {clause}.swift` naming) and resolves the content question: ship NONE — every candidate fails the [RES-018] second-consumer hurdle as of 2026-04-26. Direct precedents cited: mutability-design-space DECISION (2026-04-25), Mutator-package DEFERRAL (2026-04-25), Decimal-Phase-4 cancellation (2026-04-26). Recommends promoting candidates from candidate-list to ship-list one at a time when concrete consumers surface; provides an acceptance gate (named consumer, quadrant story, conformance-shadowing analysis, verification spike). Notes `reroot` is structurally blocked for Q2/Q3/Q4 absent a separate investigation into widening the Carrier protocol with consume-extraction.",
+      "topic": "Prior-art survey and ship-list recommendation for cross-Carrier utilities (operations that work generically across any Carrier conformer). Surveys Haskell tagged/lens/Coercible, Rust derive_more/PhantomData, Scala 3 opaque types, F# units of measure, OCaml private types, Idris/Agda; cites the Tier-3 phantom-typed-value-wrappers literature study for academic foundations. Classifies seven candidate utilities (describe, reroot, equate, project, conditional Equatable/Hashable/CustomStringConvertible) along the four HANDOFF axes (prior-art support, Carrier-protocol-feasible, quadrant coverage, Underlying constraint). Confirms the HANDOFF's structural decision (utilities inside Carrier Primitives; methods on the protocol; `Carrier where {clause}.swift` naming) and resolves the content question: ship NONE \u2014 every candidate fails the [RES-018] second-consumer hurdle as of 2026-04-26. Direct precedents cited: mutability-design-space DECISION (2026-04-25), Mutator-package DEFERRAL (2026-04-25), Decimal-Phase-4 cancellation (2026-04-26). Recommends promoting candidates from candidate-list to ship-list one at a time when concrete consumers surface; provides an acceptance gate (named consumer, quadrant story, conformance-shadowing analysis, verification spike). Notes `reroot` is structurally blocked for Q2/Q3/Q4 absent a separate investigation into widening the Carrier protocol with consume-extraction.",
       "date": "2026-04-26",
       "status": "RECOMMENDATION",
       "statusDetail": "Resolution of HANDOFF.md (Cross-Carrier Utilities Research). Structural decision (location, file-naming, methods-on-protocol convention) preserved as locked-in by HANDOFF; content decision = ship none until second-consumer evidence accumulates per [RES-018].",
       "statusRaw": "RECOMMENDATION",
       "tier": 2,
       "scope": "package-specific"
-    },
-    {
-      "file": "forums-review-simulation-2026-04-24.md",
-      "displayName": "forums-review-simulation-2026-04-24",
-      "topic": "Simulated Swift Forums related-projects announcement thread for swift-carrier-primitives. 11 posts across 9 canonical archetypes (c1, c2, c3, c4, c5, c5-skeptic, c6, c8, short) drawn from the full-corpus analysis (602 threads / 25,428 posts). Predicts load-bearing critiques, archetype-driven noise, and concrete action items. Rendered 2026-04-24 v1.0 (partial corpus); refreshed 2026-04-24 v1.1 against full corpus with canonical labels applied to body metadata. Sidecar JSON: forums-review-simulation-2026-04-24.json.",
-      "date": "2026-04-24",
-      "status": "REFERENCE",
-      "statusDetail": "Paired with forums-review-objections-2026-04-24.md (top-6 prediction) and the sidecar JSON.",
-      "statusRaw": "REFERENCE",
-      "tier": 1,
-      "scope": null
-    },
-    {
-      "file": "forums-review-objections-2026-04-24.md",
-      "displayName": "forums-review-objections-2026-04-24",
-      "topic": "Predicted top-6 hardest-landing objections for a swift-carrier-primitives announcement. Rankings: Ownership 40 / Naming 39 / Type-system 29 / Docs 26 / Layering 26 / Scope 24; Evolution-process deflated to mid-tier (~12) as a corpus artifact. Each entry includes archetype-grounded opening salvos, concreteness-anchor classification, and pre-emptive mitigation actions. Launch-readiness verdict + revised gated list.",
-      "date": "2026-04-24",
-      "status": "REFERENCE",
-      "statusDetail": "v1.1 refresh applied 2026-04-24: canonical archetype labels, Evolution-process corpus-artifact deflation, launch-readiness DocC-articles demoted from 0.1.0-gating to 0.1.x polish. Derivation basis: manual synthesis from analysis.md reliable-top-5 + characterize_package.py weights (pending skill-level [FREVIEW-013] venue-deflation + [FREVIEW-011] refresh atomicity).",
-      "statusRaw": "REFERENCE",
-      "tier": 1,
-      "scope": null
     },
     {
       "file": "sli-array.md",
@@ -141,7 +119,7 @@
     {
       "file": "sli-dictionary.md",
       "displayName": "sli-dictionary",
-      "topic": "SLI skip rationale for Dictionary<Key, Value>. Two-parameter generic — can't map into single-param Carrier without axis choice that pre-commits semantics.",
+      "topic": "SLI skip rationale for Dictionary<Key, Value>. Two-parameter generic \u2014 can't map into single-param Carrier without axis choice that pre-commits semantics.",
       "date": "2026-04-24",
       "status": "DECISION",
       "statusDetail": null,
@@ -284,7 +262,7 @@
     {
       "file": "dynamic-member-lookup-decision.md",
       "displayName": "dynamic-member-lookup-decision",
-      "topic": "Decision record on rejecting `@dynamicMemberLookup` for the Carrier protocol. Asymmetric-quadrant ergonomics rejection criterion: the affordance is unsound across the four `Copyable × Escapable` quadrants. Locked decision; cited from commit 6dd73b6.",
+      "topic": "Decision record on rejecting `@dynamicMemberLookup` for the Carrier protocol. Asymmetric-quadrant ergonomics rejection criterion: the affordance is unsound across the four `Copyable \u00d7 Escapable` quadrants. Locked decision; cited from commit 6dd73b6.",
       "date": "2026-04-25",
       "status": "DECISION",
       "statusDetail": null,
@@ -298,21 +276,10 @@
       "topic": "Design-space exploration of Carrier mutability. Investigation outcome (2026-04-25): swift-mutable-primitives / swift-mutator-primitives package investigation completed DEFERRED. Carrier remains read-only at 0.1.0; no `Carrier.Mutable` refinement and no `set` on the protocol surface. Locked decision; cited from commit 0e5e30b.",
       "date": "2026-04-25",
       "status": "DECISION",
-      "statusDetail": "v1.1.0 (2026-04-25) added §\"Investigation outcome\" recording the swift-mutable-primitives investigation as DEFERRED; original DECISION on Carrier read-only surface unchanged.",
+      "statusDetail": "v1.1.0 (2026-04-25) added \u00a7\"Investigation outcome\" recording the swift-mutable-primitives investigation as DEFERRED; original DECISION on Carrier read-only surface unchanged.",
       "statusRaw": "DECISION",
       "tier": 2,
       "scope": "cross-package"
-    },
-    {
-      "file": "forums-review-triage-2026-04-24.md",
-      "displayName": "forums-review-triage-2026-04-24",
-      "topic": "Concreteness-anchor triage of the forums-review-simulation-2026-04-24 thread per [FREVIEW-012]. Pre-classifies the 11 simulated reviewer posts by anchor count; final classifications require human review. Companion to forums-review-simulation-2026-04-24.md and forums-review-objections-2026-04-24.md.",
-      "date": "2026-04-24",
-      "status": "REFERENCE",
-      "statusDetail": null,
-      "statusRaw": "REFERENCE",
-      "tier": 1,
-      "scope": null
     }
   ],
   "narrativeSections": [
@@ -322,7 +289,7 @@
     },
     {
       "heading": "Companion research",
-      "body": "The companion characterization of the orthogonal self-projection default pattern lives at swift-ownership-primitives/Research/self-projection-default-pattern.md (v1.0.0, 2026-04-24, RECOMMENDATION, Tier 2). The original authoring on 2026-04-22 was lost mid-session 2026-04-23 and re-authored on 2026-04-24 from the shipped Ownership.Borrow.`Protocol` source and the reflection record. The companion experiment (V0–V5 variants) was also lost and has not been re-authored; variant verdicts in the re-authored doc are replayed from shape analysis."
+      "body": "The companion characterization of the orthogonal self-projection default pattern lives at swift-ownership-primitives/Research/self-projection-default-pattern.md (v1.0.0, 2026-04-24, RECOMMENDATION, Tier 2). The original authoring on 2026-04-22 was lost mid-session 2026-04-23 and re-authored on 2026-04-24 from the shipped Ownership.Borrow.`Protocol` source and the reflection record. The companion experiment (V0\u2013V5 variants) was also lost and has not been re-authored; variant verdicts in the re-authored doc are replayed from shape analysis."
     }
   ]
 }
