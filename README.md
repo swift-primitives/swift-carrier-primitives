@@ -147,29 +147,23 @@ carrier-launch skill-incorporation backlog).
 
 ## Further reading
 
-Design rationale, decision records, and empirical verification live in
-the package's `Research/` and `Experiments/` directories per `[RES-002]`
-/ `[EXP-002]` / `[DOC-101]` — DocC is the consumer surface; research and
-experiments are the contributor surface.
+The canonical narrative — what Carrier is, why it exists, the design
+decisions across quadrants, mutability, dynamic-member-lookup,
+round-trip semantics, and cross-Carrier utilities, plus theoretical
+foundations — lives in the DocC catalog as **Vision** (built and
+served by Swift Package Index from each tagged release; locally
+preview via the centralized swift-docs CI).
 
-**Research** (selection):
+The remaining `Research/` directory holds package-specific research
+threads not yet absorbed into the DocC narrative; index in
+[`Research/_index.json`](Research/_index.json). Empirical verification
+sits in [`Experiments/_index.json`](Experiments/_index.json) — V0–V5
+of the capability-lift pattern (CONFIRMED), the dynamic-member-lookup
+quadrant rejection evidence, the Q3 span-Carrier conformance probe,
+and the trivial-self default quadrant coverage.
 
-- [`capability-lift-pattern.md`](Research/capability-lift-pattern.md) — the parent pattern characterization (RECOMMENDATION, v1.3.0)
-- [`carrier-vs-rawrepresentable-comparative-analysis.md`](Research/carrier-vs-rawrepresentable-comparative-analysis.md) — nine-dimension comparative analysis (DECISION)
-- [`capability-lift-pattern-academic-foundations.md`](Research/capability-lift-pattern-academic-foundations.md) — Tier 3 academic survey (Reynolds parametricity, Wadler free theorems, fibration structure, lightweight higher-kinded encoding)
-- [`mutability-design-space.md`](Research/mutability-design-space.md) — Carrier mutability decision (DEFERRED)
-- [`dynamic-member-lookup-decision.md`](Research/dynamic-member-lookup-decision.md) — `@dynamicMemberLookup` rejection record
-- [`round-trip-semantics-noncopyable-underlyings.md`](Research/round-trip-semantics-noncopyable-underlyings.md) — semantic property of `~Copyable` Underlyings
-
-**Experiments** (selection):
-
-- [`capability-lift-pattern/`](Experiments/capability-lift-pattern/) — six variants V0–V5 (CONFIRMED)
-- [`span-carrier-conformance/`](Experiments/span-carrier-conformance/) — Q3 conformance probe
-- [`relax-trivial-self-default/`](Experiments/relax-trivial-self-default/) — quadrant coverage validation
-- [`dynamic-member-lookup-quadrants/`](Experiments/dynamic-member-lookup-quadrants/) — asymmetric-quadrant rejection evidence
-
-Full catalog in [`Research/_index.json`](Research/_index.json) and
-[`Experiments/_index.json`](Experiments/_index.json).
+Per `[DOC-101]` DocC is the consumer surface; `Research/` and
+`Experiments/` are the contributor surface.
 
 ---
 

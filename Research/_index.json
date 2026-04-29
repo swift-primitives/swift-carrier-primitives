@@ -7,94 +7,6 @@
   "scope": "swift-carrier-primitives (swift-primitives)",
   "documents": [
     {
-      "file": "capability-lift-pattern.md",
-      "displayName": "capability-lift-pattern",
-      "topic": "Characterization of the Cardinal/Ordinal/Hash capability-lift pattern; super-protocol unification options (A refinement, B parameterized Carrier<Underlying> via SE-0346, C both); API broadening; limits (~Copyable Underlying, generic Underlying, existentials); Tagged-as-canonical-Carrier framing",
-      "date": "2026-04-22",
-      "status": "RECOMMENDATION",
-      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24 when swift-carrier-primitives was created. v1.1.0 content preserved; Option B recommended if super-protocol introduced.",
-      "statusRaw": "RECOMMENDATION",
-      "tier": 2,
-      "scope": "cross-package"
-    },
-    {
-      "file": "capability-lift-pattern-primitives.md",
-      "displayName": "capability-lift-pattern-primitives",
-      "topic": "Primitives-layer view of the capability-lift pattern: Cardinal/Ordinal/Hash ecosystem instances + participation criteria",
-      "date": "2026-04-22",
-      "status": "RECOMMENDATION",
-      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
-      "statusRaw": "RECOMMENDATION",
-      "tier": 2,
-      "scope": "cross-package"
-    },
-    {
-      "file": "capability-lift-pattern-academic-foundations.md",
-      "displayName": "capability-lift-pattern-academic-foundations",
-      "topic": "Tier 3 academic survey backing the capability-lift pattern: 11 primary sources (Reynolds 1983 parametricity, Wadler 1989 free theorems, Hinze 2003, Cheney-Hinze 2003 GADTs, Yallop-White 2014 lightweight higher-kinded, Atkey 2009 fibration, Cardelli-Wegner 1985, Wadler-Blott 1989, Leijen-Meijer 1999 DSLs, Carette-Kiselyov-Shan tagless-final)",
-      "date": "2026-04-22",
-      "status": "REFERENCE",
-      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
-      "statusRaw": "REFERENCE",
-      "tier": 3,
-      "scope": "cross-package"
-    },
-    {
-      "file": "capability-lift-pattern-academic-foundations-primitives.md",
-      "displayName": "capability-lift-pattern-academic-foundations-primitives",
-      "topic": "Primitives-layer slice of the academic foundations \u2014 how the cited results apply to Cardinal/Ordinal/Hash specifically",
-      "date": "2026-04-22",
-      "status": "REFERENCE",
-      "statusDetail": "Moved from swift-institute/Research/ on 2026-04-24.",
-      "statusRaw": "REFERENCE",
-      "tier": 3,
-      "scope": "cross-package"
-    },
-    {
-      "file": "carrier-vs-rawrepresentable-comparative-analysis.md",
-      "displayName": "carrier-vs-rawrepresentable-comparative-analysis",
-      "topic": "Nine-dimension comparative analysis between Carrier<Underlying> (this package) and Swift stdlib's RawRepresentable. DECISION: non-substitutable, non-refining protocols. Carrier's ~Copyable/~Escapable support, non-failable init, dual associated types (Domain + Underlying), and primary-associated-type spelling set it apart structurally. RawRepresentable's stdlib integrations (Codable synthesis, OptionSet) sit at a level Carrier does not reach; Carrier's cross-type generic algorithms (Form D) sit at a level RawRepresentable does not express. Neither protocol should refine or subsume the other; ecosystem types should not dual-conform.",
-      "date": "2026-04-24",
-      "status": "DECISION",
-      "statusDetail": null,
-      "statusRaw": "DECISION",
-      "tier": 2,
-      "scope": "cross-package"
-    },
-    {
-      "file": "generic-consumer-across-quadrants.md",
-      "displayName": "generic-consumer-across-quadrants",
-      "topic": "Concrete witness-style generic consumer signature over some Carrier<Underlying> that spans all four Copyable \u00d7 Escapable quadrants. Operationalizes the four-quadrant coverage claim from the comparative-analysis doc; shows why RawRepresentable categorically cannot host the same signature. Addresses the c5-skeptic (scope/motivation) objection from the forums-review simulation.",
-      "date": "2026-04-24",
-      "status": "REFERENCE",
-      "statusDetail": null,
-      "statusRaw": "REFERENCE",
-      "tier": 1,
-      "scope": null
-    },
-    {
-      "file": "round-trip-semantics-noncopyable-underlyings.md",
-      "displayName": "round-trip-semantics-noncopyable-underlyings",
-      "topic": "Documents the semantic property that Carrier's `init(_ underlying: consuming Underlying)` obliges a freshly consumed value, so a correct ~Copyable Underlying conformer cannot round-trip its own `.underlying` (a borrow) without owning a separate Underlying instance. Not a bug \u2014 intended ~Copyable linearity. Describes the correct consume-and-reconstruct pattern and the supply-a-fresh-Underlying alternative. Addresses the c2 (protocol-shape) objection from the forums-review simulation.",
-      "date": "2026-04-24",
-      "status": "DECISION",
-      "statusDetail": null,
-      "statusRaw": "DECISION",
-      "tier": 2,
-      "scope": null
-    },
-    {
-      "file": "cross-carrier-utilities.md",
-      "displayName": "cross-carrier-utilities",
-      "topic": "Prior-art survey and ship-list recommendation for cross-Carrier utilities (operations that work generically across any Carrier conformer). Surveys Haskell tagged/lens/Coercible, Rust derive_more/PhantomData, Scala 3 opaque types, F# units of measure, OCaml private types, Idris/Agda; cites the Tier-3 phantom-typed-value-wrappers literature study for academic foundations. Classifies seven candidate utilities (describe, reroot, equate, project, conditional Equatable/Hashable/CustomStringConvertible) along the four HANDOFF axes (prior-art support, Carrier-protocol-feasible, quadrant coverage, Underlying constraint). Confirms the HANDOFF's structural decision (utilities inside Carrier Primitives; methods on the protocol; `Carrier where {clause}.swift` naming) and resolves the content question: ship NONE \u2014 every candidate fails the [RES-018] second-consumer hurdle as of 2026-04-26. Direct precedents cited: mutability-design-space DECISION (2026-04-25), Mutator-package DEFERRAL (2026-04-25), Decimal-Phase-4 cancellation (2026-04-26). Recommends promoting candidates from candidate-list to ship-list one at a time when concrete consumers surface; provides an acceptance gate (named consumer, quadrant story, conformance-shadowing analysis, verification spike). Notes `reroot` is structurally blocked for Q2/Q3/Q4 absent a separate investigation into widening the Carrier protocol with consume-extraction.",
-      "date": "2026-04-26",
-      "status": "RECOMMENDATION",
-      "statusDetail": "Resolution of HANDOFF.md (Cross-Carrier Utilities Research). Structural decision (location, file-naming, methods-on-protocol convention) preserved as locked-in by HANDOFF; content decision = ship none until second-consumer evidence accumulates per [RES-018].",
-      "statusRaw": "RECOMMENDATION",
-      "tier": 2,
-      "scope": "package-specific"
-    },
-    {
       "file": "sli-array.md",
       "displayName": "sli-array",
       "topic": "SLI skip rationale for Array<Element>. Could be done (trivial self-carrier or parametric element-unwrap); skipped because trivial form is zero-payoff and parametric form pre-commits a specific Domain/Underlying choice that consumers should own.",
@@ -258,28 +170,6 @@
       "statusRaw": "DECISION",
       "tier": 1,
       "scope": null
-    },
-    {
-      "file": "dynamic-member-lookup-decision.md",
-      "displayName": "dynamic-member-lookup-decision",
-      "topic": "Decision record on rejecting `@dynamicMemberLookup` for the Carrier protocol. Asymmetric-quadrant ergonomics rejection criterion: the affordance is unsound across the four `Copyable \u00d7 Escapable` quadrants. Locked decision; cited from commit 6dd73b6.",
-      "date": "2026-04-25",
-      "status": "DECISION",
-      "statusDetail": null,
-      "statusRaw": "DECISION",
-      "tier": 2,
-      "scope": "cross-package"
-    },
-    {
-      "file": "mutability-design-space.md",
-      "displayName": "mutability-design-space",
-      "topic": "Design-space exploration of Carrier mutability. Investigation outcome (2026-04-25): swift-mutable-primitives / swift-mutator-primitives package investigation completed DEFERRED. Carrier remains read-only at 0.1.0; no `Carrier.Mutable` refinement and no `set` on the protocol surface. Locked decision; cited from commit 0e5e30b.",
-      "date": "2026-04-25",
-      "status": "DECISION",
-      "statusDetail": "v1.1.0 (2026-04-25) added \u00a7\"Investigation outcome\" recording the swift-mutable-primitives investigation as DEFERRED; original DECISION on Carrier read-only surface unchanged.",
-      "statusRaw": "DECISION",
-      "tier": 2,
-      "scope": "cross-package"
     }
   ],
   "narrativeSections": [
