@@ -26,7 +26,6 @@ The protocol covers all four `Copyable × Escapable` quadrants in a single decla
 
 ### Essentials
 
-- <doc:Vision>
 - <doc:Understanding-Carriers>
 
 ### Conformance

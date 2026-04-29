@@ -147,23 +147,26 @@ carrier-launch skill-incorporation backlog).
 
 ## Further reading
 
-The canonical narrative — what Carrier is, why it exists, the design
-decisions across quadrants, mutability, dynamic-member-lookup,
-round-trip semantics, and cross-Carrier utilities, plus theoretical
-foundations — lives in the DocC catalog as **Vision** (built and
-served by Swift Package Index from each tagged release; locally
-preview via the centralized swift-docs CI).
+Per `[DOC-101]` the DocC catalog is the consumer surface — **start
+there for usage**. Built and served by Swift Package Index from each
+tagged release.
 
-The remaining `Research/` directory holds package-specific research
-threads not yet absorbed into the DocC narrative; index in
-[`Research/_index.json`](Research/_index.json). Empirical verification
-sits in [`Experiments/_index.json`](Experiments/_index.json) — V0–V5
-of the capability-lift pattern (CONFIRMED), the dynamic-member-lookup
+For contributors and ecosystem maintainers, the canonical design
+rationale lives at
+[`Research/Carrier Primitives Vision.md`](Research/Carrier%20Primitives%20Vision.md):
+ten-part narrative covering the problem, the protocol surface, Tagged
+as the canonical Carrier, the comparison vs RawRepresentable, the
+four-quadrant operationalization, the role-class taxonomy, round-trip
+semantics, the read-only-by-design rationale, theoretical foundations,
+and open questions. The 14 `sli-*.md` files alongside record per-
+stdlib-type SLI skip decisions; full index in
+[`Research/_index.json`](Research/_index.json).
+
+Empirical verification sits in
+[`Experiments/_index.json`](Experiments/_index.json) — V0–V5 of the
+capability-lift pattern (CONFIRMED), the dynamic-member-lookup
 quadrant rejection evidence, the Q3 span-Carrier conformance probe,
 and the trivial-self default quadrant coverage.
-
-Per `[DOC-101]` DocC is the consumer surface; `Research/` and
-`Experiments/` are the contributor surface.
 
 ---
 

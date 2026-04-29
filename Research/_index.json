@@ -7,6 +7,17 @@
   "scope": "swift-carrier-primitives (swift-primitives)",
   "documents": [
     {
+      "file": "Carrier Primitives Vision.md",
+      "displayName": "Carrier Primitives Vision",
+      "topic": "Consolidated contributor-facing design rationale for Carrier 0.1.0. Ten-part narrative covering: the problem (phantom-typed wrappers, four Copyable \u00d7 Escapable quadrants); the protocol surface; Tagged as the canonical generic Carrier implementation; why Carrier and not RawRepresentable (nine-dimension comparison); four-quadrant coverage operationalized via the project sketch; pattern relationships and the role-class taxonomy (Carrier vs sibling protocols vs witness protocols vs domain-specific value types); round-trip semantics for ~Copyable Underlying; read-only by design (no Mutable / no @dynamicMemberLookup / no cross-Carrier utilities at v0.1.x); theoretical foundations (Reynolds, Wadler, Coercible, fibrations); open questions and revisit triggers. Supersedes 10 prior topic-specific docs.",
+      "date": "2026-04-29",
+      "status": "VISION",
+      "statusDetail": "Consolidates 10 prior research docs into a single coherent narrative per principal direction 2026-04-29. Audience: contributors and ecosystem maintainers. Consumer-facing surface is the DocC catalog.",
+      "statusRaw": "VISION",
+      "tier": 2,
+      "scope": "package-specific"
+    },
+    {
       "file": "sli-array.md",
       "displayName": "sli-array",
       "topic": "SLI skip rationale for Array<Element>. Could be done (trivial self-carrier or parametric element-unwrap); skipped because trivial form is zero-payoff and parametric form pre-commits a specific Domain/Underlying choice that consumers should own.",

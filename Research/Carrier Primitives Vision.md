@@ -1,9 +1,32 @@
 # Carrier Primitives — Vision
 
-@Metadata {
-    @TitleHeading("Carrier Primitives")
-    @PageColor(blue)
-}
+<!--
+---
+version: 1.0.0
+last_updated: 2026-04-29
+status: VISION
+tier: 2
+scope: package-specific
+audience: contributor
+supersedes:
+  - capability-lift-pattern.md (v1.3.0, RECOMMENDATION, 2026-04-26)
+  - capability-lift-pattern-primitives.md (v1.2.0, RECOMMENDATION, 2026-04-23)
+  - capability-lift-pattern-academic-foundations.md (v1.0.0, ANALYSIS, 2026-04-23)
+  - capability-lift-pattern-academic-foundations-primitives.md
+  - carrier-vs-rawrepresentable-comparative-analysis.md (v1.0.0, DECISION, 2026-04-24)
+  - cross-carrier-utilities.md (v1.0.0, RECOMMENDATION, 2026-04-26)
+  - dynamic-member-lookup-decision.md (v1.0.0, DECISION, 2026-04-25)
+  - generic-consumer-across-quadrants.md (v1.0.0, REFERENCE, 2026-04-24)
+  - mutability-design-space.md (v1.1.0, DECISION, 2026-04-25)
+  - round-trip-semantics-noncopyable-underlyings.md (v1.0.0, DECISION, 2026-04-24)
+---
+-->
+
+> **Audience**: contributors and ecosystem maintainers. This document
+> consolidates the package's design rationale — the WHY behind 0.1.0's
+> shape. Consumer-facing usage is in the DocC catalog
+> (`Sources/Carrier Primitives/Carrier Primitives.docc/`); this document
+> is contributor-facing per `[DOC-101]`'s consumer/contributor boundary.
 
 ## Executive summary
 
