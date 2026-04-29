@@ -1,0 +1,7 @@
+description: "The Carrier super-protocol for phantom-typed value wrappers in Swift."
+topics:
+  - primitives
+  - type-safety
+  - ownership
+  - phantom-types
+homepage: "https://swift-institute.org"
