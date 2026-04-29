@@ -29,7 +29,7 @@ extension `String+Carrier Tests`.`Edge Case` {
     @Test
     func `String handles empty`() {
         let v: String = ""
-        #expect(v.underlying == "")
+        #expect(v.underlying.isEmpty)
     }
 
     @Test

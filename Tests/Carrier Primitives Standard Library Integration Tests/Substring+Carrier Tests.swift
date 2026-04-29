@@ -25,7 +25,7 @@ extension `Substring+Carrier Tests`.`Edge Case` {
     func `Substring handles empty slice`() {
         let full = "hello"
         let v: Substring = full.prefix(0)
-        #expect(v.underlying == "")
+        #expect(v.underlying.isEmpty)
     }
 
     @Test

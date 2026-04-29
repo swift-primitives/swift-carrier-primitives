@@ -27,7 +27,7 @@ extension `StaticString+Carrier Tests`.`Edge Case` {
     @Test
     func `StaticString handles empty literal`() {
         let v: StaticString = ""
-        #expect(v.underlying.description == "")
+        #expect(v.underlying.description.isEmpty)
     }
 
     @Test

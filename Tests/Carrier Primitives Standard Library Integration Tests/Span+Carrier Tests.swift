@@ -45,7 +45,8 @@ extension `Span+Carrier Tests`.`Edge Case` {
         let bytes: [UInt8] = []
         unsafe bytes.withUnsafeBufferPointer { buffer in
             let span = unsafe Span<UInt8>(_unsafeElements: buffer)
-            #expect(span.underlying.count == 0)
+            let isEmpty = span.underlying.isEmpty
+            #expect(isEmpty)
         }
     }
 

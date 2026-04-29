@@ -39,7 +39,8 @@ extension `MutableSpan+Carrier Tests`.`Edge Case` {
         var bytes: [UInt8] = []
         unsafe bytes.withUnsafeMutableBufferPointer { buffer in
             let span = unsafe MutableSpan<UInt8>(_unsafeElements: buffer)
-            #expect(span.underlying.count == 0)
+            let isEmpty = span.underlying.isEmpty
+            #expect(isEmpty)
         }
     }
 }
