@@ -19,11 +19,8 @@ jobs:
     uses: swift-institute/.github/.github/workflows/swift-ci.yml@v1
     with:
       cache-key-prefix: swift63-spm-v1
-      enable-private-repos: true
-    secrets:
-      PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
 
-  # DocC umbrella-catalog pipeline per [DOC-019a] — see
+  # DocC umbrella-catalog validation per [DOC-019a] — see
   # swift-institute/.github/.github/workflows/swift-docs.yml
   docs:
     uses: swift-institute/.github/.github/workflows/swift-docs.yml@v1
@@ -33,6 +30,3 @@ jobs:
       umbrella-bundle-id: "swift-carrier-primitives.Carrier-Primitives"
       umbrella-docc-path: "Sources/Carrier Primitives/Carrier Primitives.docc"
       exclude-modules: "Carrier_Primitives_Test_Support"
-      enable-private-repos: true
-    secrets:
-      PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
