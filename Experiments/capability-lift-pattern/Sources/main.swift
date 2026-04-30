@@ -456,6 +456,7 @@ public func v4d_describe<C: V2_Carrier.`Protocol`>(_ c: C) -> String {
 //             errors or design-level breakage. This variant catalogs
 //             the boundaries.
 // Result: PARTIAL — three sub-cases probed.
+// Revalidated: Swift 6.3.1 (2026-04-30) — PASSES
 //   V5a: Generic Underlying (e.g., Optional<T>) — works structurally
 //        but the Domain associatedtype must be re-stated per T-instantiation.
 //   V5b: ~Copyable Underlying — requires consuming init, breaks the

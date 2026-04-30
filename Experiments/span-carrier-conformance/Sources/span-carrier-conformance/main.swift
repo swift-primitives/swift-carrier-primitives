@@ -11,6 +11,7 @@
 // Status: CONFIRMED — Span: Carrier is viable with explicit witnesses;
 //         the production default extension does NOT cover it.
 // Result: CONFIRMED (V1 REFUTED → V2/V3/V4 CONFIRMED). Build Succeeded
+// Revalidated: Swift 6.3.1 (2026-04-30) — PASSES
 //         in debug + release; cross-module dispatch verified.
 //         Output: V3 extract=5, describeAsBytes=5, init(_:)=5, V3 complete
 // Date: 2026-04-25

@@ -130,6 +130,7 @@ func runV2() {
 // Hypothesis: a synthetic ~Copyable & ~Escapable struct conforms via the
 // Q4 sibling default with no explicit witnesses.
 // Result: CONFIRMED — ScopedValue conforms with one-line typealias.
+// Revalidated: Swift 6.3.1 (2026-04-30) — PASSES
 
 struct ScopedValue: ~Copyable, ~Escapable, Carrier {
     typealias Underlying = ScopedValue

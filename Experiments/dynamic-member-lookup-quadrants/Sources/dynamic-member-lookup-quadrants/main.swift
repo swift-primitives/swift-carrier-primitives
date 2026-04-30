@@ -133,6 +133,7 @@ print("V2 complete")
 // Status: REFUTED in the strong form — conformance compiles; only the
 //         dynamic member access expression is rejected.
 // Result: REFUTED — protocol extension's subscript carries implicit
+// Revalidated: Swift 6.3.1 (2026-04-30) — PASSES
 //         `where Self: Escapable, Self.Underlying: Escapable`.
 //         Diagnostics:
 //         "referencing subscript 'subscript(dynamicMember:)' on 'Carrier'
