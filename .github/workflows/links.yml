@@ -5,6 +5,10 @@ name: Link Check
 #
 # Pinned at @main during the pilot; bump to @v1 after one PR run and one
 # scheduled run have validated the shape on this repo.
+#
+# Behavior is event-derived:
+#   - pull_request → fail on broken links (PR gate)
+#   - schedule / workflow_dispatch → file/update tracking issue, don't fail
 
 on:
   pull_request:
@@ -21,21 +25,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # PR gate — fail the check on broken links so PRs can't introduce them.
-  pr-links:
-    if: github.event_name == 'pull_request'
-    uses: swift-institute/.github/.github/workflows/swift-links.yml@main
-    with:
-      fail-on-error: true
-
-  # Scheduled rot detection — file/update a tracking issue rather than
-  # redden main. Link rot is informational, not a code regression.
-  scheduled-links:
-    if: github.event_name != 'pull_request'
-    uses: swift-institute/.github/.github/workflows/swift-links.yml@main
-    with:
-      fail-on-error: false
-      create-issue: true
+  links:
     permissions:
       contents: read
       issues: write
+    uses: swift-institute/.github/.github/workflows/swift-links.yml@main
+    with:
+      fail-on-error: ${{ github.event_name == 'pull_request' }}
+      create-issue: ${{ github.event_name != 'pull_request' }}
