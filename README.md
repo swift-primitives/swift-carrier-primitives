@@ -76,7 +76,7 @@ Both `User.ID` and `File.Handle` reach `some Carrier<UInt64>` / `some Carrier<Fi
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-primitives/swift-carrier-primitives.git", from: "0.1.0")
+    .package(url: "https://github.com/swift-primitives/swift-carrier-primitives.git", branch: "main")
 ]
 ```
 
