@@ -96,21 +96,23 @@ This is the "I carry myself" case. Typical for bare arithmetic-domain primitives
 
 ### Form 2 — Tagged carrier (phantom-tag-bearing types)
 
-A wrapper type carries a value of a different type, with a phantom tag specifying the domain:
+A wrapper type carries a value of a different type, with a phantom tag specifying the domain. The conformance is **unconditional** — Tagged is always a Carrier of its immediate `Underlying`, regardless of what `Underlying` is:
 
 ```swift
 extension Tagged: Carrier.`Protocol`
-where Tag: ~Copyable & ~Escapable, Underlying: Carrier.`Protocol` & ~Copyable & ~Escapable {
+where Tag: ~Copyable & ~Escapable, Underlying: ~Copyable & ~Escapable {
     typealias Domain = Tag
-    typealias Underlying = Underlying.Underlying      // cascades through the wrapped type
-    var underlying: Self.Underlying { _read { yield _storage.underlying } }
-    init(_ underlying: consuming Self.Underlying) {
-        self.init(_unchecked: Underlying(underlying))
+    typealias Underlying = Underlying      // immediate generic parameter
+    var underlying: Underlying { _read { yield _storage } }
+    init(_ underlying: consuming Underlying) {
+        self.init(_unchecked: underlying)
     }
 }
 ```
 
-This conformance (which ships in `swift-tagged-primitives`) gives every `Tagged<Tag, V>` combination a Carrier conformance with `Domain = Tag` and `Underlying = V.Underlying` (the cascade-end type). The parametric extension covers the full family of Tagged specializations — including nested wrappers like `Tagged<X, Tagged<Y, Cardinal>>`, which resolve to the innermost trivial-self carrier — in one declaration.
+This conformance (which ships in `swift-tagged-primitives`) gives every `Tagged<Tag, V>` combination a Carrier conformance with `Domain = Tag` and `Underlying = V` (the immediate wrapped type). The single parametric extension covers the full family of Tagged specializations — including non-Carrier `Underlying` like `Ownership.Inout<Base>` (used by `Property.View`), and nested wrappers like `Tagged<X, Tagged<Y, Cardinal>>` whose `.underlying` returns `Tagged<Y, Cardinal>` (consumers reach `Cardinal` by recursing).
+
+An earlier revision encoded a cascade — `Tagged<X, Tagged<Y, V>>.Underlying == V` (bottom-most) — by requiring `Underlying: Carrier.\`Protocol\``. That design coupled Tagged's Carrier-ness to the recursive Carrier-ness of every wrapped type and produced a name-shadowing tax on the conformance. The unconditional immediate form drops both costs in exchange for explicit consumer-side recursion when nested introspection is needed; in practice nested Tagged is rare and usually semantically structured (different domain at each level), so the recursion is honest rather than redundant.
 
 ## Generic consumers
 
