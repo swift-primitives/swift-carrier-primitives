@@ -1,5 +1,5 @@
 public import Carrier_Primitives
 
-extension StaticString: Carrier {
+extension StaticString: Carrier.`Protocol` {
     public typealias Underlying = StaticString
 }

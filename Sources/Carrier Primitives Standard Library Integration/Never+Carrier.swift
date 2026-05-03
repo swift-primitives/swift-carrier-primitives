@@ -1,5 +1,5 @@
 public import Carrier_Primitives
 
-extension Never: Carrier {
+extension Never: Carrier.`Protocol` {
     public typealias Underlying = Never
 }

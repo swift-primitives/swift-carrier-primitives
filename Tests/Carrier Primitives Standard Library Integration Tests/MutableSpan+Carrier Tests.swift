@@ -29,7 +29,7 @@ extension `MutableSpan+Carrier Tests`.`Edge Case` {
 
     @Test
     func `MutableSpan<UInt8> conforms at the type level`() {
-        func _requireCarrier<T: Carrier & ~Copyable & ~Escapable>(_: T.Type) {}
+        func _requireCarrier<T: Carrier.`Protocol` & ~Copyable & ~Escapable>(_: T.Type) {}
         _requireCarrier(MutableSpan<UInt8>.self)
         #expect(Bool(true))
     }

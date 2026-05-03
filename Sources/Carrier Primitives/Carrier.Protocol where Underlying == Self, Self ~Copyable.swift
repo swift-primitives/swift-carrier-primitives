@@ -10,7 +10,7 @@
 // returning self from a `borrowing` accessor consumes self for
 // ~Copyable Self.
 
-extension Carrier where Underlying == Self, Self: ~Copyable {
+extension Carrier.`Protocol` where Underlying == Self, Self: ~Copyable {
     public var underlying: Self {
         _read { yield self }
     }

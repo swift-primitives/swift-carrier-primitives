@@ -11,7 +11,7 @@ The carrier abstraction, its relationship to phantom-typed wrappers, and where i
 A `Carrier` is a type that exposes an `Underlying` value through a borrowing accessor and constructs from an underlying via a consuming init. It's the generalization of "wrapper type" from the four concrete instances that appear in the primitives layer:
 
 - A bare value type that is its own underlying (`Cardinal.underlying == self`).
-- A Tagged wrapper around a value (`Tagged<User, Int>.underlying == rawValue`).
+- A Tagged wrapper around a value (`Tagged<User, Int>.underlying == storedInt`).
 - A scoped borrowed reference to a value (`Ownership.Inout<Base>` or similar).
 - Combinations of these.
 
@@ -21,7 +21,7 @@ The common shape is: a value accessor, a construction path, and an optional phan
 
 `Underlying` is the wrapped value type. `Domain` is a phantom tag discriminating otherwise-indistinguishable carriers of the same Underlying.
 
-Without `Domain`, `Tagged<User, Int>` and `Tagged<Order, Int>` would look identical to generic code — both conform to `some Carrier<Int>`, both expose `underlying: Int`, both construct the same way. The Tag information would be lost at the generic dispatch level.
+Without `Domain`, `Tagged<User, Int>` and `Tagged<Order, Int>` would look identical to generic code — both conform to `some Carrier.`Protocol`<Int>`, both expose `underlying: Int`, both construct the same way. The Tag information would be lost at the generic dispatch level.
 
 With `Domain`, generic code can reflect on `C.Domain` to distinguish the tags at the type level:
 
@@ -70,10 +70,10 @@ This is a semantic weakening, not a bug. The alternative — splitting Carrier i
 
 Before Carrier, each ecosystem value type (Cardinal, Ordinal, Hash.Value) declared its own capability protocol (`Cardinal.\`Protocol\``, `Ordinal.\`Protocol\``, `Hash.\`Protocol\``) following the same recipe: bare type + Tagged forwarding. Those protocols still exist and remain the primary API shape for domain-specific operations — `func align<C: Cardinal.\`Protocol\`>(_ c: C)` is the right form for Cardinal-specific arithmetic.
 
-Carrier is the super-abstraction under which those per-type protocols compose. When a package declares `extension V: Carrier where ...`, it opts into the family without giving up its per-type protocol. API sites can choose:
+Carrier is the super-abstraction under which those per-type protocols compose. When a package declares `extension V: Carrier.`Protocol` where ...`, it opts into the family without giving up its per-type protocol. API sites can choose:
 
 - `some Cardinal.\`Protocol\`` for Cardinal-only
-- `some Carrier<Cardinal>` for any Cardinal-carrier (equivalent set, different emphasis)
+- `some Carrier.`Protocol`<Cardinal>` for any Cardinal-carrier (equivalent set, different emphasis)
 - `some Carrier` for any carrier at all (cross-Carrier generic algorithms)
 
 The three specificity levels compose cleanly.
@@ -105,7 +105,7 @@ If you're a downstream package and asking "should I use Carrier?":
 | Situation | Answer |
 |-----------|--------|
 | You're writing a phantom-typed wrapper around an Underlying value | Probably yes — conform in your package. |
-| You want to write a function accepting any carrier of a specific Underlying | Yes — use `some Carrier<X>`. |
+| You want to write a function accepting any carrier of a specific Underlying | Yes — use `some Carrier.`Protocol`<X>`. |
 | You want to write a function accepting any carrier of any type | Yes — use `some Carrier & ~Copyable & ~Escapable` (Form D). |
 | You want diagnostics that reflect on the phantom Domain | Yes — `C.Domain.self` gives it to you. |
 | You're writing a type with validating init (like an enum raw-value case) | No — use `RawRepresentable` instead. See <doc:Carrier-vs-RawRepresentable>. |

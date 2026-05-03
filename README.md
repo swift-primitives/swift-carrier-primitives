@@ -2,13 +2,13 @@
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
-Unified super-protocol for phantom-typed value wrappers — `Carrier<Underlying>` spans Cardinal, Ordinal, Hash.Value, Tagged, and move-only resource wrappers across all four `Copyable × Escapable` quadrants.
+Unified super-protocol for phantom-typed value wrappers — `Carrier.\`Protocol\`<Underlying>` spans Cardinal, Ordinal, Hash.Value, Tagged, and move-only resource wrappers across all four `Copyable × Escapable` quadrants.
 
 ---
 
 ## Quick Start
 
-Nest an identifier wrapper under a real domain type and conform it to `Carrier` via a standalone extension. The phantom `Domain` reuses the existing type as a compile-time tag — `User.ID` and `Order.ID` both wrap `UInt64`, but generic code distinguishes them:
+Nest an identifier wrapper under a real domain type and conform it to `Carrier.\`Protocol\`` via a standalone extension. The phantom `Domain` reuses the existing type as a compile-time tag — `User.ID` and `Order.ID` both wrap `UInt64`, but generic code distinguishes them:
 
 ```swift
 import Carrier_Primitives
@@ -28,7 +28,7 @@ extension User {
     }
 }
 
-extension User.ID: Carrier {
+extension User.ID: Carrier.`Protocol` {
     typealias Domain = User
     typealias Underlying = UInt64
 
@@ -36,6 +36,12 @@ extension User.ID: Carrier {
         borrowing get { _storage }
     }
 }
+```
+
+The convenience alias `Carrying` reads as a verb-form predicate at conformance sites if you prefer:
+
+```swift
+extension User.ID: Carrying { ... }  // equivalent to Carrier.`Protocol`
 ```
 
 The same recipe works for `~Copyable` resource wrappers — a shape `RawRepresentable` cannot express at all:
@@ -59,7 +65,7 @@ extension File {
     }
 }
 
-extension File.Handle: Carrier {
+extension File.Handle: Carrier.`Protocol` {
     typealias Underlying = File.Descriptor
 
     var underlying: File.Descriptor {
@@ -68,7 +74,7 @@ extension File.Handle: Carrier {
 }
 ```
 
-Both `User.ID` and `File.Handle` reach `some Carrier<UInt64>` / `some Carrier<File.Descriptor>` API sites without additional plumbing. The DocC tutorial walks through the first example step by step; the Conformance Recipes article covers the other three `Copyable × Escapable` quadrants; the Carrier vs RawRepresentable article documents where the two protocols diverge.
+Both `User.ID` and `File.Handle` reach `some Carrier.\`Protocol\`<UInt64>` / `some Carrier.\`Protocol\`<File.Descriptor>` API sites without additional plumbing. The DocC tutorial walks through the first example step by step; the Conformance Recipes article covers the other three `Copyable × Escapable` quadrants; the Carrier vs RawRepresentable article documents where the two protocols diverge.
 
 ---
 
@@ -99,11 +105,11 @@ Three library products, zero external dependencies.
 
 | Product | Target | Purpose |
 |---------|--------|---------|
-| `Carrier Primitives` | `Sources/Carrier Primitives/` | The `Carrier<Underlying>` protocol + `extension Carrier where Underlying == Self` default for trivial self-carriers. |
-| `Carrier Primitives Standard Library Integration` | `Sources/Carrier Primitives Standard Library Integration/` | Conforms 28 stdlib primitive types (integer families, floating-point, `Bool`, `String`, `Substring`, `Character`, `Unicode.Scalar`, `StaticString`, `Duration`, `ObjectIdentifier`, `Never`, plus the `~Escapable` span types `Span` / `MutableSpan` / `RawSpan` / `MutableRawSpan`) to Carrier as trivial self-carriers. |
+| `Carrier Primitives` | `Sources/Carrier Primitives/` | The `Carrier.\`Protocol\`<Underlying>` protocol + `extension Carrier.\`Protocol\` where Underlying == Self` default for trivial self-carriers; namespace `Carrier` and convenience alias `Carrying`. |
+| `Carrier Primitives Standard Library Integration` | `Sources/Carrier Primitives Standard Library Integration/` | Conforms 28 stdlib primitive types (integer families, floating-point, `Bool`, `String`, `Substring`, `Character`, `Unicode.Scalar`, `StaticString`, `Duration`, `ObjectIdentifier`, `Never`, plus the `~Escapable` span types `Span` / `MutableSpan` / `RawSpan` / `MutableRawSpan`) to `Carrier.\`Protocol\`` as trivial self-carriers. |
 | `Carrier Primitives Test Support` | `Tests/Support/` | Re-exports the main targets for test consumers. |
 
-Import the narrowest product you need: `Carrier Primitives` for the protocol alone, or `Carrier Primitives Standard Library Integration` (which `@_exported public import`s the main target) when you want bare stdlib values to reach `some Carrier<Int>` / `some Carrier<String>` API sites.
+Import the narrowest product you need: `Carrier Primitives` for the protocol alone, or `Carrier Primitives Standard Library Integration` (which `@_exported public import`s the main target) when you want bare stdlib values to reach `some Carrier.\`Protocol\`<Int>` / `some Carrier.\`Protocol\`<String>` API sites.
 
 Foundation-free.
 

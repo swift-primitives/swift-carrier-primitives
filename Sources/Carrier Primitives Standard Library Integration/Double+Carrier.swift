@@ -1,5 +1,5 @@
 public import Carrier_Primitives
 
-extension Double: Carrier {
+extension Double: Carrier.`Protocol` {
     public typealias Underlying = Double
 }

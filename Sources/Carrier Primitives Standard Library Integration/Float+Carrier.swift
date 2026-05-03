@@ -1,5 +1,5 @@
 public import Carrier_Primitives
 
-extension Float: Carrier {
+extension Float: Carrier.`Protocol` {
     public typealias Underlying = Float
 }

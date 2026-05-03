@@ -1,8 +1,8 @@
-// Carrier where Underlying == Self.swift
+// Carrier.Protocol where Underlying == Self.swift
 // Default implementation for trivial self-carriers — types where
 // Underlying == Self.
 
-extension Carrier where Underlying == Self {
+extension Carrier.`Protocol` where Underlying == Self {
     /// Default: a trivial self-carrier's `underlying` IS its own storage.
     ///
     /// Uses `_read { yield self }` instead of `borrowing get { self }`.

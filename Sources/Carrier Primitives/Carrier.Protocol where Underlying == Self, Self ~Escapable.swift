@@ -13,7 +13,7 @@
 // in both the filename and the where clause so all four trivial-self
 // default extensions share the same prefix and group lexically.
 
-extension Carrier where Underlying == Self, Self: ~Escapable {
+extension Carrier.`Protocol` where Underlying == Self, Self: ~Escapable {
     public var underlying: Self {
         @_lifetime(borrow self)
         _read { yield self }

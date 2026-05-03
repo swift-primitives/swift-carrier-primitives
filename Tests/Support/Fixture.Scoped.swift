@@ -17,7 +17,7 @@ extension Fixture {
     }
 }
 
-extension Fixture.Scoped: Carrier {
+extension Fixture.Scoped: Carrier.`Protocol` {
     public typealias Underlying = Fixture.Scoped.Resource
 
     public var underlying: Fixture.Scoped.Resource {

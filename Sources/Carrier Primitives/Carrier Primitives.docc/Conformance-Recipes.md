@@ -8,12 +8,12 @@ One recipe per `Copyable × Escapable` quadrant. Pick the shape that matches you
 
 ## Overview
 
-`Carrier<Underlying>` admits four conformance shapes depending on whether `Self` and `Underlying` suppress `Copyable` or `Escapable`. The protocol's getter and init annotations degrade gracefully across the grid — the concrete conformer omits `@_lifetime` annotations when `Underlying` is `Escapable` (Swift rejects them there) and includes them when `Underlying` is `~Escapable`.
+`Carrier.`Protocol`<Underlying>` admits four conformance shapes depending on whether `Self` and `Underlying` suppress `Copyable` or `Escapable`. The protocol's getter and init annotations degrade gracefully across the grid — the concrete conformer omits `@_lifetime` annotations when `Underlying` is `Escapable` (Swift rejects them there) and includes them when `Underlying` is `~Escapable`.
 
 All four recipes below follow the same disciplined shape:
 
 - **Stored properties and the canonical initializer live in the type's body.** Per `[API-IMPL-008]`, the declaration body carries only the fields needed to store the value and the init that consumes the incoming underlying.
-- **Protocol conformance lives in a standalone `extension`.** The `Carrier` conformance — associated-type bindings plus the `underlying` getter — is declared in `extension Foo: Carrier { ... }` rather than threaded into the struct declaration.
+- **Protocol conformance lives in a standalone `extension`.** The `Carrier` conformance — associated-type bindings plus the `underlying` getter — is declared in `extension Foo: Carrier.`Protocol` { ... }` rather than threaded into the struct declaration.
 - **Nested names follow `Nest.Name`.** Identifier wrappers are `User.ID` (nested under the domain type), not `UserID` (a compound name). Resource wrappers nest under the resource's domain — e.g., `File.Handle` over `File.Descriptor`.
 
 This article walks through all four quadrants. The trivial-self-carrier default (when `Underlying == Self`) applies only to Q1 and is covered at the end.
@@ -38,7 +38,7 @@ extension User {
     }
 }
 
-extension User.ID: Carrier {
+extension User.ID: Carrier.`Protocol` {
     typealias Domain = User
     typealias Underlying = UInt64
 
@@ -82,7 +82,7 @@ extension File {
     }
 }
 
-extension File.Handle: Carrier {
+extension File.Handle: Carrier.`Protocol` {
     typealias Underlying = File.Descriptor
 
     var underlying: File.Descriptor {
@@ -120,7 +120,7 @@ extension Buffer {
     }
 }
 
-extension Buffer.View: Carrier {
+extension Buffer.View: Carrier.`Protocol` {
     typealias Underlying = Span<Element>
 
     var underlying: Span<Element> {
@@ -156,7 +156,7 @@ extension Buffer {
     }
 }
 
-extension Buffer.Scope: Carrier where Base: ~Copyable {
+extension Buffer.Scope: Carrier.`Protocol` where Base: ~Copyable {
     typealias Underlying = Ownership.Inout<Base>
 
     var underlying: Ownership.Inout<Base> {
@@ -168,7 +168,7 @@ extension Buffer.Scope: Carrier where Base: ~Copyable {
 
 **Requirements**:
 - `struct Scope<Base: ~Copyable>: ~Copyable, ~Escapable` — both suppressions on the carrier; `Base: ~Copyable` on the generic parameter.
-- `extension Buffer.Scope: Carrier where Base: ~Copyable` — the extension restates the `~Copyable` constraint on `Base` per `[MEM-COPY-004]`; without it, the extension implicitly reintroduces `Base: Copyable`.
+- `extension Buffer.Scope: Carrier.`Protocol` where Base: ~Copyable` — the extension restates the `~Copyable` constraint on `Base` per `[MEM-COPY-004]`; without it, the extension implicitly reintroduces `Base: Copyable`.
 - `_read { yield _storage }` — for `~Copyable` storage.
 - `@_lifetime(borrow self)` on getter + `@_lifetime(copy underlying)` on init — for `~Escapable` results.
 
@@ -179,7 +179,7 @@ extension Buffer.Scope: Carrier where Base: ~Copyable {
 When `Underlying == Self`, the default extension in `Carrier Primitives` provides the getter and init for free:
 
 ```swift
-extension Int: Carrier {
+extension Int: Carrier.`Protocol` {
     typealias Underlying = Int
     // underlying and init(_:) provided by the default extension.
 }

@@ -4,11 +4,11 @@
     @TitleHeading("Carrier Primitives")
 }
 
-A decision tree for picking between `Carrier<Underlying>` and Swift stdlib's `RawRepresentable`. The short version: the two protocols occupy non-overlapping design spaces; neither subsumes the other.
+A decision tree for picking between `Carrier.`Protocol`<Underlying>` and Swift stdlib's `RawRepresentable`. The short version: the two protocols occupy non-overlapping design spaces; neither subsumes the other.
 
 ## Overview
 
-`Carrier<Underlying>` and `RawRepresentable` look structurally similar — one associated type, one accessor, one init. The superficial resemblance invites the question "why not just use `RawRepresentable`?" This article answers it with a decision tree.
+`Carrier.`Protocol`<Underlying>` and `RawRepresentable` look structurally similar — one associated type, one accessor, one init. The superficial resemblance invites the question "why not just use `RawRepresentable`?" This article answers it with a decision tree.
 
 ## Quick decision tree
 
@@ -16,7 +16,7 @@ A decision tree for picking between `Carrier<Underlying>` and Swift stdlib's `Ra
 |----------------|-----|
 | You're wrapping an `Int`/`String`/similar with a phantom type tag (e.g., `User.ID`, `Order.ID`) | `Carrier` |
 | Your type is `~Copyable` or `~Escapable`, or wraps one | `Carrier` (RawRepresentable cannot express these) |
-| You're writing a generic function accepting any carrier of `Int` | `Carrier` (use `some Carrier<Int>`) |
+| You're writing a generic function accepting any carrier of `Int` | `Carrier` (use `some Carrier.`Protocol`<Int>`) |
 | You're writing an enum with validating `init?(rawValue:)` (some raw values reject as `nil`) | `RawRepresentable` |
 | You're writing an `OptionSet` | `RawRepresentable` (OptionSet refines it) |
 | You want Foundation's Codable auto-synthesis for a raw-valued enum | `RawRepresentable` |

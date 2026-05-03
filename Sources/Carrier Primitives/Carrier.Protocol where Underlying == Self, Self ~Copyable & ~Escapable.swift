@@ -7,7 +7,7 @@
 // `@_lifetime` annotations are required because Self's result type is
 // ~Escapable; the annotations express the lifetime dependency.
 
-extension Carrier where Underlying == Self, Self: ~Copyable & ~Escapable {
+extension Carrier.`Protocol` where Underlying == Self, Self: ~Copyable & ~Escapable {
     public var underlying: Self {
         @_lifetime(borrow self)
         _read { yield self }

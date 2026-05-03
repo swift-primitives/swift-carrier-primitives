@@ -35,7 +35,7 @@ extension `Span+Carrier Tests`.`Edge Case` {
 
     @Test
     func `Span<UInt8> conforms at the type level`() {
-        func _requireCarrier<T: Carrier & ~Copyable & ~Escapable>(_: T.Type) {}
+        func _requireCarrier<T: Carrier.`Protocol` & ~Copyable & ~Escapable>(_: T.Type) {}
         _requireCarrier(Span<UInt8>.self)
         #expect(Bool(true))
     }
@@ -69,7 +69,7 @@ extension `Span+Carrier Tests`.Integration {
             let span = unsafe Span<UInt8>(_unsafeElements: buffer)
             // Generic helper accepting any Carrier whose Underlying is
             // Span<UInt8>. Returns Int, no @_lifetime needed.
-            func _count<C: Carrier & ~Escapable>(
+            func _count<C: Carrier.`Protocol` & ~Escapable>(
                 _ c: borrowing C
             ) -> Int where C.Underlying == Span<UInt8> {
                 c.underlying.count

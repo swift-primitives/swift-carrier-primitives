@@ -19,7 +19,7 @@ extension `Never+Carrier Tests`.`Edge Case` {
     func `Never conforms to Carrier at the type level`() {
         // This test confirms the conformance is present in the
         // module's conformance table.
-        func _requireCarrier<T: Carrier & ~Copyable & ~Escapable>(_: T.Type) {}
+        func _requireCarrier<T: Carrier.`Protocol` & ~Copyable & ~Escapable>(_: T.Type) {}
         _requireCarrier(Never.self)
         #expect(Bool(true))
     }

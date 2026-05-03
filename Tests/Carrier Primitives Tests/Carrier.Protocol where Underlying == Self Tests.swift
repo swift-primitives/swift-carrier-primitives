@@ -21,7 +21,7 @@ import Testing
 //   • Integration — synthetic conformer reaches `some Carrier<U>` APIs.
 
 @Suite
-struct `Carrier where Underlying == Self Tests` {
+struct `Carrier.Protocol where Underlying == Self Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
@@ -34,12 +34,12 @@ struct `Carrier where Underlying == Self Tests` {
 // witness bodies come from the default extension. This is the minimum
 // shape that exercises the default extension as a unit.
 
-private struct Cardinal: Carrier {
+private struct Cardinal: Carrier.`Protocol` {
     typealias Underlying = Cardinal
     var raw: Int
 }
 
-extension `Carrier where Underlying == Self Tests`.Unit {
+extension `Carrier.Protocol where Underlying == Self Tests`.Unit {
 
     @Test
     func `default extension provides underlying for trivial self-carrier`() {
@@ -62,7 +62,7 @@ extension `Carrier where Underlying == Self Tests`.Unit {
     }
 }
 
-extension `Carrier where Underlying == Self Tests`.Integration {
+extension `Carrier.Protocol where Underlying == Self Tests`.Integration {
 
     @Test
     func `synthetic trivial conformer reaches some Carrier<U> API`() {

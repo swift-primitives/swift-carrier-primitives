@@ -16,7 +16,7 @@ extension Fixture {
     }
 }
 
-extension Fixture.Plain: Carrier {
+extension Fixture.Plain: Carrier.`Protocol` {
     public typealias Underlying = Int
 
     public var underlying: Int {

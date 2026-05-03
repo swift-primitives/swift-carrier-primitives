@@ -16,7 +16,7 @@ extension Fixture {
     }
 }
 
-extension Fixture.Unique: Carrier {
+extension Fixture.Unique: Carrier.`Protocol` {
     public typealias Underlying = Fixture.Unique.Resource
 
     public var underlying: Fixture.Unique.Resource {

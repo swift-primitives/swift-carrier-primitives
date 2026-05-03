@@ -6,7 +6,7 @@ extension Fixture {
     /// constraint spelling at API sites and lets test files exercise
     /// the parameterized super-protocol surface for any Copyable
     /// Underlying.
-    public static func value<U: Copyable>(of c: borrowing some Carrier<U>) -> U {
+    public static func value<U: Copyable>(of c: borrowing some Carrier.`Protocol`<U>) -> U {
         c.underlying
     }
 }

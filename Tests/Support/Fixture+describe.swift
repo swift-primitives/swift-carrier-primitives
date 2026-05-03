@@ -4,7 +4,7 @@ extension Fixture {
     /// Form D — a generic function over any Carrier. Demonstrates the
     /// super-protocol's payoff: cross-Carrier reflection over `Domain`
     /// and `Underlying` metatypes without per-type plumbing.
-    public static func describe<C: Carrier & ~Copyable & ~Escapable>(
+    public static func describe<C: Carrier.`Protocol` & ~Copyable & ~Escapable>(
         _ c: borrowing C
     ) -> String {
         "Carrier<\(C.Underlying.self)> with Domain \(C.Domain.self)"
@@ -26,7 +26,7 @@ extension Fixture {
     /// Added per the 2026-04-24 forums-review simulation (post 3, c3
     /// archetype) asking for an explicit test of the Never-default
     /// generic-dispatch path.
-    public static func describe<C: Carrier & ~Copyable & ~Escapable>(
+    public static func describe<C: Carrier.`Protocol` & ~Copyable & ~Escapable>(
         domain _: C.Type
     ) -> String {
         "\(C.Domain.self)"

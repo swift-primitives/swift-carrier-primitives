@@ -1,5 +1,5 @@
 public import Carrier_Primitives
 
-extension Character: Carrier {
+extension Character: Carrier.`Protocol` {
     public typealias Underlying = Character
 }

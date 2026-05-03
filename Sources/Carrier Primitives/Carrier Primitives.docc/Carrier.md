@@ -9,10 +9,10 @@ A parameterized super-protocol for types that carry an `Underlying` value, optio
 
 ## Overview
 
-`Carrier<Underlying>` abstracts the relationship between a phantom-typed wrapper and the value it wraps. Instances expose their underlying via a borrowing accessor and construct from an underlying via a consuming init. The protocol admits `~Copyable` and `~Escapable` suppressions on `Self`, `Domain`, and `Underlying`, covering all four quadrants of the Copyable × Escapable grid.
+`Carrier.`Protocol`<Underlying>` abstracts the relationship between a phantom-typed wrapper and the value it wraps. Instances expose their underlying via a borrowing accessor and construct from an underlying via a consuming init. The protocol admits `~Copyable` and `~Escapable` suppressions on `Self`, `Domain`, and `Underlying`, covering all four quadrants of the Copyable × Escapable grid.
 
 ```swift
-public protocol Carrier<Underlying>: ~Copyable, ~Escapable {
+public protocol Carrier.`Protocol`<Underlying>: ~Copyable, ~Escapable {
     associatedtype Domain: ~Copyable & ~Escapable = Never
     associatedtype Underlying: ~Copyable & ~Escapable
 
@@ -49,7 +49,7 @@ Defaults to `Never` so trivial self-carriers don't need to declare the typealias
 
 ### `Underlying`
 
-The wrapped value type. Marked primary via the angle-bracket syntax (`Carrier<Underlying>`) so API sites can write `some Carrier<Int>` per SE-0346. Suppresses Copyable and Escapable to admit move-only and lifetime-bounded wrapped values — a distinction from Swift's `RawRepresentable`, which assumes `Copyable & Escapable` `RawValue`.
+The wrapped value type. Marked primary via the angle-bracket syntax (`Carrier.`Protocol`<Underlying>`) so API sites can write `some Carrier.`Protocol`<Int>` per SE-0346. Suppresses Copyable and Escapable to admit move-only and lifetime-bounded wrapped values — a distinction from Swift's `RawRepresentable`, which assumes a `Copyable & Escapable` `RawValue`.
 
 ## The two requirements
 
@@ -85,7 +85,7 @@ Types join the Carrier family in two shapes depending on whether they wrap thems
 A bare value type is its own underlying. `Domain` defaults to `Never`:
 
 ```swift
-extension Cardinal: Carrier {
+extension Cardinal: Carrier.`Protocol` {
     typealias Underlying = Cardinal
     var underlying: Cardinal { borrowing get { self } }
     init(_ underlying: consuming Cardinal) { self = underlying }
@@ -99,17 +99,18 @@ This is the "I carry myself" case. Typical for bare arithmetic-domain primitives
 A wrapper type carries a value of a different type, with a phantom tag specifying the domain:
 
 ```swift
-extension Tagged: Carrier where RawValue: ~Copyable & ~Escapable, Tag: ~Copyable & ~Escapable {
+extension Tagged: Carrier.`Protocol`
+where Tag: ~Copyable & ~Escapable, Underlying: Carrier.`Protocol` & ~Copyable & ~Escapable {
     typealias Domain = Tag
-    typealias Underlying = RawValue
-    var underlying: RawValue { borrowing get { rawValue } }
-    init(_ underlying: consuming RawValue) {
-        self.init(__unchecked: (), underlying)
+    typealias Underlying = Underlying.Underlying      // cascades through the wrapped type
+    var underlying: Self.Underlying { _read { yield _storage.underlying } }
+    init(_ underlying: consuming Self.Underlying) {
+        self.init(_unchecked: Underlying(underlying))
     }
 }
 ```
 
-This conformance (when it lands in `swift-tagged-primitives`) gives every `Tagged<Tag, V>` combination a Carrier conformance with `Domain = Tag` and `Underlying = V`. The parametric extension covers the full family of Tagged specializations in one declaration.
+This conformance (which ships in `swift-tagged-primitives`) gives every `Tagged<Tag, V>` combination a Carrier conformance with `Domain = Tag` and `Underlying = V.Underlying` (the cascade-end type). The parametric extension covers the full family of Tagged specializations — including nested wrappers like `Tagged<X, Tagged<Y, Cardinal>>`, which resolve to the innermost trivial-self carrier — in one declaration.
 
 ## Generic consumers
 
@@ -120,13 +121,13 @@ The protocol's payoff is at API sites. Four shapes across the specificity spectr
 func align<C: Cardinal.`Protocol`>(_ c: C) -> C { ... }
 
 // Form B: parameterized Carrier (SE-0346 spelling)
-func align(_ c: some Carrier<Cardinal>) -> Cardinal { ... }
+func align(_ c: some Carrier.`Protocol`<Cardinal>) -> Cardinal { ... }
 
 // Form C: existential (loses Underlying — avoid in favor of generic)
 func handle(_ c: any Carrier) { ... }
 
 // Form D: fully generic over any Carrier
-func describe<C: Carrier & ~Copyable & ~Escapable>(_ c: borrowing C) -> String {
+func describe<C: Carrier.`Protocol` & ~Copyable & ~Escapable>(_ c: borrowing C) -> String {
     "Carrier<\(C.Underlying.self)> with Domain \(C.Domain.self)"
 }
 ```
@@ -149,7 +150,7 @@ An earlier draft proposed splitting Carrier into copyable-only and `NoncopyCarri
 
 ### Top-level protocol with a primary associated type, not `Carrier.\`Protocol\``
 
-Per SE-0346, `Carrier<Underlying>` is declared at module scope with `Underlying` marked as a primary associated type. This enables the `some Carrier<Int>` spelling at API sites. The ecosystem's nested-protocol convention (`Cardinal.\`Protocol\``) still applies to domain-specific per-type protocols; Carrier is a different shape — a super-protocol that spans the whole family.
+Per SE-0346, `Carrier.`Protocol`<Underlying>` is declared at module scope with `Underlying` marked as a primary associated type. This enables the `some Carrier.`Protocol`<Int>` spelling at API sites. The ecosystem's nested-protocol convention (`Cardinal.\`Protocol\``) still applies to domain-specific per-type protocols; Carrier is a different shape — a super-protocol that spans the whole family.
 
 ### Trivial-self-carrier default via `extension Carrier where Underlying == Self`
 

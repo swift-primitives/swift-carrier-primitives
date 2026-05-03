@@ -8,7 +8,7 @@ Why `C(c.underlying)` works for `Copyable` Underlyings but not for `~Copyable` o
 
 ## Overview
 
-`Carrier<Underlying>` exposes `underlying` via a **borrowing** getter and accepts `consuming Underlying` in its init. A naive reading of that pair suggests round-trip: read the underlying, rebuild a new carrier from it, original still valid. That reading holds for `Copyable` Underlyings. For `~Copyable` ones, the round-trip weakens in a specific way.
+`Carrier.`Protocol`<Underlying>` exposes `underlying` via a **borrowing** getter and accepts `consuming Underlying` in its init. A naive reading of that pair suggests round-trip: read the underlying, rebuild a new carrier from it, original still valid. That reading holds for `Copyable` Underlyings. For `~Copyable` ones, the round-trip weakens in a specific way.
 
 This article documents the weakening.
 
@@ -85,7 +85,7 @@ let second = File.Handle(first.underlying)       // ✗ cannot consume a borrow
 
 ## Implications for generic code
 
-A generic function over `some Carrier<Underlying>` that wants to "rebuild" a carrier must choose:
+A generic function over `some Carrier.`Protocol`<Underlying>` that wants to "rebuild" a carrier must choose:
 
 1. **Always safe?** Constrain on `where Underlying: Copyable` — the round-trip pattern works cleanly.
 2. **Consume the carrier?** Generic over `~Copyable` works — the function owns the carrier and can extract the underlying.
