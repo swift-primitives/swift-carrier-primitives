@@ -19,7 +19,6 @@ jobs:
   # the L1 embedded-build invariant)
   ci:
     uses: swift-primitives/.github/.github/workflows/swift-ci.yml@main
-    with:
 
   # DocC umbrella-catalog validation per [DOC-019a] — see
   # swift-institute/.github/.github/workflows/swift-docs.yml
