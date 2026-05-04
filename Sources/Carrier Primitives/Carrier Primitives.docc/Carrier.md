@@ -119,16 +119,16 @@ An earlier revision encoded a cascade — `Tagged<X, Tagged<Y, V>>.Underlying ==
 The protocol's payoff is at API sites. Four shapes across the specificity spectrum:
 
 ```swift
-// Form A: domain-axis protocol — preferred for domain-specific APIs.
-// Matches bare `Cardinal` AND `Tagged<Tag, Cardinal>` (and any other
-// Cardinal.`Protocol` conformer).
-func align<C: Cardinal.`Protocol`>(_ c: C) -> C { ... }
+// Form A: per-type protocol — for per-domain operations that need
+// machinery Carrier cannot host (e.g., `associatedtype Count` on
+// `Ordinal.`Protocol`` for typed-advance inference).
+func advance<O: Ordinal.`Protocol`>(_ o: O) -> O { ... }
 
-// Form B: depth-axis parameterized Carrier (SE-0346 spelling).
-// Matches types whose `Carrier.Underlying` is exactly `Cardinal` —
-// `Tagged<Tag, Cardinal>` qualifies, but bare `Cardinal` does NOT
-// (its Underlying is `UInt` post-cardinal-cascade-drop). Use only when
-// the immediate-wrap depth is load-bearing; otherwise prefer Form A.
+// Form B: parameterized Carrier (SE-0346 spelling). For trivial-self
+// primitive types (Cardinal, Ordinal, Affine.Discrete.Vector), this
+// matches both bare values and `Tagged`-wrapped forms uniformly —
+// `Carrier.`Protocol`<Cardinal>` is the universal unifier across the
+// Cardinal domain.
 func align(_ c: some Carrier.`Protocol`<Cardinal>) -> Cardinal { ... }
 
 // Form C: existential (loses Underlying — avoid in favor of generic)
