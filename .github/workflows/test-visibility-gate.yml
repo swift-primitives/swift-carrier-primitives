@@ -1,8 +1,0 @@
-name: Visibility Gate Test (PUBLIC canary)
-
-on:
-  workflow_dispatch:
-
-jobs:
-  call:
-    uses: swift-institute/.github/.github/workflows/test-visibility-gate.yml@main
