@@ -24,9 +24,3 @@ jobs:
   # swift-institute/.github/.github/workflows/swift-docs.yml
   docs:
     uses: swift-institute/.github/.github/workflows/swift-docs.yml@main
-    with:
-      umbrella-module: Carrier_Primitives
-      umbrella-display-name: "Carrier Primitives"
-      umbrella-bundle-id: "swift-carrier-primitives.Carrier-Primitives"
-      umbrella-docc-path: "Sources/Carrier Primitives/Carrier Primitives.docc"
-      exclude-modules: "Carrier_Primitives_Test_Support"
