@@ -16,14 +16,14 @@ concurrency:
 jobs:
   # Build + test matrix — see swift-institute/.github/.github/workflows/swift-ci.yml
   ci:
-    uses: swift-institute/.github/.github/workflows/swift-ci.yml@v1
+    uses: swift-institute/.github/.github/workflows/swift-ci.yml@main
     with:
       cache-key-prefix: swift63-spm-v1
 
   # DocC umbrella-catalog validation per [DOC-019a] — see
   # swift-institute/.github/.github/workflows/swift-docs.yml
   docs:
-    uses: swift-institute/.github/.github/workflows/swift-docs.yml@v1
+    uses: swift-institute/.github/.github/workflows/swift-docs.yml@main
     with:
       umbrella-module: Carrier_Primitives
       umbrella-display-name: "Carrier Primitives"
