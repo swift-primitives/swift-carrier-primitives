@@ -19,8 +19,10 @@ jobs:
   # the L1 embedded-build invariant)
   ci:
     uses: swift-primitives/.github/.github/workflows/swift-ci.yml@main
+    secrets: inherit
 
   # DocC umbrella-catalog validation per [DOC-019a] — see
   # swift-institute/.github/.github/workflows/swift-docs.yml
   docs:
     uses: swift-institute/.github/.github/workflows/swift-docs.yml@main
+    secrets: inherit
