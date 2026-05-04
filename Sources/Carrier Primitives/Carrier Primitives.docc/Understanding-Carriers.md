@@ -72,11 +72,13 @@ Before Carrier, each ecosystem value type (Cardinal, Ordinal, Hash.Value) declar
 
 Carrier is the super-abstraction under which those per-type protocols compose. When a package declares `extension V: Carrier.`Protocol` where ...`, it opts into the family without giving up its per-type protocol. API sites can choose:
 
-- `some Cardinal.\`Protocol\`` for Cardinal-only
-- `some Carrier.`Protocol`<Cardinal>` for any Cardinal-carrier (equivalent set, different emphasis)
-- `some Carrier` for any carrier at all (cross-Carrier generic algorithms)
+- `some Cardinal.\`Protocol\`` — domain-axis: matches bare `Cardinal` AND `Tagged<Tag, Cardinal>` AND any other Cardinal-domain-conforming type, regardless of wrapping depth. Use this for "any Cardinal-carrying value" APIs.
+- `some Carrier.`Protocol`<Cardinal>` — depth-axis: matches types whose `Carrier.Underlying` is exactly `Cardinal` (i.e., `Tagged<Tag, Cardinal>`). Does NOT match bare `Cardinal` post-cardinal-cascade-drop, where `Cardinal.Underlying == UInt`. Use only when the immediate-wrap depth is load-bearing.
+- `some Carrier` — fully generic: any carrier at all (cross-Carrier algorithms).
 
-The three specificity levels compose cleanly.
+The three are NOT equivalent — they target different population sets.
+`Cardinal.\`Protocol\`` is typically the right choice; `Carrier<Cardinal>`
+is correct only when the immediate wrapping depth must equal Cardinal.
 
 ## Relationship to self-projection-default
 
