@@ -19,6 +19,7 @@ jobs:
     uses: swift-institute/.github/.github/workflows/swift-ci.yml@main
     with:
       cache-key-prefix: swift63-spm-v1
+      enable-embedded-check: true
 
   # DocC umbrella-catalog validation per [DOC-019a] — see
   # swift-institute/.github/.github/workflows/swift-docs.yml
