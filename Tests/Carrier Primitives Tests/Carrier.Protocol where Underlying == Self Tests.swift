@@ -35,7 +35,7 @@ struct `Carrier.Protocol where Underlying == Self Tests` {
 // shape that exercises the default extension as a unit.
 
 private struct Cardinal: Carrier.`Protocol` {
-    typealias Underlying = Cardinal
+    typealias Underlying = Self
     var raw: Int
 }
 
