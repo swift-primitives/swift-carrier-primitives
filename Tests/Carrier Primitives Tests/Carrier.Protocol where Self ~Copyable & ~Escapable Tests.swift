@@ -27,7 +27,7 @@ struct `Carrier.Protocol where Self ~Copyable & ~Escapable Tests` {
     @Suite(.serialized) struct Performance {}
 }
 
-private enum Validation: Swift.Error, Sendable {
+enum Validation: Swift.Error, Sendable {
     case rejected
 }
 
