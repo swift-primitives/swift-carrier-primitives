@@ -110,7 +110,7 @@ where Tag: ~Copyable & ~Escapable, Underlying: ~Copyable & ~Escapable {
 }
 ```
 
-This conformance (which ships in `swift-tagged-primitives`) gives every `Tagged<Tag, V>` combination a Carrier conformance with `Domain = Tag` and `Underlying = V` (the immediate wrapped type). The single parametric extension covers the full family of Tagged specializations — including non-Carrier `Underlying` like `Ownership.Inout<Base>` (used by `Property.View`), and nested wrappers like `Tagged<X, Tagged<Y, Cardinal>>` whose `.underlying` returns `Tagged<Y, Cardinal>` (consumers reach `Cardinal` by recursing).
+This conformance (which ships in `swift-tagged-primitives`) gives every `Tagged<Tag, V>` combination a Carrier conformance with `Domain = Tag` and `Underlying = V` (the immediate wrapped type). The single parametric extension covers the full family of Tagged specializations — including non-Carrier `Underlying` like `Ownership.Inout<Base>` (used by `Property.Inout`), and nested wrappers like `Tagged<X, Tagged<Y, Cardinal>>` whose `.underlying` returns `Tagged<Y, Cardinal>` (consumers reach `Cardinal` by recursing).
 
 An earlier revision encoded a cascade — `Tagged<X, Tagged<Y, V>>.Underlying == V` (bottom-most) — by requiring `Underlying: Carrier.\`Protocol\``. That design coupled Tagged's Carrier-ness to the recursive Carrier-ness of every wrapped type and produced a name-shadowing tax on the conformance. The unconditional immediate form drops both costs in exchange for explicit consumer-side recursion when nested introspection is needed; in practice nested Tagged is rare and usually semantically structured (different domain at each level), so the recursion is honest rather than redundant.
 
