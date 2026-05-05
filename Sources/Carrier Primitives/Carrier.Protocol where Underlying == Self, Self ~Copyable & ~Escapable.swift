@@ -8,11 +8,13 @@
 // ~Escapable; the annotations express the lifetime dependency.
 
 extension Carrier.`Protocol` where Underlying == Self, Self: ~Copyable & ~Escapable {
+    /// Protocol-required underlying accessor (default implementation: returns self).
     public var underlying: Self {
         @_lifetime(borrow self)
         _read { yield self }
     }
 
+    /// Protocol-required init (default implementation: assigns underlying as self).
     @_lifetime(copy underlying)
     public init(_ underlying: consuming Self) {
         self = underlying

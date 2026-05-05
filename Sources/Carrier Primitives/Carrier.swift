@@ -16,8 +16,9 @@
 /// }
 /// ```
 public enum Carrier {
-    /// The Carrier conformance contract. Hoisted to module scope as
-    /// `_CarrierProtocol` for Swift's protocol-nesting limitation;
-    /// access the contract via this typealias.
+    /// The Carrier conformance contract.
+    ///
+    /// Hoisted to module scope as `_CarrierProtocol` for Swift's
+    /// protocol-nesting limitation; access the contract via this typealias.
     public typealias `Protocol` = _CarrierProtocol
 }

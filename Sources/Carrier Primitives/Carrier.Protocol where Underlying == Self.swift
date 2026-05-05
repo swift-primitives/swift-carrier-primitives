@@ -12,12 +12,15 @@ extension Carrier.`Protocol` where Underlying == Self {
     /// a consume). `_read` yields the stored value by borrow without
     /// consuming, satisfying the protocol's borrowing-get requirement
     /// for both Copyable and ~Copyable Self.
+    /// Protocol-required underlying accessor (default implementation: returns self).
     public var underlying: Self {
         _read { yield self }
     }
 
-    /// Default: a trivial self-carrier is constructed by assigning the
-    /// consumed underlying into self.
+    /// Protocol-required init (default implementation: assigns underlying as self).
+    ///
+    /// A trivial self-carrier is constructed by assigning the consumed
+    /// underlying into self.
     public init(_ underlying: consuming Self) {
         self = underlying
     }

@@ -27,14 +27,14 @@ struct `Carrier.Protocol where Self ~Copyable & ~Escapable Tests` {
     @Suite(.serialized) struct Performance {}
 }
 
-private enum Validation: Error, Sendable {
+private enum Validation: Swift.Error, Sendable {
     case rejected
 }
 
 extension `Carrier.Protocol where Self ~Copyable & ~Escapable Tests`.Unit {
 
     @Test
-    func `Q1 validation-pass constructs Plain via default throwing init`() throws {
+    func `Q1 validation-pass constructs Plain via default throwing init`() throws(Validation) {
         let c = try Fixture.Plain(42) { v in
             #expect(v == 42)
         }
@@ -42,7 +42,7 @@ extension `Carrier.Protocol where Self ~Copyable & ~Escapable Tests`.Unit {
     }
 
     @Test
-    func `Q2 validation-pass constructs Unique via default throwing init`() throws {
+    func `Q2 validation-pass constructs Unique via default throwing init`() throws(Validation) {
         let resource = Fixture.Unique.Resource(raw: 7)
         let u = try Fixture.Unique(resource) { _ in
             // Validation closure takes a borrow; cannot copy ~Copyable here.
@@ -51,7 +51,7 @@ extension `Carrier.Protocol where Self ~Copyable & ~Escapable Tests`.Unit {
     }
 
     @Test
-    func `Q4 validation-pass constructs Scoped via default throwing init`() throws {
+    func `Q4 validation-pass constructs Scoped via default throwing init`() throws(Validation) {
         let resource = Fixture.Scoped.Resource(raw: 11)
         let s = try Fixture.Scoped(resource) { _ in }
         #expect(s.underlying.raw == 11)
