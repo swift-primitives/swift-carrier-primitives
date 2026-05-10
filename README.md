@@ -127,6 +127,12 @@ Foundation-free.
 
 ---
 
+## Community
+
+<!-- BEGIN: discussion -->
+Discuss this package: [swift-institute/discussions/13](https://github.com/orgs/swift-institute/discussions/13)
+<!-- END: discussion -->
+
 ## License
 
 Apache 2.0. See [LICENSE.md](LICENSE.md).
