@@ -24,14 +24,29 @@
 // `Lint.swift` without requiring a separate rule package — the
 // swift-syntax dep is declared inline.
 //
-// Brand-newtype-owner exclusion. swift-carrier-primitives owns the
-// `Carrier.\`Protocol\`` brand. Unlike value-form brand-owners (cardinal,
-// ordinal, cyclic), carrier's brand is a *protocol* — `__unchecked:`
-// constructors, `.rawValue` accessors, pointer arithmetic, and
-// bitpattern integration overloads (the value-form brand boundary
-// vocabulary) do not appear at carrier's canonical brand surface.
-// Only one rule fires at legitimate-by-construction same-package brand-
-// boundary sites:
+// **Domain predicate (2026-05-17 refinement, RCQT Tier B.1)**: the
+// inline rule enforces a real carrier convention — Standard Library
+// Integration (SLI) source files MUST use `public import
+// Carrier_Primitives` so consumers of the SLI module see Carrier
+// conformances on the stdlib types (per SE-0409 import visibility).
+// Bare `import` or `internal import` in an SLI file would publish the
+// extension declarations without exposing the Carrier brand they
+// extend — a real surface defect, not a stylistic preference. The
+// rule was previously a no-op observer firing 70 times on every
+// `import Carrier...` statement; refined to fire only on actual
+// convention violations. Demonstration value is the rule's
+// existence-in-Lint.swift (anyone reading sees the inline custom-rule
+// machinery) rather than its firing count.
+//
+// Brand-newtype-owner exclusion (per [API-BRAND-001] in code-surface
+// skill). swift-carrier-primitives owns the `Carrier.\`Protocol\``
+// brand. Unlike value-form brand-owners (cardinal, ordinal, cyclic),
+// carrier's brand is a *protocol* — `__unchecked:` constructors,
+// `.rawValue` accessors, pointer arithmetic, and bitpattern
+// integration overloads (the value-form brand boundary vocabulary) do
+// not appear at carrier's canonical brand surface. Only one rule
+// fires at legitimate-by-construction same-package brand-boundary
+// sites:
 //
 //   - `int public parameter` — `Fixture.Plain`, `Fixture.Scoped.Resource`,
 //     and `Fixture.Unique.Resource` are the in-package `Carrier.\`Protocol\``
@@ -55,15 +70,45 @@ import Institute_Linter_Rule_Naming
 import SwiftSyntax
 
 extension Lint.Rule {
-    static let `carrier import noted` = Lint.Rule(
-        id: "carrier import noted",
+    /// SLI source files MUST use `public import Carrier_Primitives`.
+    ///
+    /// SLI = Standard Library Integration. Files under
+    /// `Sources/.../Standard Library Integration/` extend stdlib types
+    /// with `Carrier.\`Protocol\`` conformances. The `public import`
+    /// modifier is required so consumers of the SLI module see the
+    /// Carrier brand surfaced through the conformances they import
+    /// (SE-0409 import visibility).
+    ///
+    /// Bare `import Carrier_Primitives` (or `internal import`) in an
+    /// SLI file publishes the conformance extensions without exposing
+    /// the Carrier brand — extension members would surface their
+    /// underlying types (e.g., `UInt`, `Span<Element>`) but the
+    /// `Carrier.\`Protocol\`` conformance itself would not be visible
+    /// to downstream consumers. Real defect.
+    ///
+    /// Inline-custom-rule canary for Shape γ: demonstrates that
+    /// consumers can author domain-aware rules directly in Lint.swift
+    /// without a separate rule pack. Zero current firings on carrier
+    /// (the package is compliant); fires on regressions.
+    static let `sli public carrier import` = Lint.Rule(
+        id: "sli public carrier import",
         default: .warning,
         findings: { source, severity in
             var findings: [Diagnostic.Record] = []
+            // Scope: only SLI files (Sources/.../Standard Library Integration/).
+            let pathString = source.file.filePath.description
+            guard pathString.contains("Standard Library Integration") else {
+                return findings
+            }
             for statement in source.tree.statements {
                 guard let importDecl = statement.item.as(ImportDeclSyntax.self) else { continue }
                 let pathText = importDecl.path.trimmedDescription
-                guard pathText.hasPrefix("Carrier") else { continue }
+                guard pathText == "Carrier_Primitives" else { continue }
+                // Allowlist: `public import` (and `@_exported public import`).
+                let hasPublic = importDecl.modifiers.contains { modifier in
+                    modifier.name.tokenKind == .keyword(.public)
+                }
+                guard !hasPublic else { continue }
                 let location = source.converter.location(
                     for: importDecl.positionAfterSkippingLeadingTrivia
                 )
@@ -76,8 +121,8 @@ extension Lint.Rule {
                             column: location.column
                         ),
                         severity: severity,
-                        identifier: "carrier import noted",
-                        message: "[carrier import noted] Inline custom rule fired on `import \(pathText)` — Shape γ canary demonstrating that consumers can author rules directly in Lint.swift."
+                        identifier: "sli public carrier import",
+                        message: "[sli public carrier import] SLI source files MUST use `public import Carrier_Primitives` so consumers of the SLI module see the `Carrier.\\`Protocol\\`` conformances on stdlib types (SE-0409 import visibility). Found `import Carrier_Primitives` without `public` modifier — the conformance extensions would publish but the brand they extend would not be visible downstream. Add `public` to the import statement."
                     )
                 )
             }
@@ -109,5 +154,5 @@ Lint.run(dependencies: [
         // IS the Underlying being wrapped at the brand boundary.
         Lint.Rule.`int public parameter`.id,
     ])
-    Lint.Rule.Configuration.enable(.`carrier import noted`)
+    Lint.Rule.Configuration.enable(.`sli public carrier import`)
 }
