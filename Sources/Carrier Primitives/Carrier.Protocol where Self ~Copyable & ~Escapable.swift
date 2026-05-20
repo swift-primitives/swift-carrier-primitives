@@ -10,6 +10,7 @@ extension Carrier.`Protocol` where Self: ~Copyable & ~Escapable {
     ///
     /// Every Carrier conformer inherits this init for free — domain
     /// types do not need to declare per-domain throwing inits.
+    @_alwaysEmitIntoClient
     @_lifetime(copy underlying)
     public init<E: Swift.Error>(
         _ underlying: consuming Underlying,

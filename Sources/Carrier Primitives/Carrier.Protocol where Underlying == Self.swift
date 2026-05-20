@@ -13,6 +13,7 @@ extension Carrier.`Protocol` where Underlying == Self {
     /// consuming, satisfying the protocol's borrowing-get requirement
     /// for both Copyable and ~Copyable Self.
     /// Protocol-required underlying accessor (default implementation: returns self).
+    @_alwaysEmitIntoClient
     public var underlying: Self {
         _read { yield self }
     }
@@ -21,6 +22,7 @@ extension Carrier.`Protocol` where Underlying == Self {
     ///
     /// A trivial self-carrier is constructed by assigning the consumed
     /// underlying into self.
+    @_alwaysEmitIntoClient
     public init(_ underlying: consuming Self) {
         self = underlying
     }

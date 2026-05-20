@@ -12,11 +12,13 @@
 
 extension Carrier.`Protocol` where Underlying == Self, Self: ~Copyable {
     /// Protocol-required underlying accessor (default implementation: returns self).
+    @_alwaysEmitIntoClient
     public var underlying: Self {
         _read { yield self }
     }
 
     /// Protocol-required init (default implementation: assigns underlying as self).
+    @_alwaysEmitIntoClient
     public init(_ underlying: consuming Self) {
         self = underlying
     }
