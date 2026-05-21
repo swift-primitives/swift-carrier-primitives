@@ -10,6 +10,8 @@
 // returning self from a `borrowing` accessor consumes self for
 // ~Copyable Self.
 
+public import Carrier_Namespace
+
 extension Carrier.`Protocol` where Underlying == Self, Self: ~Copyable {
     /// Protocol-required underlying accessor (default implementation: returns self).
     @_alwaysEmitIntoClient

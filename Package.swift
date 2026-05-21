@@ -13,6 +13,10 @@ let package = Package(
     ],
     products: [
         .library(
+            name: "Carrier Namespace",
+            targets: ["Carrier Namespace"]
+        ),
+        .library(
             name: "Carrier Primitives",
             targets: ["Carrier Primitives"]
         ),
@@ -29,8 +33,14 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Carrier Primitives",
+            name: "Carrier Namespace",
             dependencies: []
+        ),
+        .target(
+            name: "Carrier Primitives",
+            dependencies: [
+                "Carrier Namespace",
+            ]
         ),
         .target(
             name: "Carrier Primitives Standard Library Integration",

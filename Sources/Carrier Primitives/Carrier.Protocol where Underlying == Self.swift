@@ -2,6 +2,8 @@
 // Default implementation for trivial self-carriers — types where
 // Underlying == Self.
 
+public import Carrier_Namespace
+
 extension Carrier.`Protocol` where Underlying == Self {
     /// Default: a trivial self-carrier's `underlying` IS its own storage.
     ///
