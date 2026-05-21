@@ -17,6 +17,10 @@ let package = Package(
             targets: ["Carrier Namespace"]
         ),
         .library(
+            name: "Carrier Protocol",
+            targets: ["Carrier Protocol"]
+        ),
+        .library(
             name: "Carrier Primitives",
             targets: ["Carrier Primitives"]
         ),
@@ -37,9 +41,16 @@ let package = Package(
             dependencies: []
         ),
         .target(
+            name: "Carrier Protocol",
+            dependencies: [
+                "Carrier Namespace",
+            ]
+        ),
+        .target(
             name: "Carrier Primitives",
             dependencies: [
                 "Carrier Namespace",
+                "Carrier Protocol",
             ]
         ),
         .target(
