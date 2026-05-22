@@ -1,7 +1,7 @@
 // Carrier.Protocol where Self ~Copyable & ~Escapable.swift
 // Default throwing init available to every Carrier conformer.
 
-public import Carrier_Namespace
+public import Carrier_Primitive
 
 extension Carrier.`Protocol` where Self: ~Copyable & ~Escapable {
     /// Constructs a carrier from an underlying value, validating it first through the supplied closure.

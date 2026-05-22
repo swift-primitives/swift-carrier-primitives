@@ -6,7 +6,7 @@
 // to the module-scope hoisted `_CarrierProtocol`). The convenience alias
 // `Carrying` is in Carrying.swift.
 
-public import Carrier_Namespace
+public import Carrier_Primitive
 
 extension Carrier {
     /// The Carrier conformance contract.

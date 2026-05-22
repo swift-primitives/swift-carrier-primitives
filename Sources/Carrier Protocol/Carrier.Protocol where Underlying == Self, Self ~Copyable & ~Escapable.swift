@@ -7,7 +7,7 @@
 // `@_lifetime` annotations are required because Self's result type is
 // ~Escapable; the annotations express the lifetime dependency.
 
-public import Carrier_Namespace
+public import Carrier_Primitive
 
 extension Carrier.`Protocol` where Underlying == Self, Self: ~Copyable & ~Escapable {
     /// Protocol-required underlying accessor (default implementation: returns self).

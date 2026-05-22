@@ -13,7 +13,7 @@
 // in both the filename and the where clause so all four trivial-self
 // default extensions share the same prefix and group lexically.
 
-public import Carrier_Namespace
+public import Carrier_Primitive
 
 extension Carrier.`Protocol` where Underlying == Self, Self: ~Escapable {
     /// Protocol-required underlying accessor (default implementation: returns self).

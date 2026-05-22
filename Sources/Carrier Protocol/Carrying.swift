@@ -4,7 +4,7 @@
 // The canonical name is `Carrier.`Protocol``; this alias is a
 // readability affordance.
 
-public import Carrier_Namespace
+public import Carrier_Primitive
 
 /// Convenience alias for `Carrier.\`Protocol\``.
 ///

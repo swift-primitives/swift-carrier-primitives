@@ -7,5 +7,5 @@
 // surface (namespace + protocol + conditional defaults) via this
 // re-export chain.
 
-@_exported public import Carrier_Namespace
+@_exported public import Carrier_Primitive
 @_exported public import Carrier_Protocol
