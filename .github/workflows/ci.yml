@@ -26,3 +26,15 @@ jobs:
   docs:
     uses: swift-primitives/.github/.github/workflows/swift-docs.yml@main
     secrets: inherit
+
+  # Institute swift-linter — a cross-org PRODUCT reusable in swift-foundations.
+  # `secrets: inherit` delivers nothing across the org boundary ([CI-109]), so
+  # PRIVATE_REPO_TOKEN is explicit-forwarded (resolved in this repo's
+  # swift-primitives org context). advisory: true keeps the job non-gating
+  # while we soak the linter across L1 consumers.
+  lint:
+    uses: swift-foundations/swift-linter/.github/workflows/lint.yml@main
+    with:
+      advisory: true
+    secrets:
+      PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
